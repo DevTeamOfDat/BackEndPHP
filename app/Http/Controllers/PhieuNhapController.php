@@ -90,6 +90,14 @@ class PhieuNhapController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            self::ma_nhan_vien => 'required',
+            self::ma_nha_cung_cap => 'required',
+            self::ngay_nhap => 'required',
+            self::trang_thai => 'required',
+            self::tong_tien => 'required',
+        ]);
+
         $this->base->store($request);
         return response()->json($this->base->getMessage(), $this->base->getStatus());
     }

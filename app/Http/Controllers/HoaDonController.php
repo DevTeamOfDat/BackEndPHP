@@ -94,6 +94,10 @@ class HoaDonController extends Controller
         $this->validate($request, [
             self::ma_nv => 'required',
             self::ma_kh => 'required',
+            self::ngay_lap => 'required',
+            self::loai_don => 'required',
+            self::trang_thai => 'required',
+            self::tong_tien => 'required',
         ]);
 
         $this->base->store($request);

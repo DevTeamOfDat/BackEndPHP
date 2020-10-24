@@ -54,6 +54,12 @@ class NhaCungCapController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            self::ten => 'required',
+            self::dia_chi => 'required',
+            self::so_dien_thoai => 'required',
+        ]);
+
         $this->base->store($request);
         return response()->json($this->base->getMessage(), $this->base->getStatus());
     }
