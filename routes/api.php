@@ -58,7 +58,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/bill-details', [\App\Http\Controllers\ChiTietHoaDonController::class, 'store']);
 
-    //Route::put('/bill-details/{id}', [\App\Http\Controllers\ChiTietHoaDonController::class, 'update']);
+    Route::put('/bill-details/{id}', [\App\Http\Controllers\ChiTietHoaDonController::class, 'update']);
 
     Route::delete('/bill-details', [\App\Http\Controllers\ChiTietHoaDonController::class, 'destroy']);
 
@@ -113,7 +113,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/bills', [\App\Http\Controllers\HoaDonController::class, 'store']);
 
-    //Route::put('/bills/{id}', [\App\Http\Controllers\HoaDonController::class, 'update']);
+    Route::put('/bills/{id}', [\App\Http\Controllers\HoaDonController::class, 'update']);
 
     Route::delete('/bills', [\App\Http\Controllers\HoaDonController::class, 'destroy']);
 

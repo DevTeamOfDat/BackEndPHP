@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\TaiKhoan;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Laravel\Passport\Passport;
+use Illuminate\Support\Facades\Hash;
 
 class TaiKhoanController extends Controller
 {
@@ -22,6 +25,9 @@ class TaiKhoanController extends Controller
     const hinh_anh = 'hinh_anh';
     const loai_tai_khoan = 'loai_tai_khoan';
     const isActive = 'isActive';
+    const NV = 'NV';
+    const QT = 'QT';
+    private $loai_tk;
 
     /**
      * NhaCungCapController constructor.
@@ -33,45 +39,61 @@ class TaiKhoanController extends Controller
     }
 
     /**
+     * @return mixed
+     */
+    public function getLoaiTk()
+    {
+        return $this->loai_tk;
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($query)
+    public function index()
     {
-//        $this->base->index($query);
-//        return response()->json($this->base->getMessage(), $this->base->getStatus());
-
-        $objs = null;
-        $code = null;
-        switch ($query) {
-            case "all":
-                $objs = DB::table(self::table)
-                    ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
-                    ->select(self::table . '.*', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta)
-                    ->get();
-                $code = 200;
-                break;
-            case "active":
-                $objs = DB::table(self::table)
-                    ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
-                    ->select(self::table . '.*', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta)
-                    ->where(self::table . '.' . self::isActive, '=', true)->get();
-                $code = 200;
-                break;
-            case "inactive":
-                $objs = DB::table(self::table)
-                    ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
-                    ->select(self::table . '.*', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta)
-                    ->where(self::table . '.' . self::isActive, '=', false)->get();
-                $code = 200;
-                break;
-            default:
-                $objs = "Không tìm thấy";
-                $code = 200;
-                break;
+        if ($this->loai_tk == self::NV || $this->loai_tk == self::QT) {
+            $objs = DB::table(self::table)
+                ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
+                ->select(self::id, self::ho_ten, self::email, self::dia_chi, self::so_dien_thoai, LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta, self::hinh_anh, self::table . '.' . self::isActive)
+                ->where(self::table . '.' . self::loai_tai_khoan, '=', 'KH')
+                ->get();
+            $code = 200;
+//            switch ($query) {
+//                case "all":
+//                    $objs = DB::table(self::table)
+//                        ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
+//                        ->select(self::id, self::ho_ten, self::email, self::dia_chi, self::so_dien_thoai, LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta, self::hinh_anh, self::table . '.' . self::isActive)
+//                        ->where(self::table . '.' . self::loai_tai_khoan, '=', 'KH')
+//                        ->get();
+//                    $code = 200;
+//                    break;
+//                case "active":
+//                    $objs = DB::table(self::table)
+//                        ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
+//                        ->select(self::id, self::ho_ten, self::email, self::dia_chi, self::so_dien_thoai, LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta, self::hinh_anh, self::table . '.' . self::isActive)
+//                        ->where(self::table . '.' . self::isActive, '=', true)
+//                        ->where(self::table . '.' . self::loai_tai_khoan, '=', 'KH')->get();
+//                    $code = 200;
+//                    break;
+//                case "inactive":
+//                    $objs = DB::table(self::table)
+//                        ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
+//                        ->select(self::id, self::ho_ten, self::email, self::dia_chi, self::so_dien_thoai, LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta, self::hinh_anh, self::table . '.' . self::isActive)
+//                        ->where(self::table . '.' . self::isActive, '=', false)
+//                        ->where(self::table . '.' . self::loai_tai_khoan, '=', 'KH')->get();
+//                    $code = 200;
+//                    break;
+//                default:
+//                    $objs = "Không tìm thấy";
+//                    $code = 200;
+//                    break;
+//            }
+            return response()->json($objs, $code);
+        } else {
+            return response()->json('Tài khoản không đủ quyền truy cập', 200);
         }
-        return response()->json($objs, $code);
     }
 
     /**
@@ -81,8 +103,6 @@ class TaiKhoanController extends Controller
      */
     public function create()
     {
-        //
-
     }
 
     /**
@@ -93,16 +113,40 @@ class TaiKhoanController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            self::email => 'required|email',
-            self::mat_khau => 'required|min:8',
-            self::ho_ten => 'required|min:8',
-            self::so_dien_thoai => 'required|min:10',
-            self::loai_tai_khoan => 'required',
-        ]);
-
-        $this->base->store($request);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+        if ($this->loai_tk == self::NV || $this->loai_tk == self::QT) {
+            if ($listObj = $request->get(BaseController::listObj)) {
+                $count = count($listObj);
+                if ($count > 0) {
+                    foreach ($listObj as $obj) {
+                        $validator = Validator::make($obj, [
+                            self::email => 'required|email',
+                            self::mat_khau => 'required|min:8',
+                            self::ho_ten => 'required|min:8',
+                            self::so_dien_thoai => 'required|min:10',
+                            self::loai_tai_khoan => 'required',
+                        ]);
+                        if ($validator->fails()) {
+                            return response()->json(['error' => $validator->errors()->all()], 200);
+                        }
+                    }
+                }
+            } else {
+                $validator = Validator::make($request->all(), [
+                    self::email => 'required|email',
+                    self::mat_khau => 'required|min:8',
+                    self::ho_ten => 'required|min:8',
+                    self::so_dien_thoai => 'required|min:10',
+                    self::loai_tai_khoan => 'required',
+                ]);
+                if ($validator->fails()) {
+                    return response()->json(['error' => $validator->errors()->all()], 200);
+                }
+            }
+            $this->base->store($request);
+            return response()->json($this->base->getMessage(), $this->base->getStatus());
+        } else {
+            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+        }
     }
 
     /**
@@ -113,8 +157,19 @@ class TaiKhoanController extends Controller
      */
     public function show($id)
     {
-        $this->base->show($id);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+        if ($this->loai_tk == self::NV || $this->loai_tk == self::QT) {
+            $client = DB::table(self::table)
+                ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
+                ->select(self::id, self::ho_ten, self::email, self::dia_chi, self::so_dien_thoai, LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta, self::hinh_anh, self::table . '.' . self::isActive)
+                ->where(self::id, '=', $id)->first();
+            if ($client) {
+                return response()->json($client, 200);
+            } else {
+                return response()->json("Không tìm thấy", 200);
+            }
+        } else {
+            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+        }
     }
 
     /**
@@ -125,7 +180,6 @@ class TaiKhoanController extends Controller
      */
     public function edit($id)
     {
-        //
     }
 
     /**
@@ -137,8 +191,22 @@ class TaiKhoanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->base->update($request, $id);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+        if ($this->loai_tk == self::NV || $this->loai_tk == self::QT) {
+            $validator = Validator::make($request->all(), [
+                self::email => 'required|email',
+                self::mat_khau => 'required|min:8',
+                self::ho_ten => 'required|min:8',
+                self::so_dien_thoai => 'required|min:10',
+                self::loai_tai_khoan => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->errors()->all()], 200);
+            }
+            $this->base->update($request, $id);
+            return response()->json($this->base->getMessage(), $this->base->getStatus());
+        } else {
+            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+        }
     }
 
     /**
@@ -158,38 +226,30 @@ class TaiKhoanController extends Controller
      */
     public function register(Request $request)
     {
-        $this->validate($request, [
-            'ho_ten' => 'required|min:8',
-            'email' => 'required|email',
-            'mat_khau' => 'required|min:8',
-            'dia_chi' => 'required|min:8',
-            'so_dien_thoai' => 'required|min:10',
+        $validator = Validator::make($request->all(), [
+            self::ho_ten => 'required|min:8',
+            self::email => 'required|email',
+            self::mat_khau => 'required|min:8',
+            self::dia_chi => 'required|min:8',
+            self::so_dien_thoai => 'required|min:10',
         ]);
 
-        if ($request->loai_tai_khoan) {
-            DB::table(self::table)->insert([
-                'ho_ten' => $request->ho_ten,
-                'email' => $request->email,
-                'email_verified_at' => now(),
-                'mat_khau' => bcrypt($request->mat_khau),
-                'dia_chi' => $request->dia_chi,
-                'so_dien_thoai' => $request->so_dien_thoai,
-                'loai_tai_khoan' => $request->loai_tai_khoan,
-            ]);
-        } else {
-            DB::table(self::table)->insert([
-                'ho_ten' => $request->ho_ten,
-                'email' => $request->email,
-                'email_verified_at' => now(),
-                'mat_khau' => bcrypt($request->mat_khau),
-                'dia_chi' => $request->dia_chi,
-                'so_dien_thoai' => $request->so_dien_thoai,
-            ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->all()], 200);
         }
+
+        DB::table(self::table)->insert([
+            self::ho_ten => $request->ho_ten,
+            self::email => $request->email,
+            self::email_verified_at => now(),
+            self::mat_khau => bcrypt($request->mat_khau),
+            self::dia_chi => $request->dia_chi,
+            self::so_dien_thoai => $request->so_dien_thoai,
+        ]);
 
         $email = $request->email;
 
-        $tk = TaiKhoan::where('email', $email)->first();
+        $tk = TaiKhoan::where(self::email, $email)->first();
 
         $token = $tk->createToken('WebsiteBanGiayPHP')->accessToken;
 
@@ -201,14 +261,27 @@ class TaiKhoanController extends Controller
      */
     public function login(Request $request)
     {
-        $data = [
-            'email' => $request->email,
-            'mat_khau' => $request->mat_khau,
-        ];
+        $validator = Validator::make($request->all(), [
+            self::email => 'required|email',
+            self::mat_khau => 'required|min:8',
+        ]);
 
-        if (auth()->attempt($data, true)) {
-            $token = auth()->user()->createToken('WebsiteBanGiayPHP')->accessToken;
-            return response()->json(['token' => $token], 200);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->all()], 200);
+        }
+
+        $email = $request->email;
+
+        $tk = TaiKhoan::where(self::email, $email)->first();
+
+        if ($tk) {
+            if (Hash::check($request->mat_khau, $tk->mat_khau)) {
+                $token = $tk->createToken('WebsiteBanGiayPHP')->accessToken;
+                $this->loai_tk = $tk->loai_tai_khoan;
+                return response()->json(['token' => $token], 200);
+            } else {
+                return response()->json(['error' => 'Password mismatch'], 200);
+            }
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);
         }
@@ -223,5 +296,6 @@ class TaiKhoanController extends Controller
     public function logout()
     {
         auth()->logout();
+        return response()->json(['message' => 'You have been successfully logged out!'], 200);
     }
 }
