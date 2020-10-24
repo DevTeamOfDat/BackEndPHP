@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HinhAnhSanPhamController extends Controller
 {
     private $base;
     const table = 'hinh_anh_san_phams';
     const id = 'id';
+    const ma_san_pham = 'ma_san_pham';
+    const hinh_anh = 'hinh_anh';
     const isActive = 'isActive';
 
     /**
@@ -26,8 +29,39 @@ class HinhAnhSanPhamController extends Controller
      */
     public function index($query)
     {
-        $this->base->index($query);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+//        $this->base->index($query);
+//        return response()->json($this->base->getMessage(), $this->base->getStatus());
+
+        $objs = null;
+        $code = null;
+        switch ($query) {
+            case "all":
+                $objs = DB::table(self::table)
+                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
+                    ->get();
+                $code = 200;
+                break;
+            case "active":
+                $objs = DB::table(self::table)
+                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
+                    ->where(self::table . '.' . self::isActive, '=', true)->get();
+                $code = 200;
+                break;
+            case "inactive":
+                $objs = DB::table(self::table)
+                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
+                    ->where(self::table . '.' . self::isActive, '=', false)->get();
+                $code = 200;
+                break;
+            default:
+                $objs = "Không tìm thấy";
+                $code = 200;
+                break;
+        }
+        return response()->json($objs, $code);
     }
 
     /**
@@ -50,8 +84,8 @@ class HinhAnhSanPhamController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'hinh_anh' => 'required',
-            'ma_san_pham' => 'required',
+            self::hinh_anh => 'required',
+            self::ma_san_pham => 'required',
         ]);
 
         $this->base->store($request);

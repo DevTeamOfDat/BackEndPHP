@@ -10,6 +10,12 @@ class HoaDonController extends Controller
     private $base;
     const table = 'hoa_dons';
     const id = 'ma_hoa_don';
+    const ma_nv = 'ma_nhan_vien';
+    const ma_kh = 'ma_khach_hang';
+    const ngay_lap = 'ngay_lap';
+    const loai_don = 'loai_don';
+    const trang_thai = 'trang_thai';
+    const tong_tien = 'tong_tien';
     const isActive = 'isActive';
 
     /**
@@ -20,6 +26,7 @@ class HoaDonController extends Controller
     {
         $this->base = new BaseController(self::table, self::id, self::isActive);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -27,8 +34,42 @@ class HoaDonController extends Controller
      */
     public function index($query)
     {
-        $this->base->index($query);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+//        $this->base->index($query);
+//        return response()->json($this->base->getMessage(), $this->base->getStatus());
+
+        $objs = null;
+        $code = null;
+        switch ($query) {
+            case "all":
+                $objs = DB::table(self::table)
+                    ->join(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
+                    ->join(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
+                    ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang')
+                    ->get();
+                $code = 200;
+                break;
+            case "active":
+                $objs = DB::table(self::table)
+                    ->join(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
+                    ->join(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
+                    ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang')
+                    ->where(self::table . '.' . self::isActive, '=', true)->get();
+                $code = 200;
+                break;
+            case "inactive":
+                $objs = DB::table(self::table)
+                    ->join(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
+                    ->join(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
+                    ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang')
+                    ->where(self::table . '.' . self::isActive, '=', false)->get();
+                $code = 200;
+                break;
+            default:
+                $objs = "Không tìm thấy";
+                $code = 200;
+                break;
+        }
+        return response()->json($objs, $code);
     }
 
     /**
@@ -51,8 +92,8 @@ class HoaDonController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'ma_nhan_vien' => 'required',
-            'ma_khach_hang' => 'required',
+            self::ma_nv => 'required',
+            self::ma_kh => 'required',
         ]);
 
         $this->base->store($request);

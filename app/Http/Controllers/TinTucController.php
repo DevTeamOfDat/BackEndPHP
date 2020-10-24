@@ -9,6 +9,12 @@ class TinTucController extends Controller
     private $base;
     const table = 'tin_tucs';
     const id = 'id';
+    const tieu_de = 'tieu_de';
+    const noi_dung = 'noi_dung';
+    const highlight = 'highlight';
+    const thumbnail = 'thumbnail';
+    const url = 'url';
+    const ngay_dang = 'ngay_dang';
     const isActive = 'isActive';
 
     /**
@@ -19,6 +25,7 @@ class TinTucController extends Controller
     {
         $this->base = new BaseController(self::table, self::id, self::isActive);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -49,6 +56,11 @@ class TinTucController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            self::tieu_de => 'required',
+            self::noi_dung => 'required',
+        ]);
+
         $this->base->store($request);
         return response()->json($this->base->getMessage(), $this->base->getStatus());
     }

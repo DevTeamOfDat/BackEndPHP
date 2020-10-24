@@ -9,6 +9,12 @@ class NhaCungCapController extends Controller
     private $base;
     const table = 'nha_cung_caps';
     const id = 'ma_nha_cung_cap';
+    const ten = 'ten';
+    const dia_chi = 'dia_chi';
+    const hot_line = 'hot_line';
+    const email = 'email';
+    const so_dien_thoai = 'so_dien_thoai';
+    const hinh_anh = 'hinh_anh';
     const isActive = 'isActive';
 
     /**

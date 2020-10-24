@@ -9,6 +9,8 @@ class DacTrungController extends Controller
     private $base;
     const table = 'dac_trungs';
     const id = 'loai_dac_trung';
+    const ten_dac_trung = 'ten_dac_trung';
+    const mo_ta = 'mo_ta';
     const isActive = 'isActive';
 
     /**
@@ -19,6 +21,7 @@ class DacTrungController extends Controller
     {
         $this->base = new BaseController(self::table, self::id, self::isActive);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -50,7 +53,7 @@ class DacTrungController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'ten_dac_trung' => 'required',
+            self::ten_dac_trung => 'required',
         ]);
 
         $this->base->store($request);

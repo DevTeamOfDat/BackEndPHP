@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SanPhamController extends Controller
 {
     private $base;
     const table = 'san_phams';
     const id = 'ma_san_pham';
+    const ma_thuong_hieu = 'ma_thuong_hieu';
+    const ma_loai_san_pham = 'ma_loai_san_pham';
+    const ten_san_pham = 'ten_san_pham';
+    const gia_ban = 'gia_ban';
+    const so_luong = 'so_luong';
     const isActive = 'isActive';
 
     /**
@@ -19,6 +25,7 @@ class SanPhamController extends Controller
     {
         $this->base = new BaseController(self::table, self::id, self::isActive);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -26,8 +33,42 @@ class SanPhamController extends Controller
      */
     public function index($query)
     {
-        $this->base->index($query);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+//        $this->base->index($query);
+//        return response()->json($this->base->getMessage(), $this->base->getStatus());
+
+        $objs = null;
+        $code = null;
+        switch ($query) {
+            case "all":
+                $objs = DB::table(self::table)
+                    ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
+                    ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
+                    ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
+                    ->get();
+                $code = 200;
+                break;
+            case "active":
+                $objs = DB::table(self::table)
+                    ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
+                    ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
+                    ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
+                    ->where(self::table . '.' . self::isActive, '=', true)->get();
+                $code = 200;
+                break;
+            case "inactive":
+                $objs = DB::table(self::table)
+                    ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
+                    ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
+                    ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
+                    ->where(self::table . '.' . self::isActive, '=', false)->get();
+                $code = 200;
+                break;
+            default:
+                $objs = "Không tìm thấy";
+                $code = 200;
+                break;
+        }
+        return response()->json($objs, $code);
     }
 
     /**
@@ -49,6 +90,14 @@ class SanPhamController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            self::ma_thuong_hieu => 'required',
+            self::ma_loai_san_pham => 'required',
+            self::ten_san_pham => 'required',
+            self::gia_ban => 'required',
+            self::so_luong => 'required',
+        ]);
+
         $this->base->store($request);
         return response()->json($this->base->getMessage(), $this->base->getStatus());
     }

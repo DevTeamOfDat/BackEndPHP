@@ -9,6 +9,8 @@ class LoaiTaiKhoanController extends Controller
     private $base;
     const table = 'loai_tai_khoans';
     const id = 'id';
+    const gia_tri = 'gia_tri';
+    const mo_ta = 'mo_ta';
     const isActive = 'isActive';
 
     /**
@@ -49,6 +51,11 @@ class LoaiTaiKhoanController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            self::gia_tri => 'required',
+            self::mo_ta => 'required',
+        ]);
+
         $this->base->store($request);
         return response()->json($this->base->getMessage(), $this->base->getStatus());
     }

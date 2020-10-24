@@ -13,6 +13,14 @@ class TaiKhoanController extends Controller
     private $base;
     const table = 'tai_khoans';
     const id = 'ma_tai_khoan';
+    const email = 'email';
+    const email_verified_at = 'email_verified_at';
+    const mat_khau = 'mat_khau';
+    const ho_ten = 'ho_ten';
+    const dia_chi = 'dia_chi';
+    const so_dien_thoai = 'so_dien_thoai';
+    const hinh_anh = 'hinh_anh';
+    const loai_tai_khoan = 'loai_tai_khoan';
     const isActive = 'isActive';
 
     /**
@@ -23,6 +31,7 @@ class TaiKhoanController extends Controller
     {
         $this->base = new BaseController(self::table, self::id, self::isActive);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -30,8 +39,39 @@ class TaiKhoanController extends Controller
      */
     public function index($query)
     {
-        $this->base->index($query);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+//        $this->base->index($query);
+//        return response()->json($this->base->getMessage(), $this->base->getStatus());
+
+        $objs = null;
+        $code = null;
+        switch ($query) {
+            case "all":
+                $objs = DB::table(self::table)
+                    ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
+                    ->select(self::table . '.*', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta)
+                    ->get();
+                $code = 200;
+                break;
+            case "active":
+                $objs = DB::table(self::table)
+                    ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
+                    ->select(self::table . '.*', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta)
+                    ->where(self::table . '.' . self::isActive, '=', true)->get();
+                $code = 200;
+                break;
+            case "inactive":
+                $objs = DB::table(self::table)
+                    ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
+                    ->select(self::table . '.*', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta)
+                    ->where(self::table . '.' . self::isActive, '=', false)->get();
+                $code = 200;
+                break;
+            default:
+                $objs = "Không tìm thấy";
+                $code = 200;
+                break;
+        }
+        return response()->json($objs, $code);
     }
 
     /**
@@ -53,6 +93,14 @@ class TaiKhoanController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            self::email => 'required|email',
+            self::mat_khau => 'required|min:8',
+            self::ho_ten => 'required|min:8',
+            self::so_dien_thoai => 'required|min:10',
+            self::loai_tai_khoan => 'required',
+        ]);
+
         $this->base->store($request);
         return response()->json($this->base->getMessage(), $this->base->getStatus());
     }

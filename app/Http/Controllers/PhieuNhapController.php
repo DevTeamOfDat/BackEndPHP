@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PhieuNhapController extends Controller
 {
     private $base;
     const table = 'phieu_nhaps';
     const id = 'ma_phieu_nhap';
+    const ma_nhan_vien = 'ma_nhan_vien';
+    const ma_nha_cung_cap = 'ma_nha_cung_cap';
+    const ngay_nhap = 'ngay_nhap';
+    const trang_thai = 'trang_thai';
+    const tong_tien = 'tong_tien';
     const isActive = 'isActive';
 
     /**
@@ -27,8 +33,42 @@ class PhieuNhapController extends Controller
      */
     public function index($query)
     {
-        $this->base->index($query);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+//        $this->base->index($query);
+//        return response()->json($this->base->getMessage(), $this->base->getStatus());
+
+        $objs = null;
+        $code = null;
+        switch ($query) {
+            case "all":
+                $objs = DB::table(self::table)
+                    ->join(NhaCungCapController::table, NhaCungCapController::table . '.' . NhaCungCapController::id, '=', self::table . '.' . self::ma_nha_cung_cap)
+                    ->join(TaiKhoanController::table, self::table . '.' . self::ma_nhan_vien, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
+                    ->select('phieu_nhaps.*', NhaCungCapController::table . '.' . NhaCungCapController::ten . ' as ten_nha_cung_cap', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien')
+                    ->get();
+                $code = 200;
+                break;
+            case "active":
+                $objs = DB::table(self::table)
+                    ->join(NhaCungCapController::table, NhaCungCapController::table . '.' . NhaCungCapController::id, '=', self::table . '.' . self::ma_nha_cung_cap)
+                    ->join(TaiKhoanController::table, self::table . '.' . self::ma_nhan_vien, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
+                    ->select('phieu_nhaps.*', NhaCungCapController::table . '.' . NhaCungCapController::ten . ' as ten_nha_cung_cap', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien')
+                    ->where(self::table . '.' . self::isActive, '=', true)->get();
+                $code = 200;
+                break;
+            case "inactive":
+                $objs = DB::table(self::table)
+                    ->join(NhaCungCapController::table, NhaCungCapController::table . '.' . NhaCungCapController::id, '=', self::table . '.' . self::ma_nha_cung_cap)
+                    ->join(TaiKhoanController::table, self::table . '.' . self::ma_nhan_vien, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
+                    ->select('phieu_nhaps.*', NhaCungCapController::table . '.' . NhaCungCapController::ten . ' as ten_nha_cung_cap', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien')
+                    ->where(self::table . '.' . self::isActive, '=', false)->get();
+                $code = 200;
+                break;
+            default:
+                $objs = "Không tìm thấy";
+                $code = 200;
+                break;
+        }
+        return response()->json($objs, $code);
     }
 
     /**

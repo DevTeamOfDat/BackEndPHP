@@ -20,6 +20,7 @@ use App\Http\Controllers\NhaCungCapController;
 //    return $request->user();
 //});
 
+
 Route::post('register', [TaiKhoanController::class, 'register']);
 Route::post('login', [TaiKhoanController::class, 'login']);
 Route::post('logout', [TaiKhoanController::class, 'logout']);

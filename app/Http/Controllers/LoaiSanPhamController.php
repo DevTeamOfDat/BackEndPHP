@@ -9,6 +9,8 @@ class LoaiSanPhamController extends Controller
     private $base;
     const table = 'loai_san_phams';
     const id = 'ma_loai_san_pham';
+    const ten_loai_san_pham = 'ten_loai_san_pham';
+    const mo_ta = 'mo_ta';
     const isActive = 'isActive';
 
     /**
@@ -19,6 +21,7 @@ class LoaiSanPhamController extends Controller
     {
         $this->base = new BaseController(self::table, self::id, self::isActive);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -49,6 +52,10 @@ class LoaiSanPhamController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            self::ten_loai_san_pham => 'required',
+        ]);
+
         $this->base->store($request);
         return response()->json($this->base->getMessage(), $this->base->getStatus());
     }

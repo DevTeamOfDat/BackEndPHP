@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ChiTietHoaDonController extends Controller
 {
     private $base;
     const table = 'chi_tiet_hoa_dons';
     const id = 'id';
+    const ma_hoa_don = 'ma_hoa_don';
+    const ma_san_pham = 'ma_san_pham';
+    const gia_ban = 'gia_ban';
+    const so_luong = 'so_luong';
     const isActive = 'isActive';
 
     /**
@@ -20,6 +25,7 @@ class ChiTietHoaDonController extends Controller
     {
         $this->base = new BaseController(self::table, self::id, self::isActive);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -27,8 +33,39 @@ class ChiTietHoaDonController extends Controller
      */
     public function index($query)
     {
-        $this->base->index($query);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+//        $this->base->index($query);
+//        return response()->json($this->base->getMessage(), $this->base->getStatus());
+
+        $objs = null;
+        $code = null;
+        switch ($query) {
+            case "all":
+                $objs = DB::table(self::table)
+                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
+                    ->get();
+                $code = 200;
+                break;
+            case "active":
+                $objs = DB::table(self::table)
+                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
+                    ->where(self::table . '.' . self::isActive, '=', true)->get();
+                $code = 200;
+                break;
+            case "inactive":
+                $objs = DB::table(self::table)
+                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
+                    ->where(self::table . '.' . self::isActive, '=', false)->get();
+                $code = 200;
+                break;
+            default:
+                $objs = "Không tìm thấy";
+                $code = 200;
+                break;
+        }
+        return response()->json($objs, $code);
     }
 
     /**
@@ -51,10 +88,10 @@ class ChiTietHoaDonController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'ma_hoa_don' => 'required',
-            'ma_san_pham' => 'required',
-            'gia_ban' => 'required',
-            'so_luong' => 'required',
+            self::ma_hoa_don => 'required',
+            self::ma_san_pham => 'required',
+            self::gia_ban => 'required',
+            self::so_luong => 'required',
         ]);
 
         $this->base->store($request);

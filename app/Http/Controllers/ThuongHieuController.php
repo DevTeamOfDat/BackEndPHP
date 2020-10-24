@@ -9,6 +9,7 @@ class ThuongHieuController extends Controller
     private $base;
     const table = 'thuong_hieus';
     const id = 'ma_thuong_hieu';
+    const ten_thuong_hieu = 'ten_thuong_hieu';
     const isActive = 'isActive';
 
     /**
@@ -49,6 +50,10 @@ class ThuongHieuController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            self::ten_thuong_hieu => 'required',
+        ]);
+
         $this->base->store($request);
         return response()->json($this->base->getMessage(), $this->base->getStatus());
     }

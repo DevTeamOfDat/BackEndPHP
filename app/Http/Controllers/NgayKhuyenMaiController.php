@@ -9,6 +9,7 @@ class NgayKhuyenMaiController extends Controller
     private $base;
     const table = 'ngay_khuyen_mais';
     const id = 'ma_ngay_khuyen_mai';
+    const ngay_gio = 'ngay_gio';
     const isActive = 'isActive';
 
     /**
@@ -49,6 +50,10 @@ class NgayKhuyenMaiController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            self::ngay_gio => 'required',
+        ]);
+
         $this->base->store($request);
         return response()->json($this->base->getMessage(), $this->base->getStatus());
     }
