@@ -249,13 +249,13 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/voichers', [\App\Http\Controllers\VoicherController::class, 'destroy']);
 
 //giỏ hàng
-    Route::get('/carts/{query}', [\App\Http\Controllers\GioHangController::class, 'index']);
-
-    Route::get('/carts/{id}', [\App\Http\Controllers\GioHangController::class, 'show']);
-
-    Route::post('/carts', [\App\Http\Controllers\GioHangController::class, 'store']);
-
-    Route::put('/carts/{id}', [\App\Http\Controllers\GioHangController::class, 'update']);
-
-    Route::delete('/carts', [\App\Http\Controllers\GioHangController::class, 'destroy']);
+//    Route::get('/carts/{query}', [\App\Http\Controllers\GioHangController::class, 'index']);
+//
+//    Route::get('/carts/{id}', [\App\Http\Controllers\GioHangController::class, 'show']);
+//
+//    Route::post('/carts', [\App\Http\Controllers\GioHangController::class, 'store']);
+//
+//    Route::put('/carts/{id}', [\App\Http\Controllers\GioHangController::class, 'update']);
+//
+//    Route::delete('/carts', [\App\Http\Controllers\GioHangController::class, 'destroy']);
 });

@@ -3,27 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="70d3bd3a-c755-4e24-9812-e31eb4158714" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/BaseController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/BaseController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ChiTietHoaDonController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ChiTietHoaDonController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ChiTietPhieuNhapController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ChiTietPhieuNhapController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/DacTrungController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/DacTrungController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/DacTrungSanPhamController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/DacTrungSanPhamController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/GioHangController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HinhAnhSanPhamController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HinhAnhSanPhamController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HoaDonController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HoaDonController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/KhuyenMaiSanPhamController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/KhuyenMaiSanPhamController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/LoaiDonController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/LoaiDonController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/LoaiSanPhamController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/LoaiSanPhamController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/LoaiTaiKhoanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/LoaiTaiKhoanController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/NgayKhuyenMaiController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/NgayKhuyenMaiController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/NhanXetController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/NhanXetController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PhieuNhapController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PhieuNhapController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SanPhamController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SanPhamController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/TaiKhoanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/TaiKhoanController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ThuongHieuController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ThuongHieuController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/TinTucController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/TinTucController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/TrangThaiController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/TrangThaiController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/VoicherController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/VoicherController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -35,7 +15,20 @@
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/routes/api.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-357">
+              <caret line="22" column="65" lean-forward="true" selection-start-line="22" selection-start-column="65" selection-end-line="22" selection-end-column="65" />
+              <folding>
+                <element signature="e#7#35#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -91,7 +84,6 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/TinTucController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/TrangThaiController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/VoicherController.php" />
-        <option value="$PROJECT_DIR$/routes/api.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/TaiKhoanController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/ChiTietHoaDonController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/BaseController.php" />
@@ -100,6 +92,7 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/DacTrungSanPhamController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/HinhAnhSanPhamController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/HoaDonController.php" />
+        <option value="$PROJECT_DIR$/routes/api.php" />
       </list>
     </option>
   </component>
@@ -267,13 +260,7 @@
             <path>
               <item name="WebBanGiayPHP" type="b2602c69:ProjectViewProjectNode" />
               <item name="WebBanGiayPHP" type="462c0819:PsiDirectoryNode" />
-              <item name="database" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WebBanGiayPHP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WebBanGiayPHP" type="462c0819:PsiDirectoryNode" />
-              <item name="database" type="462c0819:PsiDirectoryNode" />
-              <item name="migrations" type="462c0819:PsiDirectoryNode" />
+              <item name="routes" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -325,17 +312,18 @@
       <updated>1603361596408</updated>
       <workItem from="1603361597802" duration="17738000" />
       <workItem from="1603411968539" duration="9451000" />
-      <workItem from="1603430654776" duration="608000" />
+      <workItem from="1603430654776" duration="1207000" />
+      <workItem from="1603498937563" duration="4076000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27797000" />
+    <option name="totallyTimeSpent" value="32472000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.29500756" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28139183" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -350,7 +338,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.40261865" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.8183306" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24962178" />
@@ -361,13 +349,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Models/HinhAnhSanPham.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="18" column="6" lean-forward="true" selection-start-line="10" selection-start-column="4" selection-end-line="18" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Models/HoaDon.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="441">
@@ -589,26 +570,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/api.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-84">
-          <caret line="29" column="26" lean-forward="true" selection-start-line="29" selection-start-column="26" selection-end-line="29" selection-end-column="26" />
-          <folding>
-            <element signature="e#7#35#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_tai_khoans_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-420">
-          <caret line="5" column="34" selection-start-line="5" selection-start-column="34" selection-end-line="5" selection-end-column="34" />
-          <folding>
-            <element signature="e#7#52#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="184">
@@ -727,6 +688,33 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="488">
           <caret line="55" lean-forward="true" selection-start-line="50" selection-start-column="5" selection-end-line="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_tai_khoans_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-84">
+          <caret line="5" column="34" lean-forward="true" selection-start-line="5" selection-start-column="34" selection-end-line="5" selection-end-column="34" />
+          <folding>
+            <element signature="e#7#52#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/seeders/DatabaseSeeder.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="16" column="5" lean-forward="true" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/api.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-357">
+          <caret line="22" column="65" lean-forward="true" selection-start-line="22" selection-start-column="65" selection-end-line="22" selection-end-column="65" />
+          <folding>
+            <element signature="e#7#35#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
