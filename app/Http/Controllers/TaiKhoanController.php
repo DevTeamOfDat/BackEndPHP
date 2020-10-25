@@ -299,11 +299,11 @@ class TaiKhoanController extends Controller
 
     public function logout()
     {
-        DB::table('oauth_access_tokens')
-            ->where('user_id', Auth::user()->id)
-            ->update([
-                'revoked' => true
-            ]);
-        return response()->json(['message' => 'You have been successfully logged out!'], 204);
+        if (Auth::check()) {
+            Auth::user()->token()->revoke();
+            return response()->json(['success' =>'logout_success'],200);
+        }else{
+            return response()->json(['error' =>'api.something_went_wrong'], 500);
+        }
     }
 }

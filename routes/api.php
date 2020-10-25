@@ -26,7 +26,7 @@ Route::post('login', [TaiKhoanController::class, 'login']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('info', [TaiKhoanController::class, 'userInfo']);
-    Route::get('logout', [TaiKhoanController::class, 'logout']);
+    Route::post('logout', [TaiKhoanController::class, 'logout']);
 
     //dành cho trang admin
 //nhà cung cấp
