@@ -83,7 +83,7 @@ class HoaDonController extends Controller
             $objs = DB::table(self::table)
                 ->join(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
                 ->join(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
-                ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang')
+                ->select(self::id, 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang', self::ngay_lap, self::loai_don, self::trang_thai, self::tong_tien)
                 ->where(self::table . '.' . self::ma_kh, '=', $user->ma_tai_khoan)
                 ->get();
             $code = 200;
@@ -158,7 +158,7 @@ class HoaDonController extends Controller
             $obj = DB::table(self::table)
                 ->join(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
                 ->join(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
-                ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang')
+                ->select(self::id, 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang', self::ngay_lap, self::loai_don, self::trang_thai, self::tong_tien)
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->where(self::table . '.' . self::ma_kh, '=', $user->ma_tai_khoan)
                 ->get();
