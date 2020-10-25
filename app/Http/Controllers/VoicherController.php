@@ -122,8 +122,16 @@ class VoicherController extends Controller
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $this->base->show($id);
-            return response()->json($this->base->getMessage(), $this->base->getStatus());
+            $obj = DB::table(self::table)
+                ->join(TaiKhoanController::table, self::table . '.' . self::ma_khach_hang, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
+                ->select(self::table . '.*', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten)
+                ->where(self::table . '.' . self::id, '=', $id)
+                ->get();
+            if ($obj) {
+                return response()->json($obj, 200);
+            } else {
+                return response()->json('Không tìm thấy', 200);
+            }
         } else {
             return response()->json('Tài khoản không đủ quyền truy cập', 200);
         }

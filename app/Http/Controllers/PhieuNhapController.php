@@ -32,7 +32,7 @@ class PhieuNhapController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($query)
+    public function index()
     {
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
@@ -42,7 +42,7 @@ class PhieuNhapController extends Controller
             $objs = DB::table(self::table)
                 ->join(NhaCungCapController::table, NhaCungCapController::table . '.' . NhaCungCapController::id, '=', self::table . '.' . self::ma_nha_cung_cap)
                 ->join(TaiKhoanController::table, self::table . '.' . self::ma_nhan_vien, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
-                ->select('phieu_nhaps.*', NhaCungCapController::table . '.' . NhaCungCapController::ten . ' as ten_nha_cung_cap', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien')
+                ->select(self::table . '.*', NhaCungCapController::table . '.' . NhaCungCapController::ten . ' as ten_nha_cung_cap', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien')
                 ->get();
             $code = 200;
 //        switch ($query) {
@@ -132,10 +132,19 @@ class PhieuNhapController extends Controller
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $this->base->show($id);
 //            $ctpn = new ChiTietPhieuNhapController();
 //            $ctpn->showListPN($id);
-            return response()->json($this->base->getMessage(), $this->base->getStatus());
+            $obj = DB::table(self::table)
+                ->join(NhaCungCapController::table, NhaCungCapController::table . '.' . NhaCungCapController::id, '=', self::table . '.' . self::ma_nha_cung_cap)
+                ->join(TaiKhoanController::table, self::table . '.' . self::ma_nhan_vien, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
+                ->select(self::table . '.*', NhaCungCapController::table . '.' . NhaCungCapController::ten . ' as ten_nha_cung_cap', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien')
+                ->where(self::table . '.' . self::id, '=', $id)
+                ->get();
+            if ($obj) {
+                return response()->json($obj, 200);
+            } else {
+                return response()->json('Không tìm thấy', 200);
+            }
         } else {
             return response()->json('Tài khoản không đủ quyền truy cập', 200);
         }

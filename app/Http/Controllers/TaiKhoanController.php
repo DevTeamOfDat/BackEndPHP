@@ -188,24 +188,18 @@ class TaiKhoanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = auth()->user();
-        $loai_tk = $user->loai_tai_khoan;
-        if ($loai_tk == self::NV || $loai_tk == self::QT) {
-            $validator = Validator::make($request->all(), [
-                self::email => 'required|email',
-                self::mat_khau => 'required|min:8',
-                self::ho_ten => 'required|min:8',
-                self::so_dien_thoai => 'required|min:10',
-                self::loai_tai_khoan => 'required',
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['error' => $validator->errors()->all()], 200);
-            }
-            $this->base->update($request, $id);
-            return response()->json($this->base->getMessage(), $this->base->getStatus());
-        } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+        $validator = Validator::make($request->all(), [
+            self::email => 'required|email',
+            self::mat_khau => 'required|min:8',
+            self::ho_ten => 'required|min:8',
+            self::so_dien_thoai => 'required|min:10',
+            self::loai_tai_khoan => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->all()], 200);
         }
+        $this->base->update($request, $id);
+        return response()->json($this->base->getMessage(), $this->base->getStatus());
     }
 
     /**
@@ -301,9 +295,9 @@ class TaiKhoanController extends Controller
     {
         if (Auth::check()) {
             Auth::user()->token()->revoke();
-            return response()->json(['success' =>'logout_success'],200);
-        }else{
-            return response()->json(['error' =>'api.something_went_wrong'], 500);
+            return response()->json(['success' => 'logout_success'], 200);
+        } else {
+            return response()->json(['error' => 'api.something_went_wrong'], 500);
         }
     }
 }

@@ -127,8 +127,16 @@ class ChiTietHoaDonController extends Controller
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $this->base->show($id);
-            return response()->json($this->base->getMessage(), $this->base->getStatus());
+            $obj = DB::table(self::table)
+                ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+                ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
+                ->where(self::table . '.' . self::id, '=', $id)
+                ->get();
+            if ($obj) {
+                return response()->json($obj, 200);
+            } else {
+                return response()->json('Không tìm thấy', 200);
+            }
         } else {
             return response()->json('Tài khoản không đủ quyền truy cập', 200);
         }

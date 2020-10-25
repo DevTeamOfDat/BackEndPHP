@@ -137,8 +137,19 @@ class KhuyenMaiSanPhamController extends Controller
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $this->base->show($id);
-            return response()->json($this->base->getMessage(), $this->base->getStatus());
+            $obj = DB::table(self::table)
+                ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+                ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
+                ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
+                ->join(NgayKhuyenMaiController::table, self::table . '.' . self::ma_ngay_khuyen_mai, '=', NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id)
+                ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham, ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio)
+                ->where(self::table . '.' . self::id, '=', $id)
+                ->get();
+            if ($obj) {
+                return response()->json($obj, 200);
+            } else {
+                return response()->json('Không tìm thấy', 200);
+            }
         } else {
             return response()->json('Tài khoản không đủ quyền truy cập', 200);
         }

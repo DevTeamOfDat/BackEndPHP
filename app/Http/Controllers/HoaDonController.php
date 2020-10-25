@@ -134,8 +134,17 @@ class HoaDonController extends Controller
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $this->base->show($id);
-            return response()->json($this->base->getMessage(), $this->base->getStatus());
+            $obj = DB::table(self::table)
+                ->join(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
+                ->join(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
+                ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang')
+                ->where(self::table . '.' . self::id, '=', $id)
+                ->get();
+            if ($obj) {
+                return response()->json($obj, 200);
+            } else {
+                return response()->json(['message' => 'Không tìm thấy'], 200);
+            }
         } else {
             return response()->json('Tài khoản không đủ quyền truy cập', 200);
         }
