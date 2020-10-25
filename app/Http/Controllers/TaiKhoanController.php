@@ -27,7 +27,6 @@ class TaiKhoanController extends Controller
     const isActive = 'isActive';
     const NV = 'NV';
     const QT = 'QT';
-    private $loai_tk;
 
     /**
      * NhaCungCapController constructor.
@@ -39,21 +38,15 @@ class TaiKhoanController extends Controller
     }
 
     /**
-     * @return mixed
-     */
-    public function getLoaiTk()
-    {
-        return $this->loai_tk;
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        if ($this->loai_tk == self::NV || $this->loai_tk == self::QT) {
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == self::NV || $loai_tk == self::QT) {
             $objs = DB::table(self::table)
                 ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
                 ->select(self::id, self::ho_ten, self::email, self::dia_chi, self::so_dien_thoai, LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta, self::hinh_anh, self::table . '.' . self::isActive)
@@ -113,7 +106,9 @@ class TaiKhoanController extends Controller
      */
     public function store(Request $request)
     {
-        if ($this->loai_tk == self::NV || $this->loai_tk == self::QT) {
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == self::NV || $loai_tk == self::QT) {
             if ($listObj = $request->get(BaseController::listObj)) {
                 $count = count($listObj);
                 if ($count > 0) {
@@ -157,11 +152,13 @@ class TaiKhoanController extends Controller
      */
     public function show($id)
     {
-        if ($this->loai_tk == self::NV || $this->loai_tk == self::QT) {
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == self::NV || $loai_tk == self::QT) {
             $client = DB::table(self::table)
                 ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
                 ->select(self::id, self::ho_ten, self::email, self::dia_chi, self::so_dien_thoai, LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta, self::hinh_anh, self::table . '.' . self::isActive)
-                ->where(self::id, '=', $id)->first();
+                ->where(self::table . '.' . self::id, '=', $id)->first();
             if ($client) {
                 return response()->json($client, 200);
             } else {
@@ -191,7 +188,9 @@ class TaiKhoanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if ($this->loai_tk == self::NV || $this->loai_tk == self::QT) {
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == self::NV || $loai_tk == self::QT) {
             $validator = Validator::make($request->all(), [
                 self::email => 'required|email',
                 self::mat_khau => 'required|min:8',
@@ -217,8 +216,14 @@ class TaiKhoanController extends Controller
      */
     public function destroy(Request $request)
     {
-        $this->base->destroy($request);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == self::NV || $loai_tk == self::QT) {
+            $this->base->destroy($request);
+            return response()->json($this->base->getMessage(), $this->base->getStatus());
+        } else {
+            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+        }
     }
 
     /**
@@ -277,7 +282,6 @@ class TaiKhoanController extends Controller
         if ($tk) {
             if (Hash::check($request->mat_khau, $tk->mat_khau)) {
                 $token = $tk->createToken('WebsiteBanGiayPHP')->accessToken;
-                $this->loai_tk = $tk->loai_tai_khoan;
                 return response()->json(['token' => $token], 200);
             } else {
                 return response()->json(['error' => 'Password mismatch'], 200);
@@ -295,7 +299,11 @@ class TaiKhoanController extends Controller
 
     public function logout()
     {
-        auth()->logout();
-        return response()->json(['message' => 'You have been successfully logged out!'], 200);
+        DB::table('oauth_access_tokens')
+            ->where('user_id', Auth::user()->id)
+            ->update([
+                'revoked' => true
+            ]);
+        return response()->json(['message' => 'You have been successfully logged out!'], 204);
     }
 }

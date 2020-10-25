@@ -75,28 +75,30 @@ class BaseController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function index($query)
+    public function index()
     {
         $objs = null;
         $code = null;
-        switch ($query) {
-            case "all":
-                $objs = DB::table($this->table)->get();
-                $code = 200;
-                break;
-            case "active":
-                $objs = DB::table($this->table)->where($this->isActive, true)->get();
-                $code = 200;
-                break;
-            case "inactive":
-                $objs = DB::table($this->table)->where($this->isActive, false)->get();
-                $code = 200;
-                break;
-            default:
-                $objs = "Không tìm thấy";
-                $code = 200;
-                break;
-        }
+        $objs = DB::table($this->table)->get();
+        $code = 200;
+//        switch ($query) {
+//            case "all":
+//                $objs = DB::table($this->table)->get();
+//                $code = 200;
+//                break;
+//            case "active":
+//                $objs = DB::table($this->table)->where($this->isActive, true)->get();
+//                $code = 200;
+//                break;
+//            case "inactive":
+//                $objs = DB::table($this->table)->where($this->isActive, false)->get();
+//                $code = 200;
+//                break;
+//            default:
+//                $objs = "Không tìm thấy";
+//                $code = 200;
+//                break;
+//        }
         $this->message = $objs;
         $this->status = $code;
         try {

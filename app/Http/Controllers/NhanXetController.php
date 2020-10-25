@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class NhanXetController extends Controller
 {
@@ -23,6 +24,7 @@ class NhanXetController extends Controller
     {
         $this->base = new BaseController(self::table, self::id, self::isActive);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -30,42 +32,51 @@ class NhanXetController extends Controller
      */
     public function index($query)
     {
-//        $this->base->index($query);
-//        return response()->json($this->base->getMessage(), $this->base->getStatus());
-
-        $objs = null;
-        $code = null;
-        switch ($query) {
-            case "all":
-                $objs = DB::table(self::table)
-                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-                    ->join(TaiKhoanController::table, self::table . '.' . self::ma_khach_hang, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
-                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, TaiKhoanController::table . '.' . TaiKhoanController::ho_ten)
-                    ->get();
-                $code = 200;
-                break;
-            case "active":
-                $objs = DB::table(self::table)
-                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-                    ->join(TaiKhoanController::table, self::table . '.' . self::ma_khach_hang, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
-                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, TaiKhoanController::table . '.' . TaiKhoanController::ho_ten)
-                    ->where(self::table . '.' . self::isActive, '=', true)->get();
-                $code = 200;
-                break;
-            case "inactive":
-                $objs = DB::table(self::table)
-                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-                    ->join(TaiKhoanController::table, self::table . '.' . self::ma_khach_hang, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
-                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, TaiKhoanController::table . '.' . TaiKhoanController::ho_ten)
-                    ->where(self::table . '.' . self::isActive, '=', false)->get();
-                $code = 200;
-                break;
-            default:
-                $objs = "Không tìm thấy";
-                $code = 200;
-                break;
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+            $objs = null;
+            $code = null;
+            $objs = DB::table(self::table)
+                ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+                ->join(TaiKhoanController::table, self::table . '.' . self::ma_khach_hang, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
+                ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, TaiKhoanController::table . '.' . TaiKhoanController::ho_ten)
+                ->get();
+            $code = 200;
+//        switch ($query) {
+//            case "all":
+//                $objs = DB::table(self::table)
+//                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+//                    ->join(TaiKhoanController::table, self::table . '.' . self::ma_khach_hang, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
+//                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, TaiKhoanController::table . '.' . TaiKhoanController::ho_ten)
+//                    ->get();
+//                $code = 200;
+//                break;
+//            case "active":
+//                $objs = DB::table(self::table)
+//                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+//                    ->join(TaiKhoanController::table, self::table . '.' . self::ma_khach_hang, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
+//                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, TaiKhoanController::table . '.' . TaiKhoanController::ho_ten)
+//                    ->where(self::table . '.' . self::isActive, '=', true)->get();
+//                $code = 200;
+//                break;
+//            case "inactive":
+//                $objs = DB::table(self::table)
+//                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+//                    ->join(TaiKhoanController::table, self::table . '.' . self::ma_khach_hang, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
+//                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, TaiKhoanController::table . '.' . TaiKhoanController::ho_ten)
+//                    ->where(self::table . '.' . self::isActive, '=', false)->get();
+//                $code = 200;
+//                break;
+//            default:
+//                $objs = "Không tìm thấy";
+//                $code = 200;
+//                break;
+//        }
+            return response()->json($objs, $code);
+        } else {
+            return response()->json('Tài khoản không đủ quyền truy cập', 200);
         }
-        return response()->json($objs, $code);
     }
 
     /**
@@ -87,13 +98,22 @@ class NhanXetController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            self::ma_khach_hang => 'required',
-            self::binh_luan => 'required',
-        ]);
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+            $validator = Validator::make($request->all(), [
+                self::ma_khach_hang => 'required',
+                self::binh_luan => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->errors()->all()], 200);
+            }
 
-        $this->base->store($request);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+            $this->base->store($request);
+            return response()->json($this->base->getMessage(), $this->base->getStatus());
+        } else {
+            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+        }
     }
 
     /**
@@ -104,8 +124,14 @@ class NhanXetController extends Controller
      */
     public function show($id)
     {
-        $this->base->show($id);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+            $this->base->show($id);
+            return response()->json($this->base->getMessage(), $this->base->getStatus());
+        } else {
+            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+        }
     }
 
     /**
@@ -128,8 +154,14 @@ class NhanXetController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->base->update($request, $id);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+            $this->base->update($request, $id);
+            return response()->json($this->base->getMessage(), $this->base->getStatus());
+        } else {
+            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+        }
     }
 
     /**
@@ -140,7 +172,13 @@ class NhanXetController extends Controller
      */
     public function destroy(Request $request)
     {
-        $this->base->destroy($request);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+            $this->base->destroy($request);
+            return response()->json($this->base->getMessage(), $this->base->getStatus());
+        } else {
+            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+        }
     }
 }

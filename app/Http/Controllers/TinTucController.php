@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TinTucController extends Controller
 {
@@ -31,10 +32,16 @@ class TinTucController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($query)
+    public function index()
     {
-        $this->base->index($query);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+            $this->base->index();
+            return response()->json($this->base->getMessage(), $this->base->getStatus());
+        } else {
+            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+        }
     }
 
     /**
@@ -56,13 +63,22 @@ class TinTucController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            self::tieu_de => 'required',
-            self::noi_dung => 'required',
-        ]);
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+            $validator = Validator::make($request->all(), [
+                self::tieu_de => 'required',
+                self::noi_dung => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->errors()->all()], 200);
+            }
 
-        $this->base->store($request);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+            $this->base->store($request);
+            return response()->json($this->base->getMessage(), $this->base->getStatus());
+        } else {
+            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+        }
     }
 
     /**
@@ -73,8 +89,15 @@ class TinTucController extends Controller
      */
     public function show($id)
     {
-        $this->base->show($id);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+
+            $this->base->show($id);
+            return response()->json($this->base->getMessage(), $this->base->getStatus());
+        } else {
+            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+        }
     }
 
     /**
@@ -97,8 +120,15 @@ class TinTucController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->base->update($request, $id);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+
+            $this->base->update($request, $id);
+            return response()->json($this->base->getMessage(), $this->base->getStatus());
+        } else {
+            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+        }
     }
 
     /**
@@ -109,7 +139,14 @@ class TinTucController extends Controller
      */
     public function destroy(Request $request)
     {
-        $this->base->destroy($request);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+
+            $this->base->destroy($request);
+            return response()->json($this->base->getMessage(), $this->base->getStatus());
+        } else {
+            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+        }
     }
 }

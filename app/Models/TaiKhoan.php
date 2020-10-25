@@ -12,6 +12,7 @@ class TaiKhoan extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $primaryKey = 'ma_tai_khoan';
     /**
      * The attributes that are mass assignable.
      *
