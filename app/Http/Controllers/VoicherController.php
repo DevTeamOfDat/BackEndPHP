@@ -31,9 +31,9 @@ class VoicherController extends Controller
      */
     public function index()
     {
-//        $user = auth()->user();
-//        $loai_tk = $user->loai_tai_khoan;
-//        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             $objs = null;
             $code = null;
             $objs = DB::table(self::table)
@@ -69,9 +69,16 @@ class VoicherController extends Controller
 //                break;
 //        }
             return response()->json(['data' => $objs], $code);
-//        } else {
-//            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
-//        }
+        } else {
+            $objs = DB::table(self::table)
+                ->join(TaiKhoanController::table, self::table . '.' . self::ma_khach_hang, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
+                ->select(TaiKhoanController::table . '.' . TaiKhoanController::ho_ten, self::muc_voicher)
+                ->where(self::table . '.' . self::ma_khach_hang, '=', $user->ma_tai_khoan)
+                ->where(self::table . '.' . self::isActive, '=', true)
+                ->get();
+            $code = 200;
+            return response()->json(['data' => $objs], $code);
+        }
     }
 
     /**
