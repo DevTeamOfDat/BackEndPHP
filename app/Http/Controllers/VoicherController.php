@@ -31,9 +31,9 @@ class VoicherController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
-        $loai_tk = $user->loai_tai_khoan;
-        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+//        $user = auth()->user();
+//        $loai_tk = $user->loai_tai_khoan;
+//        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             $objs = null;
             $code = null;
             $objs = DB::table(self::table)
@@ -68,10 +68,10 @@ class VoicherController extends Controller
 //                $code = 200;
 //                break;
 //        }
-            return response()->json($objs, $code);
-        } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
-        }
+            return response()->json(['data' => $objs], $code);
+//        } else {
+//            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+//        }
     }
 
     /**
@@ -107,7 +107,7 @@ class VoicherController extends Controller
             $this->base->store($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -128,12 +128,12 @@ class VoicherController extends Controller
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->get();
             if ($obj) {
-                return response()->json($obj, 200);
+                return response()->json(['data' => $obj], 200);
             } else {
-                return response()->json('Không tìm thấy', 200);
+                return response()->json(['error' => 'Không tìm thấy'], 200);
             }
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -163,7 +163,7 @@ class VoicherController extends Controller
             $this->base->update($request, $id);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -181,7 +181,7 @@ class VoicherController extends Controller
             $this->base->destroy($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 }

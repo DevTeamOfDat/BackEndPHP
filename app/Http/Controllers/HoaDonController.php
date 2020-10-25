@@ -76,9 +76,18 @@ class HoaDonController extends Controller
 //                $code = 200;
 //                break;
 //        }
-            return response()->json($objs, $code);
+            return response()->json(['data' => $objs], $code);
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            $objs = null;
+            $code = null;
+            $objs = DB::table(self::table)
+                ->join(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
+                ->join(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
+                ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang')
+                ->where(self::table . '.' . self::ma_kh, '=', $user->ma_tai_khoan)
+                ->get();
+            $code = 200;
+            return response()->json(['data' => $objs], $code);
         }
     }
 
@@ -119,7 +128,7 @@ class HoaDonController extends Controller
             $this->base->store($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -141,12 +150,23 @@ class HoaDonController extends Controller
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->get();
             if ($obj) {
-                return response()->json($obj, 200);
+                return response()->json(['data' => $obj], 200);
             } else {
-                return response()->json(['message' => 'Không tìm thấy'], 200);
+                return response()->json(['error' => 'Không tìm thấy'], 200);
             }
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            $obj = DB::table(self::table)
+                ->join(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
+                ->join(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
+                ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang')
+                ->where(self::table . '.' . self::id, '=', $id)
+                ->where(self::table . '.' . self::ma_kh, '=', $user->ma_tai_khoan)
+                ->get();
+            if ($obj) {
+                return response()->json(['data' => $obj], 200);
+            } else {
+                return response()->json(['error' => 'Không tìm thấy'], 200);
+            }
         }
     }
 
@@ -176,12 +196,12 @@ class HoaDonController extends Controller
             $hd = DB::table(self::table)->where(self::id, '=', $id)->first();
             if ($hd->trang_thai == false && $request->get(self::trang_thai) == true) {
                 DB::table(self::table)->where(self::id, '=', $id)->update([self::trang_thai => true]);
-                return response()->json(['message' => 'Cập nhật thành công'], 200);
+                return response()->json(['success' => 'Cập nhật thành công'], 200);
             } else {
-                return response()->json(['message' => 'Cập nhật thất bại'], 200);
+                return response()->json(['error' => 'Cập nhật thất bại'], 200);
             }
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -199,7 +219,7 @@ class HoaDonController extends Controller
             $this->base->destroy($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 }

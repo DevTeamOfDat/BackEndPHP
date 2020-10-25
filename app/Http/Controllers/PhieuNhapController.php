@@ -75,9 +75,9 @@ class PhieuNhapController extends Controller
 //                $code = 200;
 //                break;
 //        }
-            return response()->json($objs, $code);
+            return response()->json(['data' => $objs], $code);
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -117,7 +117,7 @@ class PhieuNhapController extends Controller
             $this->base->store($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -141,12 +141,12 @@ class PhieuNhapController extends Controller
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->get();
             if ($obj) {
-                return response()->json($obj, 200);
+                return response()->json(['data' => $obj], 200);
             } else {
-                return response()->json('Không tìm thấy', 200);
+                return response()->json(['error' => 'Không tìm thấy'], 200);
             }
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -176,12 +176,12 @@ class PhieuNhapController extends Controller
             $pn = DB::table(self::table)->where(self::id, '=', $id)->first();
             if ($pn->trang_thai == false && $request->get(self::trang_thai) == true) {
                 DB::table(self::table)->where(self::id, '=', $id)->update([self::trang_thai => true]);
-                return response()->json(['message' => 'Cập nhật thành công'], 200);
+                return response()->json(['success' => 'Cập nhật thành công'], 200);
             } else {
-                return response()->json(['message' => 'Cập nhật thất bại'], 200);
+                return response()->json(['error' => 'Cập nhật thất bại'], 200);
             }
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -199,7 +199,7 @@ class PhieuNhapController extends Controller
             $this->base->destroy($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 }

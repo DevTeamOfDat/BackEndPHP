@@ -36,7 +36,7 @@ class TrangThaiController extends Controller
             $this->base->index();
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -73,7 +73,7 @@ class TrangThaiController extends Controller
             $this->base->store($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -91,7 +91,7 @@ class TrangThaiController extends Controller
             $this->base->show($id);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -121,7 +121,7 @@ class TrangThaiController extends Controller
             $this->base->update($request, $id);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -139,7 +139,7 @@ class TrangThaiController extends Controller
             $this->base->destroy($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 }

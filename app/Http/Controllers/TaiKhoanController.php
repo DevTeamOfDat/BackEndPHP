@@ -83,9 +83,9 @@ class TaiKhoanController extends Controller
 //                    $code = 200;
 //                    break;
 //            }
-            return response()->json($objs, $code);
+            return response()->json(['data' => $objs], $code);
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -140,7 +140,7 @@ class TaiKhoanController extends Controller
             $this->base->store($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -160,12 +160,12 @@ class TaiKhoanController extends Controller
                 ->select(self::id, self::ho_ten, self::email, self::dia_chi, self::so_dien_thoai, LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta, self::hinh_anh, self::table . '.' . self::isActive)
                 ->where(self::table . '.' . self::id, '=', $id)->first();
             if ($client) {
-                return response()->json($client, 200);
+                return response()->json(['data' => $client], 200);
             } else {
-                return response()->json("Không tìm thấy", 200);
+                return response()->json(['error' => "Không tìm thấy"], 200);
             }
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -216,7 +216,7 @@ class TaiKhoanController extends Controller
             $this->base->destroy($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -252,7 +252,7 @@ class TaiKhoanController extends Controller
 
         $token = $tk->createToken('WebsiteBanGiayPHP')->accessToken;
 
-        return response()->json(['token' => $token, 'account' => $tk], 200);
+        return response()->json(['token' => $token, 'data' => $tk], 200);
     }
 
     /**
@@ -288,16 +288,16 @@ class TaiKhoanController extends Controller
     public function userInfo()
     {
         $user = auth()->user();
-        return response()->json(['account' => $user], 200);
+        return response()->json(['data' => $user], 200);
     }
 
     public function logout()
     {
         if (Auth::check()) {
             Auth::user()->token()->revoke();
-            return response()->json(['success' => 'logout_success'], 200);
+            return response()->json(['success' => 'logout success'], 200);
         } else {
-            return response()->json(['error' => 'api.something_went_wrong'], 500);
+            return response()->json(['error' => 'api.something went wrong'], 500);
         }
     }
 }

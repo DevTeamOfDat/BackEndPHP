@@ -99,7 +99,7 @@ class BaseController extends Controller
 //                $code = 200;
 //                break;
 //        }
-        $this->message = $objs;
+        $this->message = ['data' => $objs];
         $this->status = $code;
         try {
             $this->size = count($objs);
@@ -134,25 +134,25 @@ class BaseController extends Controller
                     foreach ($listObj as $obj) {
                         DB::table($this->table)->insert($obj);
                     }
-                    $this->message = "Thêm mới thành công";
+                    $this->message = ['success' => "Thêm mới thành công"];
                     $this->status = 201;
                 } else {
-                    $this->message = 'Thêm mới thất bại';
+                    $this->message = ['error' => 'Thêm mới thất bại'];
                     $this->status = 200;
                 }
             } else {
                 $arr_value = $request->all();
                 if (count($arr_value) > 0) {
                     DB::table($this->table)->insert($arr_value);
-                    $this->message = "Thêm mới thành công";
+                    $this->message = ['success' => "Thêm mới thành công"];
                     $this->status = 201;
                 } else {
-                    $this->message = 'Thêm mới thất bại';
+                    $this->message = ['error' => 'Thêm mới thất bại'];
                     $this->status = 200;
                 }
             }
         } catch (\Throwable $e) {
-            $this->message = $e;
+            $this->message = ['error' => $e];
             $this->status = 500;
         }
     }
@@ -167,10 +167,10 @@ class BaseController extends Controller
     {
 //        if (count($this->table) == 1) {
         if ($obj = DB::table($this->table)->where($this->id, '=', $id)->get()) {
-            $this->message = $obj;
+            $this->message = ['data' => $obj];
             $this->status = 200;
         } else {
-            $this->message = "Không tìm thấy";
+            $this->message = ['error' => "Không tìm thấy"];
             $this->status = 200;
         }
 //        }
@@ -198,10 +198,10 @@ class BaseController extends Controller
     {
         if (DB::table($this->table)->where($this->id, '=', $id)->update($request->all())) {
             $obj = DB::table($this->table)->where($this->id, '=', $id)->get();
-            $this->message = $obj;
+            $this->message = ['data' => $obj];
             $this->status = 200;
         } else {
-            $this->message = "Chỉnh sửa thất bại";
+            $this->message = ['error' => "Chỉnh sửa thất bại"];
             $this->status = 200;
         }
     }
@@ -217,25 +217,25 @@ class BaseController extends Controller
         try {
             if ($listId = $request->get(self::listId)) {
                 if (count($listId) > 0 && DB::table($this->table)->whereIn($this->id, $listId)->update([$this->isActive => false])) {
-                    $this->message = 'Xóa thành công';
+                    $this->message = ['success' => 'Xóa thành công'];
                     $this->status = 200;
                 } else {
-                    $this->message = 'Xóa thất bại';
+                    $this->message = ['error' => 'Xóa thất bại'];
                     $this->status = 200;
                 }
             } else {
                 $id = $request->get(self::key_id);
                 if ($obj = DB::table($this->table)->where($this->id, '=', $id)->update([$this->isActive => false])) {
-                    $this->message = 'Xóa thành công';
+                    $this->message = ['success' => 'Xóa thành công'];
                     $this->status = 200;
                 } else {
-                    $this->message = 'Xóa thất bại';
+                    $this->message = ['error' => 'Xóa thất bại'];
                     $this->status = 200;
                 }
             }
         } catch (\Throwable $e) {
             report($e);
-            $this->message = $e;
+            $this->message = ['error' => $e];
             $this->status = 500;
         }
     }

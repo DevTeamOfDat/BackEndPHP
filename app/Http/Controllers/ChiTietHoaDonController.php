@@ -71,9 +71,9 @@ class ChiTietHoaDonController extends Controller
 //                    $code = 200;
 //                    break;
 //            }
-            return response()->json($objs, $code);
+            return response()->json(['data' => $objs], $code);
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -112,7 +112,7 @@ class ChiTietHoaDonController extends Controller
             $this->base->store($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -133,12 +133,12 @@ class ChiTietHoaDonController extends Controller
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->get();
             if ($obj) {
-                return response()->json($obj, 200);
+                return response()->json(['data' => $obj], 200);
             } else {
-                return response()->json('Không tìm thấy', 200);
+                return response()->json(['error' => 'Không tìm thấy'], 200);
             }
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -168,7 +168,7 @@ class ChiTietHoaDonController extends Controller
             $this->base->update($request, $id);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -186,7 +186,7 @@ class ChiTietHoaDonController extends Controller
             $this->base->destroy($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json('Tài khoản không đủ quyền truy cập', 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 }
