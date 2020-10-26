@@ -112,23 +112,33 @@ class HoaDonController extends Controller
     {
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
+        $ma_tk = $user->ma_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $validator = Validator::make($request->all(), [
-                self::ma_nv => 'required',
-                self::ma_kh => 'required',
-                self::ngay_lap => 'required',
-                self::loai_don => 'required',
-                self::trang_thai => 'required',
-                self::tong_tien => 'required',
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['error' => $validator->errors()->all()], 200);
-            }
+//            $validator = Validator::make($request->all(), [
+//                self::trang_thai => 'required',
+//            ]);
+//            if ($validator->fails()) {
+//                return response()->json(['error' => $validator->errors()->all()], 200);
+//            }
 
-            $this->base->store($request);
-            return response()->json($this->base->getMessage(), $this->base->getStatus());
+            $arr_value = [];
+            $arr_value[self::ma_nv] = $ma_tk;
+            if ($request->ma_khach_hang) {
+                $arr_value[self::ma_kh] = $request->ma_khach_hang;
+            }
+            $arr_value[self::ngay_lap] = now();
+            $arr_value[self::loai_don] = false;
+            $arr_value[self::trang_thai] = true;
+            DB::table(self::table)->insert($arr_value);
+            return response()->json(['success' => "Thêm mới thành công"], 201);
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            $arr_value = [];
+            $arr_value[self::ma_kh] = $ma_tk;
+            $arr_value[self::ngay_lap] = now();
+            $arr_value[self::loai_don] = true;
+            $arr_value[self::trang_thai] = false;
+            DB::table(self::table)->insert($arr_value);
+            return response()->json(['success' => "Thêm mới thành công"], 201);
         }
     }
 

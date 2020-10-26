@@ -6,13 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class VoicherController extends Controller
+class VoucherController extends Controller
 {
     private $base;
-    const table = 'voichers';
-    const id = 'ma_voicher';
+    const table = 'vouchers';
+    const id = 'ma_voucher';
     const ma_khach_hang = 'ma_khach_hang';
-    const muc_voicher = 'muc_voicher';
+    const muc_voucher = 'muc_voucher';
     const isActive = 'isActive';
 
     /**
@@ -72,7 +72,7 @@ class VoicherController extends Controller
         } else {
             $objs = DB::table(self::table)
                 ->join(TaiKhoanController::table, self::table . '.' . self::ma_khach_hang, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
-                ->select(TaiKhoanController::table . '.' . TaiKhoanController::ho_ten, self::muc_voicher)
+                ->select(TaiKhoanController::table . '.' . TaiKhoanController::ho_ten, self::muc_voucher)
                 ->where(self::table . '.' . self::ma_khach_hang, '=', $user->ma_tai_khoan)
                 ->where(self::table . '.' . self::isActive, '=', true)
                 ->get();
@@ -105,7 +105,7 @@ class VoicherController extends Controller
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             $validator = Validator::make($request->all(), [
                 self::ma_khach_hang => 'required',
-                self::muc_voicher => 'required',
+                self::muc_voucher => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()->all()], 200);

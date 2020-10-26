@@ -16,8 +16,8 @@ class CreateHoaDonsTable extends Migration
     {
         Schema::create('hoa_dons', function (Blueprint $table) {
             $table->id('ma_hoa_don');
-            $table->integer('ma_nhan_vien');
-            $table->integer('ma_khach_hang');
+            $table->integer('ma_nhan_vien')->nullable();
+            $table->integer('ma_khach_hang')->nullable();
             $table->string('ngay_lap')->default(now());
             $table->boolean('loai_don')->default(true);
             $table->boolean('trang_thai')->default(true);

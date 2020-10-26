@@ -187,14 +187,17 @@ class NhanXetController extends Controller
         $ma_tk = $user->ma_tai_khoan;
         try {
             if ($listId = $request->get(BaseController::listId)) {
-                if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-                    if (count($listId) > 0 && DB::table(self::table)->whereIn(self::id, $listId)->update([self::isActive => false])) {
-                        return response()->json(['success' => 'Xóa thành công'], 200);
-                    } else {
-                        return response()->json(['error' => 'Xóa thất bại'], 200);
+                if (count($listId) > 0) {
+                    foreach ($listId as $id) {
+                        $ma_kh = DB::table(self::table)->where(self::id, '=', $id)->get(self::ma_khach_hang);
+                        if ($loai_tk != TaiKhoanController::NV && $loai_tk != TaiKhoanController::QT && $ma_kh != $ma_tk) {
+                            return response()->json(['error' => 'Xóa thất bại. Bạn không được phép xóa nhận xét của người khác'], 200);
+                        }
                     }
+                    DB::table(self::table)->whereIn(self::id, $listId)->update([self::isActive => false]);
+                    return response()->json(['success' => 'Xóa thành công'], 200);
                 } else {
-                    return response()->json(['error' => 'Tài khoản không đủ quyền để thực hiện thao tác này'], 200);
+                    return response()->json(['error' => 'Xóa thất bại. Không có dữ liệu'], 200);
                 }
             } else {
                 $id = $request->get(BaseController::key_id);

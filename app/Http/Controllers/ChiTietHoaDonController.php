@@ -96,23 +96,60 @@ class ChiTietHoaDonController extends Controller
      */
     public function store(Request $request)
     {
-        $user = auth()->user();
-        $loai_tk = $user->loai_tai_khoan;
-        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $validator = Validator::make($request->all(), [
-                self::ma_hoa_don => 'required',
-                self::ma_san_pham => 'required',
-                self::gia_ban => 'required',
-                self::so_luong => 'required',
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['error' => $validator->errors()->all()], 200);
+        try {
+            if ($listObj = $request->get(BaseController::listObj)) {
+                $count = count($listObj);
+                if ($count > 0) {
+                    foreach ($listObj as $obj) {
+                        $validator = Validator::make($obj, [
+                            self::ma_hoa_don => 'required',
+                            self::ma_san_pham => 'required',
+                            self::so_luong => 'required',
+                        ]);
+                        if ($validator->fails()) {
+                            return response()->json(['error' => $validator->errors()->all()], 200);
+                        }
+                        if ($obj[self::so_luong] < 1) {
+                            return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 200);
+                        }
+                        if (DB::table(self::table)->where(self::ma_san_pham, '=', $obj[self::ma_san_pham])
+                            ->where(self::ma_hoa_don, '=', $obj[self::ma_hoa_don])->first()) {
+                            return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã hóa đơn và mã sản phẩm'], 200);
+                        }
+                    }
+                    foreach ($listObj as $obj) {
+                        DB::table(self::table)->insert($obj);
+                    }
+                    return response()->json(['success' => 'Thêm mới thành công'], 201);
+                } else {
+                    return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);
+                }
+            } else {
+                $arr_value = $request->all();
+                if (count($arr_value) > 0) {
+                    $validator = Validator::make($arr_value, [
+                        self::ma_hoa_don => 'required',
+                        self::ma_san_pham => 'required',
+                        self::so_luong => 'required',
+                    ]);
+                    if ($validator->fails()) {
+                        return response()->json(['error' => $validator->errors()->all()], 200);
+                    }
+                    if ($arr_value[self::so_luong] < 1) {
+                        return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 200);
+                    }
+                    if (DB::table(self::table)->where(self::ma_san_pham, '=', $arr_value[self::ma_san_pham])
+                        ->where(self::ma_hoa_don, '=', $arr_value[self::ma_hoa_don])->first()) {
+                        return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã hóa đơn và mã sản phẩm'], 200);
+                    }
+                    DB::table(self::table)->insert($arr_value);
+                    return response()->json(['success' => 'Thêm mới thành công'], 201);
+                } else {
+                    return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);
+                }
             }
-
-            $this->base->store($request);
-            return response()->json($this->base->getMessage(), $this->base->getStatus());
-        } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+        } catch (\Throwable $e) {
+            return response()->json(['error' => $e], 500);
         }
     }
 

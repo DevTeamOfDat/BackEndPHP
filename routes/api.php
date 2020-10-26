@@ -239,15 +239,15 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/status', [\App\Http\Controllers\TrangThaiController::class, 'destroy']);
 
 //voicher
-    Route::get('/voichers', [\App\Http\Controllers\VoicherController::class, 'index']);
+    Route::get('/vouchers', [\App\Http\Controllers\VoucherController::class, 'index']);
 
-    Route::get('/voichers/{id}', [\App\Http\Controllers\VoicherController::class, 'show']);
+    Route::get('/vouchers/{id}', [\App\Http\Controllers\VoucherController::class, 'show']);
 
-    Route::post('/voichers', [\App\Http\Controllers\VoicherController::class, 'store']);
+    Route::post('/vouchers', [\App\Http\Controllers\VoucherController::class, 'store']);
 
-    Route::put('/voichers/{id}', [\App\Http\Controllers\VoicherController::class, 'update']);
+    Route::put('/vouchers/{id}', [\App\Http\Controllers\VoucherController::class, 'update']);
 
-    Route::delete('/voichers', [\App\Http\Controllers\VoicherController::class, 'destroy']);
+    Route::delete('/vouchers', [\App\Http\Controllers\VoucherController::class, 'destroy']);
 
 //giỏ hàng
 //    Route::get('/carts/{query}', [\App\Http\Controllers\GioHangController::class, 'index']);

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVoichersTable extends Migration
+class CreateVouchersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateVoichersTable extends Migration
      */
     public function up()
     {
-        Schema::create('voichers', function (Blueprint $table) {
-            $table->id('ma_voicher');
+        Schema::create('vouchers', function (Blueprint $table) {
+            $table->id('ma_voucher');
             $table->integer('ma_khach_hang');
-            $table->integer('muc_voicher')->default(0);
+            $table->integer('muc_voucher')->default(0);
             $table->boolean('isActive')->default(true);
         });
 
@@ -28,9 +28,9 @@ class CreateVoichersTable extends Migration
         date_default_timezone_set('Asia/Ho_Chi_Minh');
 
         for ($i = 0; $i < $limit; $i++) {
-            DB::table('voichers')->insert([
+            DB::table('vouchers')->insert([
                 'ma_khach_hang' => $faker->randomElement($khs),
-                'muc_voicher' => rand(0, 100),
+                'muc_voucher' => rand(0, 100),
                 'isActive' => $faker->randomElement([true, false]),
             ]);
         }
@@ -43,6 +43,6 @@ class CreateVoichersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('voichers');
+        Schema::dropIfExists('vouchers');
     }
 }
