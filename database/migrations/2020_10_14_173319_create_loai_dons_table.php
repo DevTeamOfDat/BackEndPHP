@@ -16,7 +16,7 @@ class CreateLoaiDonsTable extends Migration
         Schema::create('loai_dons', function (Blueprint $table) {
             $table->id();
             $table->string('gia_tri');
-            $table->string('mo_ta');
+            $table->string('mo_ta')->default('');
             $table->boolean('isActive')->default(true);
         });
 

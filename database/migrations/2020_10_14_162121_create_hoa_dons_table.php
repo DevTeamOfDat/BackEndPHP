@@ -18,9 +18,9 @@ class CreateHoaDonsTable extends Migration
             $table->id('ma_hoa_don');
             $table->integer('ma_nhan_vien');
             $table->integer('ma_khach_hang');
-            $table->string('ngay_lap');
-            $table->boolean('loai_don');
-            $table->boolean('trang_thai');
+            $table->string('ngay_lap')->default(now());
+            $table->boolean('loai_don')->default(true);
+            $table->boolean('trang_thai')->default(true);
             $table->double('tong_tien', 15, 2)->default(0.00);
             $table->boolean('isActive')->default(true);
         });

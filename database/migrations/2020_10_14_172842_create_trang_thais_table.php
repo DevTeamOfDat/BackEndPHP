@@ -16,17 +16,17 @@ class CreateTrangThaisTable extends Migration
         Schema::create('trang_thais', function (Blueprint $table) {
             $table->id();
             $table->string('gia_tri');
-            $table->string('mo_ta');
+            $table->string('mo_ta')->default('');
             $table->boolean('isActive')->default(true);
         });
 
         DB::table('trang_thais')->insert([
             'gia_tri' => 'true',
-            'mo_ta' => 'Đã gửi/nhận hàng',
+            'mo_ta' => 'Khách đã nhận hàng',
         ]);
         DB::table('trang_thais')->insert([
             'gia_tri' => 'false',
-            'mo_ta' => 'Chưa gửi/nhận hàng',
+            'mo_ta' => 'Khách chưa nhận hàng',
         ]);
     }
 

@@ -17,7 +17,7 @@ class CreateDacTrungsTable extends Migration
         Schema::create('dac_trungs', function (Blueprint $table) {
             $table->id('loai_dac_trung');
             $table->string('ten_dac_trung');
-            $table->text('mo_ta')->nullable();
+            $table->text('mo_ta')->default('');
             $table->boolean('isActive')->default(true);
         });
 

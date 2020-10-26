@@ -20,7 +20,7 @@ class CreateSanPhamsTable extends Migration
             $table->integer('ma_loai_san_pham');
             $table->string('ten_san_pham');
             $table->double('gia_ban', 15, 2)->default(0.00);
-            $table->integer('so_luong');
+            $table->integer('so_luong')->default(0);
             $table->boolean('isActive')->default(true);
         });
 
