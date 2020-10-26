@@ -19,8 +19,8 @@ class CreatePhieuNhapsTable extends Migration
             $table->integer('ma_nhan_vien');
             $table->integer('ma_nha_cung_cap');
             $table->string('ngay_nhap');
-            $table->boolean('trang_thai');
             $table->double('tong_tien', 15, 2)->default(0.00);
+            $table->text('ghi_chu')->default('');
             $table->boolean('isActive')->default(true);
         });
 
@@ -36,7 +36,6 @@ class CreatePhieuNhapsTable extends Migration
                 'ma_nhan_vien' => $faker->randomElement($nvs),
                 'ma_nha_cung_cap' => $faker->randomElement($nccs),
                 'ngay_nhap' => $faker->date('d-m-Y | H:i', time()),
-                'trang_thai' => $faker->randomElement([true, false]),
                 'isActive' => $faker->randomElement([true, false]),
             ]);
         }
