@@ -225,6 +225,7 @@ class TaiKhoanController extends Controller
      */
     public function register(Request $request)
     {
+        date_default_timezone_set(BaseController::timezone);
         $validator = Validator::make($request->all(), [
             self::ho_ten => 'required|min:8',
             self::email => 'required|email',
@@ -240,7 +241,7 @@ class TaiKhoanController extends Controller
         DB::table(self::table)->insert([
             self::ho_ten => $request->ho_ten,
             self::email => $request->email,
-            self::email_verified_at => now(),
+            self::email_verified_at => date('d-m-Y'),
             self::mat_khau => bcrypt($request->mat_khau),
             self::dia_chi => $request->dia_chi,
             self::so_dien_thoai => $request->so_dien_thoai,

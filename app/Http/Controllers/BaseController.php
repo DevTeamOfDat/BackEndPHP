@@ -17,6 +17,7 @@ class BaseController extends Controller
     const listObj = 'listObj';
     const listId = 'listId';
     const key_id = 'id';
+    const timezone = 'Asia/Ho_Chi_Minh';
 
     /**
      * BaseController constructor.
@@ -137,7 +138,7 @@ class BaseController extends Controller
                     $this->message = ['success' => "Thêm mới thành công"];
                     $this->status = 201;
                 } else {
-                    $this->message = ['error' => 'Thêm mới thất bại'];
+                    $this->message = ['error' => 'Thêm mới thất bại. Không có dữ liệu'];
                     $this->status = 200;
                 }
             } else {
@@ -147,7 +148,7 @@ class BaseController extends Controller
                     $this->message = ['success' => "Thêm mới thành công"];
                     $this->status = 201;
                 } else {
-                    $this->message = ['error' => 'Thêm mới thất bại'];
+                    $this->message = ['error' => 'Thêm mới thất bại. Không có dữ liệu'];
                     $this->status = 200;
                 }
             }

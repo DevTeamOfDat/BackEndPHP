@@ -98,16 +98,6 @@ class ChiTietPhieuNhapController extends Controller
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-//            $validator = Validator::make($request->all(), [
-//                self::ma_phieu_nhap => 'required',
-//                self::ma_san_pham => 'required',
-//                self::gia_nhap => 'required',
-//                self::so_luong => 'required',
-//            ]);
-//            if ($validator->fails()) {
-//                return response()->json(['error' => $validator->errors()->all()], 200);
-//            }
-
             try {
                 if ($listObj = $request->get(BaseController::listObj)) {
                     $count = count($listObj);

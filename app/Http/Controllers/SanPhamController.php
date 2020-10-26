@@ -32,11 +32,11 @@ class SanPhamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($query)
+    public function index()
     {
-        $user = auth()->user();
-        $loai_tk = $user->loai_tai_khoan;
-        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+//        $user = auth()->user();
+//        $loai_tk = $user->loai_tai_khoan;
+//        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             $objs = null;
             $code = null;
             $objs = DB::table(self::table)
@@ -76,9 +76,9 @@ class SanPhamController extends Controller
 //                break;
 //        }
             return response()->json(['data' => $objs], $code);
-        } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
-        }
+//        } else {
+//            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+//        }
     }
 
     /**
@@ -107,8 +107,6 @@ class SanPhamController extends Controller
                 self::ma_thuong_hieu => 'required',
                 self::ma_loai_san_pham => 'required',
                 self::ten_san_pham => 'required',
-                self::gia_ban => 'required',
-                self::so_luong => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()->all()], 200);
@@ -129,9 +127,9 @@ class SanPhamController extends Controller
      */
     public function show($id)
     {
-        $user = auth()->user();
-        $loai_tk = $user->loai_tai_khoan;
-        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+//        $user = auth()->user();
+//        $loai_tk = $user->loai_tai_khoan;
+//        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             $obj = DB::table(self::table)
                 ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
                 ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
@@ -143,9 +141,9 @@ class SanPhamController extends Controller
             } else{
                 return response()->json(['error' => 'Không tìm thấy'], 200);
             }
-        } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
-        }
+//        } else {
+//            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+//        }
     }
 
     /**

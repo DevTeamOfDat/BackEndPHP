@@ -38,7 +38,7 @@ class NhanXetController extends Controller
         $objs = null;
         $code = null;
         $objs = DB::table(self::table)
-            ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+            ->leftJoin(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
             ->join(TaiKhoanController::table, self::table . '.' . self::ma_khach_hang, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
             ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, TaiKhoanController::table . '.' . TaiKhoanController::ho_ten)
             ->get();
@@ -98,19 +98,25 @@ class NhanXetController extends Controller
      */
     public function store(Request $request)
     {
-//        $user = auth()->user();
-//        $loai_tk = $user->loai_tai_khoan;
+        $user = auth()->user();
 //        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
         $validator = Validator::make($request->all(), [
-            self::ma_khach_hang => 'required',
             self::binh_luan => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()->all()], 200);
         }
 
-        $this->base->store($request);
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+        $obj = [];
+        $obj[self::ma_khach_hang] = $user->ma_tai_khoan;
+        $obj[self::binh_luan] = $request->binh_luan;
+        if (DB::table(self::table)->insert($obj)) {
+            return response()->json(['success' => 'Thêm mới thành công'], 201);
+        } else {
+            return response()->json(['error' => 'Thêm mới thất bại'], 200);
+        }
+//        $this->base->store($request);
+//        return response()->json($this->base->getMessage(), $this->base->getStatus());
 //        } else {
 //            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
 //        }

@@ -110,23 +110,17 @@ class HoaDonController extends Controller
      */
     public function store(Request $request)
     {
+        date_default_timezone_set(BaseController::timezone);
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         $ma_tk = $user->ma_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-//            $validator = Validator::make($request->all(), [
-//                self::trang_thai => 'required',
-//            ]);
-//            if ($validator->fails()) {
-//                return response()->json(['error' => $validator->errors()->all()], 200);
-//            }
-
             $arr_value = [];
             $arr_value[self::ma_nv] = $ma_tk;
             if ($request->ma_khach_hang) {
                 $arr_value[self::ma_kh] = $request->ma_khach_hang;
             }
-            $arr_value[self::ngay_lap] = now();
+            $arr_value[self::ngay_lap] = date('d-m-Y');
             $arr_value[self::loai_don] = false;
             $arr_value[self::trang_thai] = true;
             DB::table(self::table)->insert($arr_value);
@@ -134,7 +128,7 @@ class HoaDonController extends Controller
         } else {
             $arr_value = [];
             $arr_value[self::ma_kh] = $ma_tk;
-            $arr_value[self::ngay_lap] = now();
+            $arr_value[self::ngay_lap] = date('d-m-Y');
             $arr_value[self::loai_don] = true;
             $arr_value[self::trang_thai] = false;
             DB::table(self::table)->insert($arr_value);
@@ -159,8 +153,17 @@ class HoaDonController extends Controller
                 ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang')
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->get();
+
+            $listBillDetail = DB::table(ChiTietHoaDonController::table)
+                ->join(SanPhamController::table, ChiTietHoaDonController::table . '.' . ChiTietHoaDonController::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+                ->select(ChiTietHoaDonController::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
+                ->where(ChiTietHoaDonController::ma_hoa_don, '=', $id)
+                ->get();
             if ($obj) {
-                return response()->json(['data' => $obj], 200);
+                return response()->json([
+                    'data' => $obj,
+                    'listBillDetail' => $listBillDetail
+                ], 200);
             } else {
                 return response()->json(['error' => 'Không tìm thấy'], 200);
             }
@@ -172,8 +175,17 @@ class HoaDonController extends Controller
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->where(self::table . '.' . self::ma_kh, '=', $user->ma_tai_khoan)
                 ->get();
+            $listBillDetail = DB::table(ChiTietHoaDonController::table)
+                ->join(SanPhamController::table, ChiTietHoaDonController::table . '.' . ChiTietHoaDonController::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+                ->select(ChiTietHoaDonController::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
+                ->where(ChiTietHoaDonController::ma_hoa_don, '=', $id)
+                ->where(self::table . '.' . self::ma_kh, '=', $user->ma_tai_khoan)
+                ->get();
             if ($obj) {
-                return response()->json(['data' => $obj], 200);
+                return response()->json([
+                    'data' => $obj,
+                    'listBillDetail' => $listBillDetail
+                ], 200);
             } else {
                 return response()->json(['error' => 'Không tìm thấy'], 200);
             }

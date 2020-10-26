@@ -14,7 +14,7 @@ class PhieuNhapController extends Controller
     const ma_nhan_vien = 'ma_nhan_vien';
     const ma_nha_cung_cap = 'ma_nha_cung_cap';
     const ngay_nhap = 'ngay_nhap';
-    const trang_thai = 'trang_thai';
+    const ghi_chu = 'ghi_chu';
     const tong_tien = 'tong_tien';
     const isActive = 'isActive';
 
@@ -100,22 +100,27 @@ class PhieuNhapController extends Controller
      */
     public function store(Request $request)
     {
+        date_default_timezone_set(BaseController::timezone);
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             $validator = Validator::make($request->all(), [
-                self::ma_nhan_vien => 'required',
                 self::ma_nha_cung_cap => 'required',
-                self::ngay_nhap => 'required',
-                self::trang_thai => 'required',
-                self::tong_tien => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()->all()], 200);
             }
 
-            $this->base->store($request);
-            return response()->json($this->base->getMessage(), $this->base->getStatus());
+            $obj = [];
+            $obj[self::ma_nhan_vien] = $user->ma_tai_khoan;
+            $obj[self::ma_nha_cung_cap] = $request->ma_nha_cung_cap;
+            $obj[self::ngay_nhap] = date('d-m-Y');
+            if ($request->ghi_chu) {
+                $obj[self::ghi_chu] = $request->ghi_chu;
+            }
+
+            DB::table(self::table)->insert($obj);
+            return response()->json(['success' => "Thêm mới thành công"], 201);
         } else {
             return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
@@ -132,16 +137,22 @@ class PhieuNhapController extends Controller
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-//            $ctpn = new ChiTietPhieuNhapController();
-//            $ctpn->showListPN($id);
             $obj = DB::table(self::table)
                 ->join(NhaCungCapController::table, NhaCungCapController::table . '.' . NhaCungCapController::id, '=', self::table . '.' . self::ma_nha_cung_cap)
                 ->join(TaiKhoanController::table, self::table . '.' . self::ma_nhan_vien, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
                 ->select(self::table . '.*', NhaCungCapController::table . '.' . NhaCungCapController::ten . ' as ten_nha_cung_cap', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien')
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->get();
+            $listCouponDetail = DB::table(ChiTietPhieuNhapController::table)
+                ->join(SanPhamController::table, ChiTietPhieuNhapController::table . '.' . ChiTietPhieuNhapController::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+                ->select(ChiTietPhieuNhapController::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
+                ->where(ChiTietPhieuNhapController::ma_phieu_nhap, '=', $id)
+                ->get();
             if ($obj) {
-                return response()->json(['data' => $obj], 200);
+                return response()->json([
+                    'data' => $obj,
+                    'listCouponDetail' => $listCouponDetail
+                ], 200);
             } else {
                 return response()->json(['error' => 'Không tìm thấy'], 200);
             }
@@ -174,8 +185,7 @@ class PhieuNhapController extends Controller
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             $pn = DB::table(self::table)->where(self::id, '=', $id)->first();
-            if ($pn->trang_thai == false && $request->get(self::trang_thai) == true) {
-                DB::table(self::table)->where(self::id, '=', $id)->update([self::trang_thai => true]);
+            if (DB::table(self::table)->where(self::id, '=', $id)->update($request->all())) {
                 return response()->json(['success' => 'Cập nhật thành công'], 200);
             } else {
                 return response()->json(['error' => 'Cập nhật thất bại'], 200);

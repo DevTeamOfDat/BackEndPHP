@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class NgayKhuyenMaiController extends Controller
@@ -29,14 +30,16 @@ class NgayKhuyenMaiController extends Controller
      */
     public function index()
     {
-//        $user = auth()->user();
-//        $loai_tk = $user->loai_tai_khoan;
-//        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             $this->base->index();
             return response()->json($this->base->getMessage(), $this->base->getStatus());
-//        } else {
-//            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
-//        }
+        } else {
+            $objs = DB::table(self::table)->where(self::isActive, '=', true)
+                ->orderBy(self::ngay_gio)->limit(3)->get();
+            return response()->json(['data' => $objs], 200);
+        }
     }
 
     /**
@@ -61,11 +64,36 @@ class NgayKhuyenMaiController extends Controller
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $validator = Validator::make($request->all(), [
-                self::ngay_gio => 'required',
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['error' => $validator->errors()->all()], 200);
+            try {
+                if ($listObj = $request->get(BaseController::listObj)) {
+                    $count = count($listObj);
+                    if ($count > 0) {
+                        foreach ($listObj as $obj) {
+                            $validator = Validator::make($obj, [
+                                self::ngay_gio => 'required',
+                            ]);
+                            if ($validator->fails()) {
+                                return response()->json(['error' => $validator->errors()->all()], 200);
+                            }
+                        }
+                    } else {
+                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);
+                    }
+                } else {
+                    $arr_value = $request->all();
+                    if (count($arr_value) > 0) {
+                        $validator = Validator::make($arr_value, [
+                            self::ngay_gio => 'required',
+                        ]);
+                        if ($validator->fails()) {
+                            return response()->json(['error' => $validator->errors()->all()], 200);
+                        }
+                    } else {
+                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);
+                    }
+                }
+            } catch (\Throwable $e) {
+                return response()->json(['error' => $e], 500);
             }
 
             $this->base->store($request);

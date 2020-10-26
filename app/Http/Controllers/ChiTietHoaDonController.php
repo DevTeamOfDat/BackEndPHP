@@ -217,13 +217,13 @@ class ChiTietHoaDonController extends Controller
      */
     public function destroy(Request $request)
     {
-        $user = auth()->user();
-        $loai_tk = $user->loai_tai_khoan;
-        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+//        $user = auth()->user();
+//        $loai_tk = $user->loai_tai_khoan;
+//        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             $this->base->destroy($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
-        } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
-        }
+//        } else {
+//            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+//        }
     }
 }

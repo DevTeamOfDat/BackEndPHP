@@ -15,7 +15,7 @@ class CreateNgayKhuyenMaisTable extends Migration
     {
         Schema::create('ngay_khuyen_mais', function (Blueprint $table) {
             $table->id('ma_ngay_khuyen_mai');
-            $table->string('ngay_gio');
+            $table->date('ngay_gio');
             $table->boolean('isActive')->default(true);
         });
 

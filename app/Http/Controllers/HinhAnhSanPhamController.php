@@ -31,9 +31,9 @@ class HinhAnhSanPhamController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
-        $loai_tk = $user->loai_tai_khoan;
-        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+//        $user = auth()->user();
+//        $loai_tk = $user->loai_tai_khoan;
+//        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             $objs = null;
             $code = null;
             $objs = DB::table(self::table)
@@ -69,9 +69,9 @@ class HinhAnhSanPhamController extends Controller
 //                break;
 //        }
             return response()->json(['data' => $objs], $code);
-        } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
-        }
+//        } else {
+//            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+//        }
     }
 
     /**
@@ -96,12 +96,38 @@ class HinhAnhSanPhamController extends Controller
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $validator = Validator::make($request->all(), [
-                self::hinh_anh => 'required',
-                self::ma_san_pham => 'required',
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['error' => $validator->errors()->all()], 200);
+            try {
+                if ($listObj = $request->get(BaseController::listObj)) {
+                    $count = count($listObj);
+                    if ($count > 0) {
+                        foreach ($listObj as $obj) {
+                            $validator = Validator::make($obj, [
+                                self::hinh_anh => 'required',
+                                self::ma_san_pham => 'required',
+                            ]);
+                            if ($validator->fails()) {
+                                return response()->json(['error' => $validator->errors()->all()], 200);
+                            }
+                        }
+                    } else {
+                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);
+                    }
+                } else {
+                    $arr_value = $request->all();
+                    if (count($arr_value) > 0) {
+                        $validator = Validator::make($arr_value, [
+                            self::hinh_anh => 'required',
+                            self::ma_san_pham => 'required',
+                        ]);
+                        if ($validator->fails()) {
+                            return response()->json(['error' => $validator->errors()->all()], 200);
+                        }
+                    } else {
+                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);
+                    }
+                }
+            } catch (\Throwable $e) {
+                return response()->json(['error' => $e], 500);
             }
 
             $this->base->store($request);
@@ -119,22 +145,23 @@ class HinhAnhSanPhamController extends Controller
      */
     public function show($id)
     {
-        $user = auth()->user();
-        $loai_tk = $user->loai_tai_khoan;
-        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+        //show theo masp
+//        $user = auth()->user();
+//        $loai_tk = $user->loai_tai_khoan;
+//        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             $obj = DB::table(self::table)
                 ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
                 ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
-                ->where(self::table . '.' . self::id, '=', $id)
+                ->where(self::table . '.' . self::ma_san_pham, '=', $id)
                 ->get();
             if ($obj) {
                 return response()->json(['data' => $obj], 200);
             } else {
                 return response()->json(['error' => 'Không tìm thấy'], 200);
             }
-        } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
-        }
+//        } else {
+//            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+//        }
     }
 
     /**

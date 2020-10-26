@@ -62,11 +62,36 @@ class LoaiSanPhamController extends Controller
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $validator = Validator::make($request->all(), [
-                self::ten_loai_san_pham => 'required',
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['error' => $validator->errors()->all()], 200);
+            try {
+                if ($listObj = $request->get(BaseController::listObj)) {
+                    $count = count($listObj);
+                    if ($count > 0) {
+                        foreach ($listObj as $obj) {
+                            $validator = Validator::make($obj, [
+                                self::ten_loai_san_pham => 'required',
+                            ]);
+                            if ($validator->fails()) {
+                                return response()->json(['error' => $validator->errors()->all()], 200);
+                            }
+                        }
+                    } else {
+                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);
+                    }
+                } else {
+                    $arr_value = $request->all();
+                    if (count($arr_value) > 0) {
+                        $validator = Validator::make($arr_value, [
+                            self::ten_loai_san_pham => 'required',
+                        ]);
+                        if ($validator->fails()) {
+                            return response()->json(['error' => $validator->errors()->all()], 200);
+                        }
+                    } else {
+                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);
+                    }
+                }
+            } catch (\Throwable $e) {
+                return response()->json(['error' => $e], 500);
             }
 
             $this->base->store($request);
