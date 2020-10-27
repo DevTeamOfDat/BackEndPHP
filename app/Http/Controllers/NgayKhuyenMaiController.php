@@ -36,9 +36,10 @@ class NgayKhuyenMaiController extends Controller
             $this->base->index();
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            $objs = DB::table(self::table)->where(self::isActive, '=', true)
-                ->orderBy(self::ngay_gio)->limit(3)->get();
-            return response()->json(['data' => $objs], 200);
+//            $objs = DB::table(self::table)->where(self::isActive, '=', true)
+//                ->orderBy(self::ngay_gio)->limit(3)->get();
+//            return response()->json(['data' => $objs], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
     }
 
@@ -61,6 +62,8 @@ class NgayKhuyenMaiController extends Controller
      */
     public function store(Request $request)
     {
+        date_default_timezone_set(BaseController::timezone);
+        $date = date('d-m-Y');
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
@@ -75,6 +78,9 @@ class NgayKhuyenMaiController extends Controller
                             if ($validator->fails()) {
                                 return response()->json(['error' => $validator->errors()->all()], 200);
                             }
+                            if ($obj[self::ngay_gio] < $date) {
+                                return response()->json(['error' => 'Ngày không hợp lệ'], 200);
+                            }
                         }
                     } else {
                         return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);
@@ -87,6 +93,9 @@ class NgayKhuyenMaiController extends Controller
                         ]);
                         if ($validator->fails()) {
                             return response()->json(['error' => $validator->errors()->all()], 200);
+                        }
+                        if ($arr_value[self::ngay_gio] < $date) {
+                            return response()->json(['error' => 'Ngày không hợp lệ'], 200);
                         }
                     } else {
                         return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);

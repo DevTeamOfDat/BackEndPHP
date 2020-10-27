@@ -38,7 +38,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::put('/suppliers/{id}', [NhaCungCapController::class, 'update']);
 
-    Route::delete('/suppliers', [NhaCungCapController::class, 'destroy']);
+    Route::post('/suppliers/delete', [NhaCungCapController::class, 'destroy']);
 
 //tài khoản
     Route::get('/accounts', [TaiKhoanController::class, 'index']);
@@ -49,7 +49,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::put('/accounts/{id}', [TaiKhoanController::class, 'update']);
 
-    Route::delete('/accounts', [TaiKhoanController::class, 'destroy']);
+    Route::post('/accounts/delete', [TaiKhoanController::class, 'destroy']);
 
 //chi tiết hóa đơn
 //    Route::get('/bill-details', [\App\Http\Controllers\ChiTietHoaDonController::class, 'index']);
@@ -60,7 +60,7 @@ Route::middleware('auth:api')->group(function () {
 
 //    Route::put('/bill-details/{id}', [\App\Http\Controllers\ChiTietHoaDonController::class, 'update']);
 
-    Route::delete('/bill-details', [\App\Http\Controllers\ChiTietHoaDonController::class, 'destroy']);
+    Route::post('/bill-details/delete', [\App\Http\Controllers\ChiTietHoaDonController::class, 'destroy']);
 
 //chi tiết phiếu nhập
 //    Route::get('/coupon-details', [\App\Http\Controllers\ChiTietPhieuNhapController::class, 'index']);
@@ -71,7 +71,7 @@ Route::middleware('auth:api')->group(function () {
 
     //Route::put('/coupon-details/{id}', [\App\Http\Controllers\ChiTietPhieuNhapController::class, 'update']);
 
-    Route::delete('/coupon-details', [\App\Http\Controllers\ChiTietPhieuNhapController::class, 'destroy']);
+    Route::post('/coupon-details/delete', [\App\Http\Controllers\ChiTietPhieuNhapController::class, 'destroy']);
 
 //đặc trưng
     Route::get('/specialities', [\App\Http\Controllers\DacTrungController::class, 'index']);
@@ -104,7 +104,7 @@ Route::middleware('auth:api')->group(function () {
 
 //    Route::put('/image-products/{id}', [\App\Http\Controllers\HinhAnhSanPhamController::class, 'update']);
 
-    Route::delete('/image-products', [\App\Http\Controllers\HinhAnhSanPhamController::class, 'destroy']);
+    Route::post('/image-products/delete', [\App\Http\Controllers\HinhAnhSanPhamController::class, 'destroy']);
 
 //hóa đơn
     Route::get('/bills', [\App\Http\Controllers\HoaDonController::class, 'index']);
@@ -115,18 +115,18 @@ Route::middleware('auth:api')->group(function () {
 
     Route::put('/bills/{id}', [\App\Http\Controllers\HoaDonController::class, 'update']);
 
-    Route::delete('/bills', [\App\Http\Controllers\HoaDonController::class, 'destroy']);
+    Route::post('/bills/delete', [\App\Http\Controllers\HoaDonController::class, 'destroy']);
 
 //khuyến mãi sản phẩm
     Route::get('/promotion-products', [\App\Http\Controllers\KhuyenMaiSanPhamController::class, 'index']);
 
-    Route::get('/promotion-products/{id}', [\App\Http\Controllers\KhuyenMaiSanPhamController::class, 'show']);
+//    Route::get('/promotion-products/{id}', [\App\Http\Controllers\KhuyenMaiSanPhamController::class, 'show']);
 
     Route::post('/promotion-products', [\App\Http\Controllers\KhuyenMaiSanPhamController::class, 'store']);
 
 //    Route::put('/promotion-products/{id}', [\App\Http\Controllers\KhuyenMaiSanPhamController::class, 'update']);
 
-    Route::delete('/promotion-products', [\App\Http\Controllers\KhuyenMaiSanPhamController::class, 'destroy']);
+    Route::post('/promotion-products/delete', [\App\Http\Controllers\KhuyenMaiSanPhamController::class, 'destroy']);
 
 //loại đơn
     Route::get('/bill-types', [\App\Http\Controllers\LoaiDonController::class, 'index']);
@@ -148,7 +148,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::put('/product-types/{id}', [\App\Http\Controllers\LoaiSanPhamController::class, 'update']);
 
-    Route::delete('/product-types', [\App\Http\Controllers\LoaiSanPhamController::class, 'destroy']);
+    Route::post('/product-types/delete', [\App\Http\Controllers\LoaiSanPhamController::class, 'destroy']);
 
 //loại tài khoản
     Route::get('/account-types', [\App\Http\Controllers\LoaiTaiKhoanController::class, 'index']);
@@ -159,7 +159,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::put('/account-types/{id}', [\App\Http\Controllers\LoaiTaiKhoanController::class, 'update']);
 
-    Route::delete('/account-types', [\App\Http\Controllers\LoaiTaiKhoanController::class, 'destroy']);
+    Route::post('/account-types/delete', [\App\Http\Controllers\LoaiTaiKhoanController::class, 'destroy']);
 
 //ngày khuyến mãi
     Route::get('/promotion-dates', [\App\Http\Controllers\NgayKhuyenMaiController::class, 'index']);
@@ -170,7 +170,7 @@ Route::middleware('auth:api')->group(function () {
 
 //    Route::put('/promotion-dates/{id}', [\App\Http\Controllers\NgayKhuyenMaiController::class, 'update']);
 
-    Route::delete('/promotion-dates', [\App\Http\Controllers\NgayKhuyenMaiController::class, 'destroy']);
+    Route::post('/promotion-dates/delete', [\App\Http\Controllers\NgayKhuyenMaiController::class, 'destroy']);
 
 //nhận xét
     Route::get('/reviews', [\App\Http\Controllers\NhanXetController::class, 'index']);
@@ -181,7 +181,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::put('/reviews/{id}', [\App\Http\Controllers\NhanXetController::class, 'update']);
 
-    Route::delete('/reviews', [\App\Http\Controllers\NhanXetController::class, 'destroy']);
+    Route::post('/reviews/delete', [\App\Http\Controllers\NhanXetController::class, 'destroy']);
 
 //phiếu nhập
     Route::get('/coupons', [\App\Http\Controllers\PhieuNhapController::class, 'index']);
@@ -192,7 +192,7 @@ Route::middleware('auth:api')->group(function () {
 
 //    Route::put('/coupons/{id}', [\App\Http\Controllers\PhieuNhapController::class, 'update']);
 
-    Route::delete('/coupons', [\App\Http\Controllers\PhieuNhapController::class, 'destroy']);
+    Route::post('/coupons/delete', [\App\Http\Controllers\PhieuNhapController::class, 'destroy']);
 
 //sản phẩm
     Route::get('/products', [\App\Http\Controllers\SanPhamController::class, 'index']);
@@ -203,7 +203,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::put('/products/{id}', [\App\Http\Controllers\SanPhamController::class, 'update']);
 
-    Route::delete('/products', [\App\Http\Controllers\SanPhamController::class, 'destroy']);
+    Route::post('/products/delete', [\App\Http\Controllers\SanPhamController::class, 'destroy']);
 
 //thương hiệu
     Route::get('/trademarks', [\App\Http\Controllers\ThuongHieuController::class, 'index']);
@@ -225,7 +225,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::put('/hotnews/{id}', [\App\Http\Controllers\TinTucController::class, 'update']);
 
-    Route::delete('/hotnews', [\App\Http\Controllers\TinTucController::class, 'destroy']);
+    Route::post('/hotnews/delete', [\App\Http\Controllers\TinTucController::class, 'destroy']);
 
 //trạng thái
     Route::get('/status', [\App\Http\Controllers\TrangThaiController::class, 'index']);
@@ -247,7 +247,7 @@ Route::middleware('auth:api')->group(function () {
 
 //    Route::put('/vouchers/{id}', [\App\Http\Controllers\VoucherController::class, 'update']);
 
-    Route::delete('/vouchers', [\App\Http\Controllers\VoucherController::class, 'destroy']);
+    Route::post('/vouchers/delete', [\App\Http\Controllers\VoucherController::class, 'destroy']);
 
 //giỏ hàng
 //    Route::get('/carts/{query}', [\App\Http\Controllers\GioHangController::class, 'index']);

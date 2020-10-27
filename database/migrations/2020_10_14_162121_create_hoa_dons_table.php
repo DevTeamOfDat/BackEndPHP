@@ -18,10 +18,12 @@ class CreateHoaDonsTable extends Migration
             $table->id('ma_hoa_don');
             $table->integer('ma_nhan_vien')->nullable();
             $table->integer('ma_khach_hang')->nullable();
-            $table->string('ngay_lap')->default(now());
+            $table->integer('ma_voucher')->nullable();
+            $table->date('ngay_lap')->default(now());
             $table->boolean('loai_don')->default(true);
             $table->boolean('trang_thai')->default(true);
             $table->double('tong_tien', 15, 2)->default(0.00);
+            $table->double('thanh_tien', 15, 2)->default(0.00);
             $table->boolean('isActive')->default(true);
         });
 
@@ -33,12 +35,13 @@ class CreateHoaDonsTable extends Migration
 //        $khs = array($kh);
         $nvs = \Illuminate\Support\Facades\DB::table('tai_khoans')->where('loai_tai_khoan', '=', 'NV')->pluck('ma_tai_khoan');
 //        $nvs = array($nv);
+//        $vouchers = \Illuminate\Support\Facades\DB::table('vouchers')->where('ma_khach_hang', '=', 'NV')->pluck('ma_tai_khoan');
 
         for ($i = 0; $i < $limit; $i++) {
             DB::table('hoa_dons')->insert([
                 'ma_nhan_vien' => $faker->randomElement($nvs),
                 'ma_khach_hang' => $faker->randomElement($khs),
-                'ngay_lap' => $faker->date('d-m-Y | H:i', time()),
+                'ngay_lap' => $faker->date('d-m-Y', time()),
                 'loai_don' => $faker->randomElement([true, false]),
                 'trang_thai' => $faker->randomElement([true, false]),
                 'isActive' => $faker->randomElement([true, false]),

@@ -12,8 +12,6 @@ class KhuyenMaiSanPhamController extends Controller
     const table = 'khuyen_mai_san_phams';
     const id = 'id';
     const ma_san_pham = 'ma_san_pham';
-    const ma_loai_san_pham = 'ma_loai_san_pham';
-    const ma_thuong_hieu = 'ma_thuong_hieu';
     const ma_ngay_khuyen_mai = 'ma_ngay_khuyen_mai';
     const muc_khuyen_mai = 'muc_khuyen_mai';
     const isActive = 'isActive';
@@ -34,59 +32,32 @@ class KhuyenMaiSanPhamController extends Controller
      */
     public function index()
     {
-//        $user = auth()->user();
-//        $loai_tk = $user->loai_tai_khoan;
-//        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $objs = null;
-            $code = null;
+        date_default_timezone_set(BaseController::timezone);
+        $date = date('d-m-Y');
+//        $ngay_km = DB::table(NgayKhuyenMaiController::table)
+//            ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, '<', $date)
+//            ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::isActive, '=', true)
+//            ->get(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id);
+
+//        DB::table(NgayKhuyenMaiController::table)
+//            ->whereIn(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id, $ngay_km)
+//            ->update([NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::isActive => false]);
+
+        $user = auth()->user();
+        $loai_tk = $user->loai_tai_khoan;
+        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+            $this->base->index();
+            return response()->json($this->base->getMessage(), $this->base->getStatus());
+        } else {
             $objs = DB::table(self::table)
-                ->leftJoin(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-                ->leftJoin(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
-                ->leftJoin(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
-                ->join(NgayKhuyenMaiController::table, self::table . '.' . self::ma_ngay_khuyen_mai, '=', NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id)
-                ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham, ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio)
+                ->leftJoin(SanPhamController::table, SanPhamController::table . '.' . SanPhamController::id, '=', self::table . '.' . self::ma_san_pham)
+                ->join(NgayKhuyenMaiController::table, NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id, '=', self::table . '.' . self::ma_ngay_khuyen_mai)
+                ->select(self::table . '.' . self::id, self::table . '.' . self::ma_san_pham, SanPhamController::table . '.' . SanPhamController::ten_san_pham, self::table . '.' . self::ma_ngay_khuyen_mai, NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, self::muc_khuyen_mai)
+                ->where(self::table . '.' . self::isActive, '=', true)
+                ->where(NgayKhuyenMaiController::ngay_gio, '=', $date)
                 ->get();
-            $code = 200;
-//        switch ($query) {
-//            case "all":
-//                $objs = DB::table(self::table)
-//                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-//                    ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
-//                    ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
-//                    ->join(NgayKhuyenMaiController::table, self::table . '.' . self::ma_ngay_khuyen_mai, '=', NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id)
-//                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham, ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio)
-//                    ->get();
-//                $code = 200;
-//                break;
-//            case "active":
-//                $objs = DB::table(self::table)
-//                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-//                    ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
-//                    ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
-//                    ->join(NgayKhuyenMaiController::table, self::table . '.' . self::ma_ngay_khuyen_mai, '=', NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id)
-//                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham, ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio)
-//                    ->where(self::table . '.' . self::isActive, '=', true)->get();
-//                $code = 200;
-//                break;
-//            case "inactive":
-//                $objs = DB::table(self::table)
-//                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-//                    ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
-//                    ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
-//                    ->join(NgayKhuyenMaiController::table, self::table . '.' . self::ma_ngay_khuyen_mai, '=', NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id)
-//                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham, ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio)
-//                    ->where(self::table . '.' . self::isActive, '=', false)->get();
-//                $code = 200;
-//                break;
-//            default:
-//                $objs = "Không tìm thấy";
-//                $code = 200;
-//                break;
-//        }
-            return response()->json(['data' => $objs], $code);
-//        } else {
-//            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
-//        }
+            return response()->json(['data' => $objs], 200);
+        }
     }
 
     /**
@@ -97,7 +68,6 @@ class KhuyenMaiSanPhamController extends Controller
     public function create()
     {
         //
-
     }
 
     /**
@@ -117,8 +87,8 @@ class KhuyenMaiSanPhamController extends Controller
                     if ($count > 0) {
                         foreach ($listObj as $obj) {
                             $validator = Validator::make($obj, [
-                                self::muc_khuyen_mai => 'required',
                                 self::ma_ngay_khuyen_mai => 'required',
+                                self::muc_khuyen_mai => 'required',
                             ]);
                             if ($validator->fails()) {
                                 return response()->json(['error' => $validator->errors()->all()], 200);
@@ -131,8 +101,8 @@ class KhuyenMaiSanPhamController extends Controller
                     $arr_value = $request->all();
                     if (count($arr_value) > 0) {
                         $validator = Validator::make($arr_value, [
-                            self::muc_khuyen_mai => 'required',
                             self::ma_ngay_khuyen_mai => 'required',
+                            self::muc_khuyen_mai => 'required',
                         ]);
                         if ($validator->fails()) {
                             return response()->json(['error' => $validator->errors()->all()], 200);
@@ -160,25 +130,7 @@ class KhuyenMaiSanPhamController extends Controller
      */
     public function show($id)
     {
-        $user = auth()->user();
-        $loai_tk = $user->loai_tai_khoan;
-        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $obj = DB::table(self::table)
-                ->leftJoin(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-                ->leftJoin(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
-                ->leftJoin(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
-                ->join(NgayKhuyenMaiController::table, self::table . '.' . self::ma_ngay_khuyen_mai, '=', NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id)
-                ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham, ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio)
-                ->where(self::table . '.' . self::id, '=', $id)
-                ->get();
-            if ($obj) {
-                return response()->json(['data' => $obj], 200);
-            } else {
-                return response()->json(['error' => 'Không tìm thấy'], 200);
-            }
-        } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
-        }
+        //
     }
 
     /**
@@ -201,14 +153,7 @@ class KhuyenMaiSanPhamController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = auth()->user();
-        $loai_tk = $user->loai_tai_khoan;
-        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $this->base->update($request, $id);
-            return response()->json($this->base->getMessage(), $this->base->getStatus());
-        } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
-        }
+        //
     }
 
     /**

@@ -13,10 +13,12 @@ class HoaDonController extends Controller
     const id = 'ma_hoa_don';
     const ma_nv = 'ma_nhan_vien';
     const ma_kh = 'ma_khach_hang';
+    const ma_voucher = 'ma_voucher';
     const ngay_lap = 'ngay_lap';
     const loai_don = 'loai_don';
     const trang_thai = 'trang_thai';
     const tong_tien = 'tong_tien';
+    const thanh_tien = 'thanh_tien';
     const isActive = 'isActive';
 
     /**
@@ -41,9 +43,10 @@ class HoaDonController extends Controller
             $objs = null;
             $code = null;
             $objs = DB::table(self::table)
-                ->join(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
-                ->join(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
-                ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang')
+                ->leftJoin(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
+                ->leftJoin(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
+                ->leftJoin(VoucherController::table, VoucherController::table . '.' . VoucherController::id, self::table . '.' . self::ma_voucher)
+                ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang', VoucherController::table . '.' . VoucherController::muc_voucher)
                 ->get();
             $code = 200;
 //        switch ($query) {
