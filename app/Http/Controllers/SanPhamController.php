@@ -41,14 +41,15 @@ class SanPhamController extends Controller
 //        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
         $objs = null;
         $code = null;
-        if ($objs = DB::table(self::table)
-            ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
-            ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
-            ->leftJoin(KhuyenMaiSanPhamController::table, self::table . '.' . self::id, KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_san_pham)
-            ->leftJoin(NgayKhuyenMaiController::table, NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id, KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_ngay_khuyen_mai)
-            ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham, KhuyenMaiSanPhamController::muc_khuyen_mai, DB::raw('gia_ban*(1-muc_khuyen_mai/100) as gia moi'))
-            ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, '=', $date)
-            ->get()) {
+        try {
+            $objs = DB::table(self::table)
+                ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
+                ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
+                ->leftJoin(KhuyenMaiSanPhamController::table, self::table . '.' . self::id, KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_san_pham)
+                ->leftJoin(NgayKhuyenMaiController::table, NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id, KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_ngay_khuyen_mai)
+                ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham, KhuyenMaiSanPhamController::muc_khuyen_mai, DB::raw('gia_ban*(1-muc_khuyen_mai/100) as gia_moi'))
+                ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, '=', $date)
+                ->get();
             $code = 200;
 //        switch ($query) {
 //            case "all":
@@ -81,7 +82,7 @@ class SanPhamController extends Controller
 //                break;
 //        }
             return response()->json(['data' => $objs], $code);
-        } else {
+        } catch (\Throwable $e) {
             $objs = DB::table(self::table)
                 ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
                 ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
