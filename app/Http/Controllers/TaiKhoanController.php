@@ -241,10 +241,11 @@ class TaiKhoanController extends Controller
         DB::table(self::table)->insert([
             self::ho_ten => $request->ho_ten,
             self::email => $request->email,
-            self::email_verified_at => date('d-m-Y'),
+            self::email_verified_at => date('Y-m-d'),
             self::mat_khau => bcrypt($request->mat_khau),
             self::dia_chi => $request->dia_chi,
             self::so_dien_thoai => $request->so_dien_thoai,
+//            self::loai_tai_khoan => $request->loai_tai_khoan,
         ]);
 
         $email = $request->email;

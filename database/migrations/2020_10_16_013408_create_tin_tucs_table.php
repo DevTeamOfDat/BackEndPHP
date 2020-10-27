@@ -20,7 +20,7 @@ class CreateTinTucsTable extends Migration
             $table->string('highlight')->default('');
             $table->string('thumbnail')->default('');
             $table->string('url')->default('');
-            $table->string('ngay_dang')->default(date('d-m-Y', time()));
+            $table->string('ngay_dang')->default(date('Y-m-d', time()));
             $table->boolean('isActive')->default(true);
         });
         $faker = Faker\Factory::create();

@@ -17,7 +17,7 @@ class CreateLoaiSanPhamsTable extends Migration
         Schema::create('loai_san_phams', function (Blueprint $table) {
             $table->id('ma_loai_san_pham');
             $table->string('ten_loai_san_pham');
-            $table->text('mo_ta')->default('');
+            $table->string('mo_ta')->default('');
             $table->boolean('isActive')->default(true);
         });
 

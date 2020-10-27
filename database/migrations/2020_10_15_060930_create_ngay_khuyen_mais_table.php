@@ -26,7 +26,7 @@ class CreateNgayKhuyenMaisTable extends Migration
 
         for ($i = 0; $i < $limit; $i++) {
             DB::table('ngay_khuyen_mais')->insert([
-                'ngay_gio' => $faker->date('d-m-Y', time()),
+                'ngay_gio' => $faker->date('Y-m-d'),
                 'isActive' => $faker->randomElement([true, false]),
             ]);
         }

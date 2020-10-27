@@ -18,7 +18,7 @@ class CreateNhanXetsTable extends Migration
             $table->id('ma_nhan_xet');
             $table->integer('ma_san_pham')->nullable();
             $table->integer('ma_khach_hang');
-            $table->text('binh_luan')->default('');
+            $table->text('binh_luan');
             $table->boolean('isActive')->default(true);
         });
 

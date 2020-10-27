@@ -35,21 +35,21 @@ class SanPhamController extends Controller
     public function index()
     {
         date_default_timezone_set(BaseController::timezone);
-        $date = date('d-m-Y');
+        $date = date('Y-m-d');
 //        $user = auth()->user();
 //        $loai_tk = $user->loai_tai_khoan;
 //        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
         $objs = null;
         $code = null;
-        $objs = DB::table(self::table)
+        if ($objs = DB::table(self::table)
             ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
             ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
             ->leftJoin(KhuyenMaiSanPhamController::table, self::table . '.' . self::id, KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_san_pham)
             ->leftJoin(NgayKhuyenMaiController::table, NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id, KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_ngay_khuyen_mai)
-            ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham, KhuyenMaiSanPhamController::muc_khuyen_mai, (self::table . '.' . self::gia_ban * (1 - (KhuyenMaiSanPhamController::muc_khuyen_mai / 100))) . 'as giá bán mới')
+            ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham, KhuyenMaiSanPhamController::muc_khuyen_mai, DB::raw('gia_ban*(1-muc_khuyen_mai/100) as gia moi'))
             ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, '=', $date)
-            ->get();
-        $code = 200;
+            ->get()) {
+            $code = 200;
 //        switch ($query) {
 //            case "all":
 //                $objs = DB::table(self::table)
@@ -80,7 +80,15 @@ class SanPhamController extends Controller
 //                $code = 200;
 //                break;
 //        }
-        return response()->json(['data' => $objs], $code);
+            return response()->json(['data' => $objs], $code);
+        } else {
+            $objs = DB::table(self::table)
+                ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
+                ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
+                ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
+                ->get();
+            return response()->json(['data' => $objs], 200);
+        }
 //        } else {
 //            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
 //        }

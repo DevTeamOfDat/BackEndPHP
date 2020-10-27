@@ -114,7 +114,7 @@ class PhieuNhapController extends Controller
             $obj = [];
             $obj[self::ma_nhan_vien] = $user->ma_tai_khoan;
             $obj[self::ma_nha_cung_cap] = $request->ma_nha_cung_cap;
-            $obj[self::ngay_nhap] = date('d-m-Y');
+            $obj[self::ngay_nhap] = date('Y-m-d');
             if ($request->ghi_chu) {
                 $obj[self::ghi_chu] = $request->ghi_chu;
             }

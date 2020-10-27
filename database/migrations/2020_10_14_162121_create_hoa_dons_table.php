@@ -41,7 +41,7 @@ class CreateHoaDonsTable extends Migration
             DB::table('hoa_dons')->insert([
                 'ma_nhan_vien' => $faker->randomElement($nvs),
                 'ma_khach_hang' => $faker->randomElement($khs),
-                'ngay_lap' => $faker->date('d-m-Y', time()),
+                'ngay_lap' => $faker->date('Y-m-d'),
                 'loai_don' => $faker->randomElement([true, false]),
                 'trang_thai' => $faker->randomElement([true, false]),
                 'isActive' => $faker->randomElement([true, false]),

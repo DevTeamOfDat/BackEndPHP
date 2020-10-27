@@ -35,7 +35,7 @@ class CreatePhieuNhapsTable extends Migration
             DB::table('phieu_nhaps')->insert([
                 'ma_nhan_vien' => $faker->randomElement($nvs),
                 'ma_nha_cung_cap' => $faker->randomElement($nccs),
-                'ngay_nhap' => $faker->date('d-m-Y'),
+                'ngay_nhap' => $faker->date('Y-m-d'),
                 'isActive' => $faker->randomElement([true, false]),
             ]);
         }
