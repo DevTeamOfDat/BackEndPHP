@@ -206,6 +206,20 @@ class PhieuNhapController extends Controller
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+            try {
+                if ($listId = $request->get(BaseController::listId)) {
+                    DB::table(ChiTietPhieuNhapController::table)->whereIn(ChiTietPhieuNhapController::ma_phieu_nhap, $listId)
+                        ->where(ChiTietPhieuNhapController::isActive, '=', true)
+                        ->update([ChiTietPhieuNhapController::isActive => false]);
+                } else {
+                    $id = $request->get(BaseController::key_id);
+                    DB::table(ChiTietPhieuNhapController::table)->where(ChiTietPhieuNhapController::ma_phieu_nhap, $id)
+                        ->where(ChiTietPhieuNhapController::isActive, '=', true)
+                        ->update([ChiTietPhieuNhapController::isActive => false]);
+                }
+            } catch (\Throwable $e) {
+                report($e);
+            }
             $this->base->destroy($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
