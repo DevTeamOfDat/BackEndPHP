@@ -19,17 +19,17 @@ class CreateNgayKhuyenMaisTable extends Migration
             $table->boolean('isActive')->default(true);
         });
 
-        $faker = Faker\Factory::create();
-        $limit = 20;
-
-        date_default_timezone_set('Asia/Ho_Chi_Minh');
-
-        for ($i = 0; $i < $limit; $i++) {
-            DB::table('ngay_khuyen_mais')->insert([
-                'ngay_gio' => $faker->date('Y-m-d'),
-                'isActive' => $faker->randomElement([true, false]),
-            ]);
-        }
+//        $faker = Faker\Factory::create();
+//        $limit = 20;
+//
+//        date_default_timezone_set('Asia/Ho_Chi_Minh');
+//
+//        for ($i = 0; $i < $limit; $i++) {
+//            DB::table('ngay_khuyen_mais')->insert([
+//                'ngay_gio' => $faker->date('Y-m-d'),
+//                'isActive' => $faker->randomElement([true, false]),
+//            ]);
+//        }
     }
 
     /**

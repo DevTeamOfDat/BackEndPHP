@@ -123,15 +123,15 @@ class HoaDonController extends Controller
             if ($request->ma_khach_hang) {
                 $arr_value[self::ma_kh] = $request->ma_khach_hang;
             }
-            $arr_value[self::ngay_lap] = date('d-m-Y');
+            $arr_value[self::ngay_lap] = date('Y-m-d');
             $arr_value[self::loai_don] = false;
             $arr_value[self::trang_thai] = true;
-            DB::table(self::table)->insert($arr_value);
+            DB::table(self::table)->insert($request->all());
             return response()->json(['success' => "Thêm mới thành công"], 201);
         } else {
             $arr_value = [];
             $arr_value[self::ma_kh] = $ma_tk;
-            $arr_value[self::ngay_lap] = date('d-m-Y');
+            $arr_value[self::ngay_lap] = date('Y-m-d');
             $arr_value[self::loai_don] = true;
             $arr_value[self::trang_thai] = false;
             DB::table(self::table)->insert($arr_value);

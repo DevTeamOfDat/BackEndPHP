@@ -50,6 +50,13 @@ class SanPhamController extends Controller
                 ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham, KhuyenMaiSanPhamController::muc_khuyen_mai, DB::raw('gia_ban*(1-muc_khuyen_mai/100) as gia_moi'))
                 ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, '=', $date)
                 ->get();
+            if ($objs) {
+                $objs = DB::table(self::table)
+                    ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
+                    ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
+                    ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
+                    ->get();
+            }
             $code = 200;
 //        switch ($query) {
 //            case "all":

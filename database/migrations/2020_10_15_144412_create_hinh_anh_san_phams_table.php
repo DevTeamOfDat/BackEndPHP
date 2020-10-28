@@ -15,23 +15,23 @@ class CreateHinhAnhSanPhamsTable extends Migration
     {
         Schema::create('hinh_anh_san_phams', function (Blueprint $table) {
             $table->id();
-            $table->integer('ma_san_pham');
+            $table->bigInteger('ma_san_pham');
             $table->string('hinh_anh')->unique();
             $table->boolean('isActive')->default(true);
         });
 
-        $faker = Faker\Factory::create();
-        $limit = 20;
-
-        $sps = \Illuminate\Support\Facades\DB::table('san_phams')->pluck('ma_san_pham');
-
-        for ($i = 0; $i < $limit; $i++) {
-            DB::table('hinh_anh_san_phams')->insert([
-                'ma_san_pham' => $faker->randomElement($sps),
-                'hinh_anh' => $faker->imageUrl(),
-                'isActive' => $faker->randomElement([true, false]),
-            ]);
-        }
+//        $faker = Faker\Factory::create();
+//        $limit = 20;
+//
+//        $sps = \Illuminate\Support\Facades\DB::table('san_phams')->pluck('ma_san_pham');
+//
+//        for ($i = 0; $i < $limit; $i++) {
+//            DB::table('hinh_anh_san_phams')->insert([
+//                'ma_san_pham' => $faker->randomElement($sps),
+//                'hinh_anh' => $faker->imageUrl(),
+//                'isActive' => $faker->randomElement([true, false]),
+//            ]);
+//        }
     }
 
     /**
