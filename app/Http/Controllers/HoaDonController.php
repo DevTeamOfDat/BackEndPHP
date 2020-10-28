@@ -241,6 +241,20 @@ class HoaDonController extends Controller
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+            try {
+                if ($listId = $request->get(BaseController::listId)) {
+                    DB::table(ChiTietHoaDonController::table)->whereIn(ChiTietHoaDonController::ma_hoa_don, $listId)
+                        ->where(ChiTietHoaDonController::isActive, '=', true)
+                        ->update([ChiTietHoaDonController::isActive => false]);
+                } else {
+                    $id = $request->get(BaseController::key_id);
+                    DB::table(ChiTietHoaDonController::table)->where(ChiTietHoaDonController::ma_hoa_don, $id)
+                        ->where(ChiTietHoaDonController::isActive, '=', true)
+                        ->update([ChiTietHoaDonController::isActive => false]);
+                }
+            } catch (\Throwable $e) {
+                report($e);
+            }
             $this->base->destroy($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {

@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="70d3bd3a-c755-4e24-9812-e31eb4158714" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PhieuNhapController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PhieuNhapController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HoaDonController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HoaDonController.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,8 +19,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/TaiKhoanController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="235">
-              <caret line="247" column="63" lean-forward="true" selection-start-line="247" selection-start-column="63" selection-end-line="247" selection-end-column="63" />
+            <state relative-caret-position="256">
+              <caret line="248" column="11" lean-forward="true" selection-start-line="248" selection-start-column="11" selection-end-line="248" selection-end-column="11" />
               <folding>
                 <element signature="e#40#64#0#PHP" expanded="true" />
               </folding>
@@ -28,10 +29,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/HoaDonController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="398">
+              <caret line="256" column="13" lean-forward="true" selection-start-line="256" selection-start-column="13" selection-end-line="256" selection-end-column="13" />
+              <folding>
+                <element signature="e#40#68#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PhieuNhapController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="194">
-              <caret line="222" column="43" selection-start-line="222" selection-start-column="43" selection-end-line="222" selection-end-column="43" />
+            <state relative-caret-position="68">
+              <caret line="208" column="12" lean-forward="true" selection-start-line="208" selection-start-column="12" selection-end-line="221" selection-end-column="13" />
               <folding>
                 <element signature="e#40#68#0#PHP" expanded="true" />
               </folding>
@@ -43,7 +56,7 @@
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/BaseController.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="383">
-              <caret line="240" column="9" lean-forward="true" selection-start-line="217" selection-start-column="8" selection-end-line="240" selection-end-column="9" />
+              <caret line="240" column="9" selection-start-line="217" selection-start-column="8" selection-end-line="240" selection-end-column="9" />
               <folding>
                 <element signature="e#40#68#0#PHP" expanded="true" />
               </folding>
@@ -133,7 +146,6 @@
         <option value="$PROJECT_DIR$/config/database.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/SanPhamController.php" />
         <option value="$PROJECT_DIR$/routes/api.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/HoaDonController.php" />
         <option value="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_tai_khoans_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2020_10_14_004211_create_nha_cung_caps_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2020_10_14_163956_create_thuong_hieus_table.php" />
@@ -156,6 +168,7 @@
         <option value="$PROJECT_DIR$/database/migrations/2020_10_27_013014_create_khuyen_mai_san_phams_table.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/TaiKhoanController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/PhieuNhapController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/HoaDonController.php" />
       </list>
     </option>
   </component>
@@ -393,18 +406,17 @@
       <workItem from="1603848836947" duration="5426000" />
       <workItem from="1603858373451" duration="12000" />
       <workItem from="1603863053624" duration="1446000" />
-      <workItem from="1603890077720" duration="3923000" />
+      <workItem from="1603890077720" duration="6087000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="144143000" />
+    <option name="totallyTimeSpent" value="146307000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15355521" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17397882" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -419,7 +431,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.25531915" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.07037643" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24962178" />
@@ -638,16 +650,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/HoaDonController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="362">
-          <caret line="128" column="57" selection-start-line="128" selection-start-column="57" selection-end-line="128" selection-end-column="57" />
-          <folding>
-            <element signature="e#40#68#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SanPhamController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="362">
@@ -822,16 +824,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/TaiKhoanController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="247" column="63" lean-forward="true" selection-start-line="247" selection-start-column="63" selection-end-line="247" selection-end-column="63" />
-          <folding>
-            <element signature="e#40#64#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/api.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
@@ -845,17 +837,37 @@
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/BaseController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="383">
-          <caret line="240" column="9" lean-forward="true" selection-start-line="217" selection-start-column="8" selection-end-line="240" selection-end-column="9" />
+          <caret line="240" column="9" selection-start-line="217" selection-start-column="8" selection-end-line="240" selection-end-column="9" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/TaiKhoanController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="256">
+          <caret line="248" column="11" lean-forward="true" selection-start-line="248" selection-start-column="11" selection-end-line="248" selection-end-column="11" />
+          <folding>
+            <element signature="e#40#64#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PhieuNhapController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="222" column="43" selection-start-line="222" selection-start-column="43" selection-end-line="222" selection-end-column="43" />
+        <state relative-caret-position="68">
+          <caret line="208" column="12" lean-forward="true" selection-start-line="208" selection-start-column="12" selection-end-line="221" selection-end-column="13" />
+          <folding>
+            <element signature="e#40#68#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/HoaDonController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="398">
+          <caret line="256" column="13" lean-forward="true" selection-start-line="256" selection-start-column="13" selection-end-line="256" selection-end-column="13" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
           </folding>
