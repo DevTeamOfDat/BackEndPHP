@@ -213,6 +213,29 @@ class TaiKhoanController extends Controller
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == self::NV || $loai_tk == self::QT) {
+            try {
+                if ($listId = $request->get(BaseController::listId)) {
+                    if (count($listId) > 0) {
+                        foreach ($listId as $id) {
+                            if (DB::table(self::table)->where(self::table . '.' . self::loai_tai_khoan, '=', 'KH')
+                                ->where(self::table . '.' . self::id, '=', $id)->get()) {
+                                return response()->json(['error' => 'Xóa thất bại. Không thể xóa tài khoản khách hàng'], 200);
+                            }
+                        }
+                    } else {
+                        return response()->json(['error' => 'Xóa thất bại. Không có dữ liệu'], 200);
+                    }
+                } else {
+                    $id = $request->get(BaseController::key_id);
+                    if (DB::table(self::table)->where(self::table . '.' . self::loai_tai_khoan, '=', 'KH')
+                        ->where(self::table . '.' . self::id, '=', $id)->get()) {
+                        return response()->json(['error' => 'Xóa thất bại. Không thể xóa tài khoản khách hàng'], 200);
+                    }
+                }
+            } catch (\Throwable $e) {
+                report($e);
+                return response()->json(['error' => $e], 500);
+            }
             $this->base->destroy($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
