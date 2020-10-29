@@ -246,11 +246,17 @@ class HoaDonController extends Controller
                     DB::table(ChiTietHoaDonController::table)->whereIn(ChiTietHoaDonController::ma_hoa_don, $listId)
                         ->where(ChiTietHoaDonController::isActive, '=', true)
                         ->update([ChiTietHoaDonController::isActive => false]);
+                    DB::table(VoucherController::table)->join(self::table, self::table . '.' . self::ma_voucher, '=', VoucherController::table . '.' . VoucherController::id)
+                        ->whereIn(self::table . '.' . self::id, $listId)
+                        ->update([ChiTietHoaDonController::isActive => true]);
                 } else {
                     $id = $request->get(BaseController::key_id);
                     DB::table(ChiTietHoaDonController::table)->where(ChiTietHoaDonController::ma_hoa_don, $id)
                         ->where(ChiTietHoaDonController::isActive, '=', true)
                         ->update([ChiTietHoaDonController::isActive => false]);
+                    DB::table(VoucherController::table)->join(self::table, self::table . '.' . self::ma_voucher, '=', VoucherController::table . '.' . VoucherController::id)
+                        ->where(self::table . '.' . self::id, $id)
+                        ->update([ChiTietHoaDonController::isActive => true]);
                 }
             } catch (\Throwable $e) {
                 report($e);

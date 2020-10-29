@@ -119,7 +119,8 @@ class ChiTietPhieuNhapController extends Controller
                                 return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 200);
                             }
                             if (DB::table(self::table)->where(self::ma_san_pham, '=', $obj[self::ma_san_pham])
-                                ->where(self::ma_phieu_nhap, '=', $obj[self::ma_phieu_nhap])->first()) {
+                                ->where(self::ma_phieu_nhap, '=', $obj[self::ma_phieu_nhap])
+                                ->where(self::isActive, '=', true)->first()) {
                                 return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã phiếu nhập và mã sản phẩm'], 200);
                             }
                         }
@@ -149,7 +150,8 @@ class ChiTietPhieuNhapController extends Controller
                             return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 200);
                         }
                         if (DB::table(self::table)->where(self::ma_san_pham, '=', $arr_value[self::ma_san_pham])
-                            ->where(self::ma_phieu_nhap, '=', $arr_value[self::ma_phieu_nhap])->first()) {
+                            ->where(self::ma_phieu_nhap, '=', $arr_value[self::ma_phieu_nhap])
+                            ->where(self::isActive, '=', true)->first()) {
                             return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã phiếu nhập và mã sản phẩm'], 200);
                         }
                         DB::table(self::table)->insert($arr_value);

@@ -113,11 +113,34 @@ class ChiTietHoaDonController extends Controller
                             return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 200);
                         }
                         if (DB::table(self::table)->where(self::ma_san_pham, '=', $obj[self::ma_san_pham])
-                            ->where(self::ma_hoa_don, '=', $obj[self::ma_hoa_don])->first()) {
+                            ->where(self::ma_hoa_don, '=', $obj[self::ma_hoa_don])
+                            ->where(self::isActive, '=', true)->first()) {
                             return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã hóa đơn và mã sản phẩm'], 200);
+                        } elseif ($obj[self::so_luong] > DB::table(SanPhamController::table)->where(SanPhamController::id, '=', $obj[self::ma_san_pham])
+                                ->where(SanPhamController::isActive, '=', true)->select(SanPhamController::so_luong)->get()) {
+                            return response()->json(['error' => 'Thêm mới thất bại. Số lượng sản phẩm không đủ'], 200);
                         }
                     }
+
                     foreach ($listObj as $obj) {
+                        $ngay_lap = DB::table(HoaDonController::table)->where(HoaDonController::table . '.' . HoaDonController::id, '=', $obj[self::ma_hoa_don])
+                            ->where(HoaDonController::table . '.' . HoaDonController::isActive, '=', true)
+                            ->select(HoaDonController::ngay_lap)->first();
+                        $ma_ngay_km = DB::table(NgayKhuyenMaiController::table)->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, '=', $ngay_lap)
+                            ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::isActive, '=', true)
+                            ->select(NgayKhuyenMaiController::id)->get();
+                        $gia_ban_sp = DB::table(SanPhamController::table)->where(SanPhamController::table . '.' . SanPhamController::id, '=', $obj[self::ma_san_pham])
+                            ->where(SanPhamController::isActive, '=', true)
+                            ->select(SanPhamController::gia_ban)->get();
+                        if ($muc_km = DB::table(KhuyenMaiSanPhamController::table)
+                            ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_san_pham, '=', $obj[self::ma_san_pham])
+                            ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_ngay_khuyen_mai, '=', $ma_ngay_km)
+                            ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::isActive, '=', true)
+                            ->select(KhuyenMaiSanPhamController::muc_khuyen_mai)->get()) {
+                            $obj[self::gia_ban] = $gia_ban_sp * (1 - $muc_km / 100);
+                        } else {
+                            $obj[self::gia_ban] = $gia_ban_sp;
+                        }
                         DB::table(self::table)->insert($obj);
                     }
                     return response()->json(['success' => 'Thêm mới thành công'], 201);
@@ -139,8 +162,30 @@ class ChiTietHoaDonController extends Controller
                         return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 200);
                     }
                     if (DB::table(self::table)->where(self::ma_san_pham, '=', $arr_value[self::ma_san_pham])
-                        ->where(self::ma_hoa_don, '=', $arr_value[self::ma_hoa_don])->first()) {
+                        ->where(self::ma_hoa_don, '=', $arr_value[self::ma_hoa_don])
+                        ->where(self::isActive, '=', true)->first()) {
                         return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã hóa đơn và mã sản phẩm'], 200);
+                    } elseif ($arr_value[self::so_luong] > DB::table(SanPhamController::table)->where(SanPhamController::id, '=', $arr_value[self::ma_san_pham])
+                            ->where(SanPhamController::isActive, '=', true)->select(SanPhamController::so_luong)->get()) {
+                        return response()->json(['error' => 'Thêm mới thất bại. Số lượng sản phẩm không đủ'], 200);
+                    }
+                    $ngay_lap = DB::table(HoaDonController::table)->where(HoaDonController::table . '.' . HoaDonController::id, '=', $arr_value[self::ma_hoa_don])
+                        ->where(HoaDonController::table . '.' . HoaDonController::isActive, '=', true)
+                        ->select(HoaDonController::ngay_lap)->first();
+                    $ma_ngay_km = DB::table(NgayKhuyenMaiController::table)->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, '=', $ngay_lap)
+                        ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::isActive, '=', true)
+                        ->select(NgayKhuyenMaiController::id)->get();
+                    $gia_ban_sp = DB::table(SanPhamController::table)->where(SanPhamController::table . '.' . SanPhamController::id, '=', $arr_value[self::ma_san_pham])
+                        ->where(SanPhamController::isActive, '=', true)
+                        ->select(SanPhamController::gia_ban)->get();
+                    if ($muc_km = DB::table(KhuyenMaiSanPhamController::table)
+                        ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_san_pham, '=', $arr_value[self::ma_san_pham])
+                        ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_ngay_khuyen_mai, '=', $ma_ngay_km)
+                        ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::isActive, '=', true)
+                        ->select(KhuyenMaiSanPhamController::muc_khuyen_mai)->get()) {
+                        $arr_value[self::gia_ban] = $gia_ban_sp * (1 - $muc_km / 100);
+                    } else {
+                        $arr_value[self::gia_ban] = $gia_ban_sp;
                     }
                     DB::table(self::table)->insert($arr_value);
                     return response()->json(['success' => 'Thêm mới thành công'], 201);
@@ -220,8 +265,8 @@ class ChiTietHoaDonController extends Controller
 //        $user = auth()->user();
 //        $loai_tk = $user->loai_tai_khoan;
 //        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $this->base->destroy($request);
-            return response()->json($this->base->getMessage(), $this->base->getStatus());
+        $this->base->destroy($request);
+        return response()->json($this->base->getMessage(), $this->base->getStatus());
 //        } else {
 //            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
 //        }
