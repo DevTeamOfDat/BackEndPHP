@@ -47,15 +47,16 @@ class SanPhamController extends Controller
                 ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
                 ->leftJoin(KhuyenMaiSanPhamController::table, self::table . '.' . self::id, KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_san_pham)
                 ->leftJoin(NgayKhuyenMaiController::table, NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id, KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_ngay_khuyen_mai)
-                ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham, KhuyenMaiSanPhamController::muc_khuyen_mai, DB::raw('gia_ban*(1-muc_khuyen_mai/100) as gia_moi'))
+                ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham, KhuyenMaiSanPhamController::muc_khuyen_mai, DB::raw('gia_ban*(1-muc_khuyen_mai/100) as gia_moi'), DB::select('(SELECT ' . HinhAnhSanPhamController::hinh_anh . ' FROM ' . HinhAnhSanPhamController::table . ' WHERE ' . HinhAnhSanPhamController::table . '.' . HinhAnhSanPhamController::ma_san_pham . ' = ' . SanPhamController::table . '.' . SanPhamController::id . ' AND ' . HinhAnhSanPhamController::hinh_anh . ' IS NOT NULL' . ' LIMIT 1) AS image'))
                 ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, '=', $date)
                 ->get();
             if ($objs) {
-                $objs = DB::table(self::table)
-                    ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
-                    ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
-                    ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
-                    ->get();
+//                $objs = DB::table(self::table)
+//                    ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
+//                    ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
+//                    ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
+//                    ->get();
+                $objs = DB::table('products')->get();
             }
             $code = 200;
 //        switch ($query) {
@@ -90,11 +91,12 @@ class SanPhamController extends Controller
 //        }
             return response()->json(['data' => $objs], $code);
         } catch (\Throwable $e) {
-            $objs = DB::table(self::table)
-                ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
-                ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
-                ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
-                ->get();
+//            $objs = DB::table(self::table)
+//                ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
+//                ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
+//                ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
+//                ->get();
+            $objs = DB::table('products')->get();
             return response()->json(['data' => $objs], 200);
         }
 //        } else {
@@ -157,8 +159,11 @@ class SanPhamController extends Controller
             ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
             ->where(self::table . '.' . self::id, '=', $id)
             ->get();
+        $listImg = DB::table(HinhAnhSanPhamController::table)
+            ->where(HinhAnhSanPhamController::table . '.' . HinhAnhSanPhamController::ma_san_pham, '=', $id)
+            ->get(HinhAnhSanPhamController::hinh_anh);
         if ($obj) {
-            return response()->json(['data' => $obj], 200);
+            return response()->json(['data' => $obj, 'listImg' => $listImg], 200);
         } else {
             return response()->json(['error' => 'Không tìm thấy'], 200);
         }
