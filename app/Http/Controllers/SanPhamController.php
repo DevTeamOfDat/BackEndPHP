@@ -42,15 +42,17 @@ class SanPhamController extends Controller
         $objs = null;
         $code = null;
         try {
-            $objs = DB::table(self::table)
-                ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
-                ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
-                ->leftJoin(KhuyenMaiSanPhamController::table, self::table . '.' . self::id, KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_san_pham)
-                ->leftJoin(NgayKhuyenMaiController::table, NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id, KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_ngay_khuyen_mai)
-                ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham, KhuyenMaiSanPhamController::muc_khuyen_mai, DB::raw('gia_ban*(1-muc_khuyen_mai/100) as gia_moi'), DB::select('(SELECT ' . HinhAnhSanPhamController::hinh_anh . ' FROM ' . HinhAnhSanPhamController::table . ' WHERE ' . HinhAnhSanPhamController::table . '.' . HinhAnhSanPhamController::ma_san_pham . ' = ' . SanPhamController::table . '.' . SanPhamController::id . ' AND ' . HinhAnhSanPhamController::hinh_anh . ' IS NOT NULL' . ' LIMIT 1) AS image'))
-                ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, '=', $date)
-                ->get();
-            if ($objs) {
+//            $objs = DB::table(self::table)
+//                ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
+//                ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
+//                ->leftJoin(KhuyenMaiSanPhamController::table, self::table . '.' . self::id, KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_san_pham)
+//                ->leftJoin(NgayKhuyenMaiController::table, NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id, KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_ngay_khuyen_mai)
+//                ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham, KhuyenMaiSanPhamController::muc_khuyen_mai, DB::raw('gia_ban*(1-muc_khuyen_mai/100) as gia_moi'), DB::select('(SELECT ' . HinhAnhSanPhamController::hinh_anh . ' FROM ' . HinhAnhSanPhamController::table . ' WHERE ' . HinhAnhSanPhamController::table . '.' . HinhAnhSanPhamController::ma_san_pham . ' = ' . SanPhamController::table . '.' . SanPhamController::id . ' AND ' . HinhAnhSanPhamController::hinh_anh . ' IS NOT NULL' . ' LIMIT 1) AS image'))
+//                ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, '=', $date)
+//                ->get();
+//            $objs = DB::table('listproduct')->get();
+            $objs = DB::select('call listProduct(?)', array($date));
+            if (count($objs) == 0) {
 //                $objs = DB::table(self::table)
 //                    ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
 //                    ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
@@ -153,12 +155,15 @@ class SanPhamController extends Controller
 //        $user = auth()->user();
 //        $loai_tk = $user->loai_tai_khoan;
 //        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-        $obj = DB::table(self::table)
-            ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
-            ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
-            ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
-            ->where(self::table . '.' . self::id, '=', $id)
-            ->get();
+//        $obj = DB::table(self::table)
+//            ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
+//            ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
+//            ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
+//            ->where(self::table . '.' . self::id, '=', $id)
+//            ->get();
+        date_default_timezone_set(BaseController::timezone);
+        $date = date('Y-m-d');
+        $obj = $objs = DB::select('call itemProduct(?,?)', array($date, $id));
         $listImg = DB::table(HinhAnhSanPhamController::table)
             ->where(HinhAnhSanPhamController::table . '.' . HinhAnhSanPhamController::ma_san_pham, '=', $id)
             ->get(HinhAnhSanPhamController::hinh_anh);
