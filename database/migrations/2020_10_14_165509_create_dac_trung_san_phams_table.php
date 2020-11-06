@@ -18,6 +18,7 @@ class CreateDacTrungSanPhamsTable extends Migration
             $table->id();
             $table->bigInteger('loai_dac_trung');
             $table->bigInteger('ma_san_pham');
+            $table->integer('so_luong')->default(0);
             $table->boolean('isActive')->default(true);
         });
 

@@ -13,6 +13,7 @@ class DacTrungSanPhamController extends Controller
     const id = 'id';
     const loai_dac_trung = 'loai_dac_trung';
     const ma_san_pham = 'ma_san_pham';
+    const so_luong = 'so_luong';
     const isActive = 'isActive';
 
     /**
@@ -134,8 +135,22 @@ class DacTrungSanPhamController extends Controller
                 return response()->json(['error' => $e], 500);
             }
 
-            $this->base->store($request);
-            return response()->json($this->base->getMessage(), $this->base->getStatus());
+            $params = [];
+            $params[self::loai_dac_trung] = $request->loai_dac_trung;
+            $params[self::ma_san_pham] = $request->ma_san_pham;
+            if ($request->so_luong) {
+                $sl = DB::table(self::table)
+                    ->where(self::table . '.' . self::ma_san_pham, '=', $request->ma_san_pham)
+                    ->where(self::table . '.' . self::loai_dac_trung, '=', $request->loai_dac_trung)
+                    ->select(self::table . '.' . self::so_luong)
+                    ->get();
+                $params[self::so_luong] = $request->so_luong + $sl;
+            }
+            if (DB::table(self::table)->insert($params)) {
+                return response()->json(['success' => "Thêm mới thành công"], 201);
+            } else {
+                return response()->json(['error' => 'Thêm mới thất bại'], 200);
+            }
         } else {
             return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
         }
@@ -153,17 +168,17 @@ class DacTrungSanPhamController extends Controller
 //        $user = auth()->user();
 //        $loai_tk = $user->loai_tai_khoan;
 //        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $obj = DB::table(self::table)
-                ->join(DacTrungController::table, self::table . '.' . self::loai_dac_trung, '=', DacTrungController::table . '.' . DacTrungController::id)
-                ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-                ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, DacTrungController::table . '.' . DacTrungController::ten_dac_trung)
-                ->where(self::table . '.' . self::ma_san_pham, '=', $id)
-                ->get();
-            if ($obj) {
-                return response()->json(['data' => $obj], 200);
-            } else {
-                return response()->json(['error' => 'Không tìm thấy'], 200);
-            }
+        $obj = DB::table(self::table)
+            ->join(DacTrungController::table, self::table . '.' . self::loai_dac_trung, '=', DacTrungController::table . '.' . DacTrungController::id)
+            ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+            ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, DacTrungController::table . '.' . DacTrungController::ten_dac_trung)
+            ->where(self::table . '.' . self::ma_san_pham, '=', $id)
+            ->get();
+        if ($obj) {
+            return response()->json(['data' => $obj], 200);
+        } else {
+            return response()->json(['error' => 'Không tìm thấy'], 200);
+        }
 //        } else {
 //            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
 //        }
@@ -189,14 +204,24 @@ class DacTrungSanPhamController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = auth()->user();
-        $loai_tk = $user->loai_tai_khoan;
-        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $this->base->update($request, $id);
-            return response()->json($this->base->getMessage(), $this->base->getStatus());
-        } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+//        $user = auth()->user();
+//        $loai_tk = $user->loai_tai_khoan;
+//        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
+
+        $params = [];
+        if ($request->so_luong) {
+            $sl = DB::table(self::table)
+                ->where(self::id, '=', $id)
+                ->select(self::table . '.' . self::so_luong)
+                ->get();
+            $params[self::so_luong] = $sl - $request->so_luong;
         }
+        DB::table(self::table)->where(self::id, '=', $id)->update($params);
+        $obj = DB::table(self::table)->where(self::id, '=', $id)->get();
+        return response()->json(['data' => $obj], 200);
+//        } else {
+//            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+//        }
     }
 
     /**

@@ -143,15 +143,14 @@ class PhieuNhapController extends Controller
                 ->select(self::table . '.*', NhaCungCapController::table . '.' . NhaCungCapController::ten . ' as ten_nha_cung_cap', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien')
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->get();
-            $listCouponDetail = DB::table(ChiTietPhieuNhapController::table)
-                ->join(SanPhamController::table, ChiTietPhieuNhapController::table . '.' . ChiTietPhieuNhapController::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-                ->select(ChiTietPhieuNhapController::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
-                ->where(ChiTietPhieuNhapController::ma_phieu_nhap, '=', $id)
-                ->get();
+//            $listCouponDetail = DB::table(ChiTietPhieuNhapController::table)
+//                ->join(SanPhamController::table, ChiTietPhieuNhapController::table . '.' . ChiTietPhieuNhapController::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+//                ->select(ChiTietPhieuNhapController::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
+//                ->where(ChiTietPhieuNhapController::ma_phieu_nhap, '=', $id)
+//                ->get();
             if ($obj) {
                 return response()->json([
-                    'data' => $obj,
-                    'listCouponDetail' => $listCouponDetail
+                    'data' => $obj
                 ], 200);
             } else {
                 return response()->json(['error' => 'Không tìm thấy'], 200);

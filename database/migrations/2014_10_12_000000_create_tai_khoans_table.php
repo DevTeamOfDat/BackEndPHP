@@ -16,6 +16,8 @@ class CreateTaiKhoansTable extends Migration
     {
         Schema::create('tai_khoans', function (Blueprint $table) {
             $table->id('ma_tai_khoan');
+//            $table->string('ma_tai_khoan', 36)->index()->unique();
+//            $table->uuid('ma_tai_khoan')->primary();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->default(now());
             $table->string('mat_khau');

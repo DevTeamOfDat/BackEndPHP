@@ -157,15 +157,14 @@ class HoaDonController extends Controller
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->get();
 
-            $listBillDetail = DB::table(ChiTietHoaDonController::table)
-                ->join(SanPhamController::table, ChiTietHoaDonController::table . '.' . ChiTietHoaDonController::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-                ->select(ChiTietHoaDonController::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
-                ->where(ChiTietHoaDonController::ma_hoa_don, '=', $id)
-                ->get();
+//            $listBillDetail = DB::table(ChiTietHoaDonController::table)
+//                ->join(SanPhamController::table, ChiTietHoaDonController::table . '.' . ChiTietHoaDonController::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+//                ->select(ChiTietHoaDonController::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
+//                ->where(ChiTietHoaDonController::ma_hoa_don, '=', $id)
+//                ->get();
             if ($obj) {
                 return response()->json([
-                    'data' => $obj,
-                    'listBillDetail' => $listBillDetail
+                    'data' => $obj
                 ], 200);
             } else {
                 return response()->json(['error' => 'Không tìm thấy'], 200);
@@ -178,16 +177,15 @@ class HoaDonController extends Controller
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->where(self::table . '.' . self::ma_kh, '=', $user->ma_tai_khoan)
                 ->get();
-            $listBillDetail = DB::table(ChiTietHoaDonController::table)
-                ->join(SanPhamController::table, ChiTietHoaDonController::table . '.' . ChiTietHoaDonController::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-                ->select(ChiTietHoaDonController::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
-                ->where(ChiTietHoaDonController::ma_hoa_don, '=', $id)
-                ->where(self::table . '.' . self::ma_kh, '=', $user->ma_tai_khoan)
-                ->get();
+//            $listBillDetail = DB::table(ChiTietHoaDonController::table)
+//                ->join(SanPhamController::table, ChiTietHoaDonController::table . '.' . ChiTietHoaDonController::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+//                ->select(ChiTietHoaDonController::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
+//                ->where(ChiTietHoaDonController::ma_hoa_don, '=', $id)
+//                ->where(self::table . '.' . self::ma_kh, '=', $user->ma_tai_khoan)
+//                ->get();
             if ($obj) {
                 return response()->json([
-                    'data' => $obj,
-                    'listBillDetail' => $listBillDetail
+                    'data' => $obj
                 ], 200);
             } else {
                 return response()->json(['error' => 'Không tìm thấy'], 200);

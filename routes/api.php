@@ -54,7 +54,8 @@ Route::middleware('auth:api')->group(function () {
 //chi tiết hóa đơn
 //    Route::get('/bill-details', [\App\Http\Controllers\ChiTietHoaDonController::class, 'index']);
 
-//    Route::get('/bill-details/{id}', [\App\Http\Controllers\ChiTietHoaDonController::class, 'show']);
+    //lấy ra list chi tiết hóa đơn theo mã hóa đơn
+    Route::get('/bill-details/{id}', [\App\Http\Controllers\ChiTietHoaDonController::class, 'show']);
 
     Route::post('/bill-details', [\App\Http\Controllers\ChiTietHoaDonController::class, 'store']);
 
@@ -65,7 +66,8 @@ Route::middleware('auth:api')->group(function () {
 //chi tiết phiếu nhập
 //    Route::get('/coupon-details', [\App\Http\Controllers\ChiTietPhieuNhapController::class, 'index']);
 
-//    Route::get('/coupon-details/{id}', [\App\Http\Controllers\ChiTietPhieuNhapController::class, 'show']);
+    //lấy ra list chi tiết phiếu nhập theo mã phiếu nhập
+    Route::get('/coupon-details/{id}', [\App\Http\Controllers\ChiTietPhieuNhapController::class, 'show']);
 
     Route::post('/coupon-details', [\App\Http\Controllers\ChiTietPhieuNhapController::class, 'store']);
 
@@ -87,10 +89,13 @@ Route::middleware('auth:api')->group(function () {
 //đặc trưng sản phẩm
 //    Route::get('/speciality-products', [\App\Http\Controllers\DacTrungSanPhamController::class, 'index']);
 
+    //lấy ra tất cả đặc trưng sản phẩm theo mã sản phẩm
     Route::get('/speciality-products/{id}', [\App\Http\Controllers\DacTrungSanPhamController::class, 'show']);
 
+    //thêm đặc trưng sản phẩm và số lượng khi thêm chi tiết phiếu nhập
     Route::post('/speciality-products', [\App\Http\Controllers\DacTrungSanPhamController::class, 'store']);
 
+    //sửa số lượng khi thêm chi tiết hóa đơn
     Route::put('/speciality-products/{id}', [\App\Http\Controllers\DacTrungSanPhamController::class, 'update']);
 
 //    Route::delete('/speciality-products', [\App\Http\Controllers\DacTrungSanPhamController::class, 'destroy']);
@@ -98,6 +103,7 @@ Route::middleware('auth:api')->group(function () {
 //hình ảnh sản phẩm
 //    Route::get('/image-products', [\App\Http\Controllers\HinhAnhSanPhamController::class, 'index']);
 
+    //lấy ra list hình ảnh theo mã sản phẩm
     Route::get('/image-products/{id}', [\App\Http\Controllers\HinhAnhSanPhamController::class, 'show']);
 
     Route::post('/image-products', [\App\Http\Controllers\HinhAnhSanPhamController::class, 'store']);

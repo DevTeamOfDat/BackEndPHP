@@ -164,11 +164,11 @@ class SanPhamController extends Controller
         date_default_timezone_set(BaseController::timezone);
         $date = date('Y-m-d');
         $obj = $objs = DB::select('call itemProduct(?,?)', array($date, $id));
-        $listImg = DB::table(HinhAnhSanPhamController::table)
-            ->where(HinhAnhSanPhamController::table . '.' . HinhAnhSanPhamController::ma_san_pham, '=', $id)
-            ->get(HinhAnhSanPhamController::hinh_anh);
+//        $listImg = DB::table(HinhAnhSanPhamController::table)
+//            ->where(HinhAnhSanPhamController::table . '.' . HinhAnhSanPhamController::ma_san_pham, '=', $id)
+//            ->get(HinhAnhSanPhamController::hinh_anh);
         if ($obj) {
-            return response()->json(['data' => $obj, 'listImg' => $listImg], 200);
+            return response()->json(['data' => $obj], 200);
         } else {
             return response()->json(['error' => 'Không tìm thấy'], 200);
         }

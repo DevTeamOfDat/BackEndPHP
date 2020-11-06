@@ -13,6 +13,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         \App\Models\TaiKhoan::factory(10)->create();
+//         \App\Models\TaiKhoan::factory(10)->create();
     }
 }
