@@ -11,6 +11,7 @@ class ThuongHieuController extends Controller
     const table = 'thuong_hieus';
     const id = 'ma_thuong_hieu';
     const ten_thuong_hieu = 'ten_thuong_hieu';
+    const hinh_anh = 'hinh_anh';
     const isActive = 'isActive';
 
     /**
@@ -63,6 +64,7 @@ class ThuongHieuController extends Controller
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             $validator = Validator::make($request->all(), [
                 self::ten_thuong_hieu => 'required',
+                self::hinh_anh => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()->all()], 200);

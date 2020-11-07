@@ -93,10 +93,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/speciality-products/{id}', [\App\Http\Controllers\DacTrungSanPhamController::class, 'show']);
 
     //thêm đặc trưng sản phẩm và số lượng khi thêm chi tiết phiếu nhập
-    Route::post('/speciality-products', [\App\Http\Controllers\DacTrungSanPhamController::class, 'store']);
+//    Route::post('/speciality-products', [\App\Http\Controllers\DacTrungSanPhamController::class, 'store']);
 
     //sửa số lượng khi thêm chi tiết hóa đơn
-    Route::put('/speciality-products/{id}', [\App\Http\Controllers\DacTrungSanPhamController::class, 'update']);
+//    Route::put('/speciality-products/{id}', [\App\Http\Controllers\DacTrungSanPhamController::class, 'update']);
 
 //    Route::delete('/speciality-products', [\App\Http\Controllers\DacTrungSanPhamController::class, 'destroy']);
 

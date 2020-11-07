@@ -17,6 +17,7 @@ class CreateChiTietHoaDonsTable extends Migration
             $table->id()->autoIncrement();
             $table->bigInteger('ma_hoa_don');
             $table->bigInteger('ma_san_pham');
+            $table->string('danh_sach_loai_dac_trung');
             $table->double('gia_ban', 15, 2)->default(0.00);
             $table->integer('so_luong')->default(0);
             $table->boolean('isActive')->default(true);

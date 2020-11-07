@@ -13,6 +13,7 @@ class ChiTietHoaDonController extends Controller
     const id = 'id';
     const ma_hoa_don = 'ma_hoa_don';
     const ma_san_pham = 'ma_san_pham';
+    const danh_sach_loai_dac_trung = 'danh_sach_loai_dac_trung';
     const gia_ban = 'gia_ban';
     const so_luong = 'so_luong';
     const isActive = 'isActive';
@@ -105,6 +106,7 @@ class ChiTietHoaDonController extends Controller
                             self::ma_hoa_don => 'required',
                             self::ma_san_pham => 'required',
                             self::so_luong => 'required',
+                            self::danh_sach_loai_dac_trung => 'required',
                         ]);
                         if ($validator->fails()) {
                             return response()->json(['error' => $validator->errors()->all()], 200);
@@ -112,8 +114,16 @@ class ChiTietHoaDonController extends Controller
                         if ($obj[self::so_luong] < 1) {
                             return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 200);
                         }
-                        if (DB::table(self::table)->where(self::ma_san_pham, '=', $obj[self::ma_san_pham])
+                        $str = '[';
+                        foreach ($obj[self::danh_sach_loai_dac_trung] as $item) {
+                            $str = $str . $item . ',';
+                        }
+                        $str = substr($str, 0, strlen($str) - 1);
+                        $str = $str . ']';
+                        if (DB::table(self::table)
+                            ->where(self::ma_san_pham, '=', $obj[self::ma_san_pham])
                             ->where(self::ma_hoa_don, '=', $obj[self::ma_hoa_don])
+                            ->where(self::danh_sach_loai_dac_trung, '=', $str)
                             ->where(self::isActive, '=', true)->first()) {
                             return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã hóa đơn và mã sản phẩm'], 200);
                         } elseif ($obj[self::so_luong] > DB::table(SanPhamController::table)->where(SanPhamController::id, '=', $obj[self::ma_san_pham])
@@ -154,6 +164,7 @@ class ChiTietHoaDonController extends Controller
                         self::ma_hoa_don => 'required',
                         self::ma_san_pham => 'required',
                         self::so_luong => 'required',
+                        self::danh_sach_loai_dac_trung => 'required',
                     ]);
                     if ($validator->fails()) {
                         return response()->json(['error' => $validator->errors()->all()], 200);
@@ -161,8 +172,16 @@ class ChiTietHoaDonController extends Controller
                     if ($arr_value[self::so_luong] < 1) {
                         return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 200);
                     }
-                    if (DB::table(self::table)->where(self::ma_san_pham, '=', $arr_value[self::ma_san_pham])
+                    $str = '[';
+                    foreach ($arr_value[self::danh_sach_loai_dac_trung] as $item) {
+                        $str = $str . $item . ',';
+                    }
+                    $str = substr($str, 0, strlen($str) - 1);
+                    $str = $str . ']';
+                    if (DB::table(self::table)
+                        ->where(self::ma_san_pham, '=', $arr_value[self::ma_san_pham])
                         ->where(self::ma_hoa_don, '=', $arr_value[self::ma_hoa_don])
+                        ->where(self::danh_sach_loai_dac_trung, '=', $str)
                         ->where(self::isActive, '=', true)->first()) {
                         return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã hóa đơn và mã sản phẩm'], 200);
                     } elseif ($arr_value[self::so_luong] > DB::table(SanPhamController::table)->where(SanPhamController::id, '=', $arr_value[self::ma_san_pham])
@@ -214,6 +233,26 @@ class ChiTietHoaDonController extends Controller
             ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
             ->where(self::table . '.' . self::ma_hoa_don, '=', $id)
             ->get();
+        $list_speciality_id = DB::table(self::table)
+            ->select(self::danh_sach_loai_dac_trung)
+            ->where(self::table . '.' . self::ma_hoa_don, '=', $id)
+            ->get();
+
+        foreach ($list_speciality_id as $index => $speciality_id) {
+            $speciality = $speciality_id->danh_sach_loai_dac_trung;
+            $speciality = substr($speciality, 1, strlen($speciality) - 2);
+            $arr = explode(',', $speciality);
+            $str = '';
+            foreach ($arr as $item) {
+                $ten_dac_trung = DB::table(DacTrungController::table)
+                    ->select(DacTrungController::ten_dac_trung)
+                    ->where(DacTrungController::id, '=', $item)
+                    ->get();
+                $str = $str . $ten_dac_trung[0]->ten_dac_trung . ', ';
+            }
+            $str = substr($str, 0, strlen($str) - 2);
+            $obj[$index]->ten_dac_trung = $str;
+        }
         if ($obj) {
             return response()->json(['data' => $obj], 200);
         } else {

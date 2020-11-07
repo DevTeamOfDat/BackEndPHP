@@ -16,7 +16,7 @@ class CreateDacTrungSanPhamsTable extends Migration
     {
         Schema::create('dac_trung_san_phams', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('loai_dac_trung');
+            $table->string('danh_sach_loai_dac_trung');
             $table->bigInteger('ma_san_pham');
             $table->integer('so_luong')->default(0);
             $table->boolean('isActive')->default(true);

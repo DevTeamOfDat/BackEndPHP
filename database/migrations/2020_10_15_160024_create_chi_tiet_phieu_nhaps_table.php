@@ -17,6 +17,7 @@ class CreateChiTietPhieuNhapsTable extends Migration
             $table->id()->autoIncrement();
             $table->bigInteger('ma_phieu_nhap');
             $table->bigInteger('ma_san_pham');
+            $table->string('danh_sach_loai_dac_trung');
             $table->double('gia_nhap', 15, 2)->default(0.00);
             $table->integer('so_luong')->default(0);
             $table->boolean('isActive')->default(true);
