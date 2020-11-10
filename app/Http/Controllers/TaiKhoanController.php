@@ -116,8 +116,8 @@ class TaiKhoanController extends Controller
                         $validator = Validator::make($obj, [
                             self::email => 'required|email',
                             self::mat_khau => 'required|min:8',
-                            self::ho_ten => 'required|min:8',
-                            self::so_dien_thoai => 'required|min:10',
+                            self::ho_ten => 'required',
+                            self::so_dien_thoai => 'required',
                             self::loai_tai_khoan => 'required',
                         ]);
                         if ($validator->fails()) {
@@ -129,8 +129,8 @@ class TaiKhoanController extends Controller
                 $validator = Validator::make($request->all(), [
                     self::email => 'required|email',
                     self::mat_khau => 'required|min:8',
-                    self::ho_ten => 'required|min:8',
-                    self::so_dien_thoai => 'required|min:10',
+                    self::ho_ten => 'required',
+                    self::so_dien_thoai => 'required',
                     self::loai_tai_khoan => 'required',
                 ]);
                 if ($validator->fails()) {
@@ -191,8 +191,8 @@ class TaiKhoanController extends Controller
         $validator = Validator::make($request->all(), [
             self::email => 'required|email',
             self::mat_khau => 'required|min:8',
-            self::ho_ten => 'required|min:8',
-            self::so_dien_thoai => 'required|min:10',
+            self::ho_ten => 'required',
+            self::so_dien_thoai => 'required',
             self::loai_tai_khoan => 'required',
         ]);
         if ($validator->fails()) {
@@ -250,11 +250,11 @@ class TaiKhoanController extends Controller
     {
         date_default_timezone_set(BaseController::timezone);
         $validator = Validator::make($request->all(), [
-            self::ho_ten => 'required|min:8',
+            self::ho_ten => 'required',
             self::email => 'required|email',
             self::mat_khau => 'required|min:8',
-            self::dia_chi => 'required|min:8',
-            self::so_dien_thoai => 'required|min:10',
+            self::dia_chi => 'required',
+            self::so_dien_thoai => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -287,7 +287,7 @@ class TaiKhoanController extends Controller
     {
         $validator = Validator::make($request->all(), [
             self::email => 'required|email',
-            self::mat_khau => 'required|min:8',
+            self::mat_khau => 'required',
         ]);
 
         if ($validator->fails()) {
