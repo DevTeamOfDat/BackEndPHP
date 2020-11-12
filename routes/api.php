@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaiKhoanController;
 use App\Http\Controllers\NhaCungCapController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +29,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('info', [TaiKhoanController::class, 'userInfo']);
     Route::post('logout', [TaiKhoanController::class, 'logout']);
 
-    //dành cho trang admin
+    //report
+    Route::get('/reports/inventory-product', [ReportController::class, 'inventoryProduct']);
+    Route::post('/reports/report-coupons', [ReportController::class, 'reportCoupons']);
+    Route::post('/reports/report-bills', [ReportController::class, 'reportBills']);
+    Route::post('/reports/report-employees', [ReportController::class, 'reportEmployees']);
+
 //nhà cung cấp
     Route::get('/suppliers', [NhaCungCapController::class, 'index']);
 
