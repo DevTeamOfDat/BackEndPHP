@@ -158,14 +158,18 @@ class ReportController extends Controller
     {
         if ($this->checkUser()) {
             $key = $request->get('key');
-            $param = $request->get('param');
             $params = null;
-            if (str_contains($param, '/')) {
-                $params = explode('/', $param);
-            } elseif (str_contains($param, '-')) {
-                $params = explode('-', $param);
-            } else {
-                $params = $param;
+            try {
+                $param = $request->get('param');
+                if (str_contains($param, '/')) {
+                    $params = explode('/', $param);
+                } elseif (str_contains($param, '-')) {
+                    $params = explode('-', $param);
+                } else {
+                    $params = $param;
+                }
+            } catch (\Throwable $e) {
+
             }
             $objs = null;
             $code = 200;
@@ -174,7 +178,7 @@ class ReportController extends Controller
                     $objs = DB::table(HoaDonController::table)
                         ->leftJoin(LoaiDonController::table, LoaiDonController::table . '.' . LoaiDonController::gia_tri, '=', HoaDonController::table . '.' . HoaDonController::loai_don)
                         ->leftJoin(TrangThaiController::table, TrangThaiController::table . '.' . TrangThaiController::gia_tri, '=', HoaDonController::table . '.' . HoaDonController::trang_thai)
-                        ->select(HoaDonController::id, HoaDonController::trang_thai, TrangThaiController::gia_tri, HoaDonController::loai_don, LoaiDonController::gia_tri, HoaDonController::thanh_tien, HoaDonController::ngay_lap)
+                        ->select(HoaDonController::id, HoaDonController::trang_thai, TrangThaiController::gia_tri . '. as gia_tri_trang_thai', HoaDonController::loai_don, LoaiDonController::gia_tri .'. as gia_tri_loai_don', HoaDonController::thanh_tien, HoaDonController::ngay_lap)
                         ->where(HoaDonController::isActive, '=', true)
                         ->groupBy(HoaDonController::id)
                         ->orderByDesc('thanh_tien')
@@ -184,7 +188,7 @@ class ReportController extends Controller
                     $objs = DB::table(HoaDonController::table)
                         ->leftJoin(LoaiDonController::table, LoaiDonController::table . '.' . LoaiDonController::gia_tri, '=', HoaDonController::table . '.' . HoaDonController::loai_don)
                         ->leftJoin(TrangThaiController::table, TrangThaiController::table . '.' . TrangThaiController::gia_tri, '=', HoaDonController::table . '.' . HoaDonController::trang_thai)
-                        ->select(HoaDonController::id, HoaDonController::trang_thai, TrangThaiController::gia_tri, HoaDonController::loai_don, LoaiDonController::gia_tri, HoaDonController::thanh_tien, HoaDonController::ngay_lap)
+                        ->select(HoaDonController::id, HoaDonController::trang_thai, TrangThaiController::gia_tri . '. as gia_tri_trang_thai', HoaDonController::loai_don, LoaiDonController::gia_tri .'. as gia_tri_loai_don', HoaDonController::thanh_tien, HoaDonController::ngay_lap)
                         ->where(HoaDonController::isActive, '=', true)
                         ->whereMonth(HoaDonController::ngay_lap, '=', $params[0])
                         ->whereYear(HoaDonController::ngay_lap, '=', $params[1])
@@ -198,7 +202,7 @@ class ReportController extends Controller
                             $objs = DB::table(HoaDonController::table)
                                 ->leftJoin(LoaiDonController::table, LoaiDonController::table . '.' . LoaiDonController::gia_tri, '=', HoaDonController::table . '.' . HoaDonController::loai_don)
                                 ->leftJoin(TrangThaiController::table, TrangThaiController::table . '.' . TrangThaiController::gia_tri, '=', HoaDonController::table . '.' . HoaDonController::trang_thai)
-                                ->select(HoaDonController::id, HoaDonController::trang_thai, TrangThaiController::gia_tri, HoaDonController::loai_don, LoaiDonController::gia_tri, HoaDonController::thanh_tien, HoaDonController::ngay_lap)
+                                ->select(HoaDonController::id, HoaDonController::trang_thai, TrangThaiController::gia_tri . '. as gia_tri_trang_thai', HoaDonController::loai_don, LoaiDonController::gia_tri .'. as gia_tri_loai_don', HoaDonController::thanh_tien, HoaDonController::ngay_lap)
                                 ->where(HoaDonController::isActive, '=', true)
                                 ->whereMonth(HoaDonController::ngay_lap, '>=', self::quy1[0])
                                 ->whereMonth(HoaDonController::ngay_lap, '<=', self::quy1[2])
@@ -211,7 +215,7 @@ class ReportController extends Controller
                             $objs = DB::table(HoaDonController::table)
                                 ->leftJoin(LoaiDonController::table, LoaiDonController::table . '.' . LoaiDonController::gia_tri, '=', HoaDonController::table . '.' . HoaDonController::loai_don)
                                 ->leftJoin(TrangThaiController::table, TrangThaiController::table . '.' . TrangThaiController::gia_tri, '=', HoaDonController::table . '.' . HoaDonController::trang_thai)
-                                ->select(HoaDonController::id, HoaDonController::trang_thai, TrangThaiController::gia_tri, HoaDonController::loai_don, LoaiDonController::gia_tri, HoaDonController::thanh_tien, HoaDonController::ngay_lap)
+                                ->select(HoaDonController::id, HoaDonController::trang_thai, TrangThaiController::gia_tri . '. as gia_tri_trang_thai', HoaDonController::loai_don, LoaiDonController::gia_tri .'. as gia_tri_loai_don', HoaDonController::thanh_tien, HoaDonController::ngay_lap)
                                 ->where(HoaDonController::isActive, '=', true)
                                 ->whereMonth(HoaDonController::ngay_lap, '>=', self::quy2[0])
                                 ->whereMonth(HoaDonController::ngay_lap, '<=', self::quy2[2])
@@ -224,7 +228,7 @@ class ReportController extends Controller
                             $objs = DB::table(HoaDonController::table)
                                 ->leftJoin(LoaiDonController::table, LoaiDonController::table . '.' . LoaiDonController::gia_tri, '=', HoaDonController::table . '.' . HoaDonController::loai_don)
                                 ->leftJoin(TrangThaiController::table, TrangThaiController::table . '.' . TrangThaiController::gia_tri, '=', HoaDonController::table . '.' . HoaDonController::trang_thai)
-                                ->select(HoaDonController::id, HoaDonController::trang_thai, TrangThaiController::gia_tri, HoaDonController::loai_don, LoaiDonController::gia_tri, HoaDonController::thanh_tien, HoaDonController::ngay_lap)
+                                ->select(HoaDonController::id, HoaDonController::trang_thai, TrangThaiController::gia_tri . '. as gia_tri_trang_thai', HoaDonController::loai_don, LoaiDonController::gia_tri .'. as gia_tri_loai_don', HoaDonController::thanh_tien, HoaDonController::ngay_lap)
                                 ->where(HoaDonController::isActive, '=', true)
                                 ->whereMonth(HoaDonController::ngay_lap, '>=', self::quy3[0])
                                 ->whereMonth(HoaDonController::ngay_lap, '<=', self::quy3[2])
@@ -237,7 +241,7 @@ class ReportController extends Controller
                             $objs = DB::table(HoaDonController::table)
                                 ->leftJoin(LoaiDonController::table, LoaiDonController::table . '.' . LoaiDonController::gia_tri, '=', HoaDonController::table . '.' . HoaDonController::loai_don)
                                 ->leftJoin(TrangThaiController::table, TrangThaiController::table . '.' . TrangThaiController::gia_tri, '=', HoaDonController::table . '.' . HoaDonController::trang_thai)
-                                ->select(HoaDonController::id, HoaDonController::trang_thai, TrangThaiController::gia_tri, HoaDonController::loai_don, LoaiDonController::gia_tri, HoaDonController::thanh_tien, HoaDonController::ngay_lap)
+                                ->select(HoaDonController::id, HoaDonController::trang_thai, TrangThaiController::gia_tri . '. as gia_tri_trang_thai', HoaDonController::loai_don, LoaiDonController::gia_tri .'. as gia_tri_loai_don', HoaDonController::thanh_tien, HoaDonController::ngay_lap)
                                 ->where(HoaDonController::isActive, '=', true)
                                 ->whereMonth(HoaDonController::ngay_lap, '>=', self::quy4[0])
                                 ->whereMonth(HoaDonController::ngay_lap, '<=', self::quy4[2])
@@ -252,7 +256,7 @@ class ReportController extends Controller
                     $objs = DB::table(HoaDonController::table)
                         ->leftJoin(LoaiDonController::table, LoaiDonController::table . '.' . LoaiDonController::gia_tri, '=', HoaDonController::table . '.' . HoaDonController::loai_don)
                         ->leftJoin(TrangThaiController::table, TrangThaiController::table . '.' . TrangThaiController::gia_tri, '=', HoaDonController::table . '.' . HoaDonController::trang_thai)
-                        ->select(HoaDonController::id, HoaDonController::trang_thai, TrangThaiController::gia_tri, HoaDonController::loai_don, LoaiDonController::gia_tri, HoaDonController::thanh_tien, HoaDonController::ngay_lap)
+                        ->select(HoaDonController::id, HoaDonController::trang_thai, TrangThaiController::gia_tri . '. as gia_tri_trang_thai', HoaDonController::loai_don, LoaiDonController::gia_tri .'. as gia_tri_loai_don', HoaDonController::thanh_tien, HoaDonController::ngay_lap)
                         ->where(HoaDonController::isActive, '=', true)
                         ->whereYear(HoaDonController::ngay_lap, '=', $params)
                         ->groupBy(HoaDonController::id)
@@ -263,7 +267,7 @@ class ReportController extends Controller
                     $objs = DB::table(HoaDonController::table)
                         ->leftJoin(LoaiDonController::table, LoaiDonController::table . '.' . LoaiDonController::gia_tri, '=', HoaDonController::table . '.' . HoaDonController::loai_don)
                         ->leftJoin(TrangThaiController::table, TrangThaiController::table . '.' . TrangThaiController::gia_tri, '=', HoaDonController::table . '.' . HoaDonController::trang_thai)
-                        ->select(HoaDonController::id, HoaDonController::trang_thai, TrangThaiController::gia_tri, HoaDonController::loai_don, LoaiDonController::gia_tri, HoaDonController::thanh_tien, HoaDonController::ngay_lap)
+                        ->select(HoaDonController::id, HoaDonController::trang_thai, TrangThaiController::gia_tri . '. as gia_tri_trang_thai', HoaDonController::loai_don, LoaiDonController::gia_tri .'. as gia_tri_loai_don', HoaDonController::thanh_tien, HoaDonController::ngay_lap)
                         ->where(HoaDonController::isActive, '=', true)
                         ->groupBy(HoaDonController::id)
                         ->orderByDesc('thanh_tien')
