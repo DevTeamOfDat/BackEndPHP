@@ -301,7 +301,7 @@ class TaiKhoanController extends Controller
         if ($tk) {
             if (Hash::check($request->mat_khau, $tk->mat_khau)) {
                 $token = $tk->createToken('WebsiteBanGiayPHP')->accessToken;
-                return response()->json(['token' => $token], 200);
+                return response()->json(['token' => $token, 'data' => $tk], 200);
             } else {
                 return response()->json(['error' => 'Password mismatch'], 400);
             }
