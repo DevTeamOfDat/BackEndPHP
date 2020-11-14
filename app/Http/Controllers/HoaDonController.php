@@ -219,12 +219,12 @@ class HoaDonController extends Controller
             $hd = DB::table(self::table)->where(self::id, '=', $id)->first();
             if ($hd->trang_thai == false && $request->get(self::trang_thai) == true) {
                 DB::table(self::table)->where(self::id, '=', $id)->update([self::trang_thai => true]);
-                return response()->json(['success' => 'Cập nhật thành công'], 200);
+                return response()->json(['success' => 'Cập nhật thành công'], 201);
             } else {
-                return response()->json(['error' => 'Cập nhật thất bại'], 200);
+                return response()->json(['error' => 'Cập nhật thất bại'], 400);
             }
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -262,7 +262,7 @@ class HoaDonController extends Controller
             $this->base->destroy($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 }

@@ -104,7 +104,7 @@ class NhanXetController extends Controller
             self::binh_luan => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->all()], 200);
+            return response()->json(['error' => $validator->errors()->all()], 400);
         }
 
         $obj = [];
@@ -113,7 +113,7 @@ class NhanXetController extends Controller
         if (DB::table(self::table)->insert($obj)) {
             return response()->json(['success' => 'Thêm mới thành công'], 201);
         } else {
-            return response()->json(['error' => 'Thêm mới thất bại'], 200);
+            return response()->json(['error' => 'Thêm mới thất bại'], 400);
         }
 //        $this->base->store($request);
 //        return response()->json($this->base->getMessage(), $this->base->getStatus());
@@ -176,7 +176,7 @@ class NhanXetController extends Controller
             $this->base->update($request, $id);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -197,13 +197,13 @@ class NhanXetController extends Controller
                     foreach ($listId as $id) {
                         $ma_kh = DB::table(self::table)->where(self::id, '=', $id)->get(self::ma_khach_hang);
                         if ($loai_tk != TaiKhoanController::NV && $loai_tk != TaiKhoanController::QT && $ma_kh != $ma_tk) {
-                            return response()->json(['error' => 'Xóa thất bại. Bạn không được phép xóa nhận xét của người khác'], 200);
+                            return response()->json(['error' => 'Xóa thất bại. Bạn không được phép xóa nhận xét của người khác'], 403);
                         }
                     }
                     DB::table(self::table)->whereIn(self::id, $listId)->update([self::isActive => false]);
                     return response()->json(['success' => 'Xóa thành công'], 200);
                 } else {
-                    return response()->json(['error' => 'Xóa thất bại. Không có dữ liệu'], 200);
+                    return response()->json(['error' => 'Xóa thất bại. Không có dữ liệu'], 400);
                 }
             } else {
                 $id = $request->get(BaseController::key_id);
@@ -212,10 +212,10 @@ class NhanXetController extends Controller
                     if ($obj = DB::table(self::table)->where(self::id, '=', $id)->update([self::isActive => false])) {
                         return response()->json(['success' => 'Xóa thành công'], 200);
                     } else {
-                        return response()->json(['error' => 'Xóa thất bại'], 200);
+                        return response()->json(['error' => 'Xóa thất bại'], 400);
                     }
                 } else {
-                    return response()->json(['error' => 'Tài khoản không đủ quyền để thực hiện thao tác này'], 200);
+                    return response()->json(['error' => 'Tài khoản không đủ quyền để thực hiện thao tác này'], 403);
                 }
             }
         } catch (\Throwable $e) {

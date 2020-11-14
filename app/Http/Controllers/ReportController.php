@@ -19,7 +19,7 @@ class ReportController extends Controller
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             return true;
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 

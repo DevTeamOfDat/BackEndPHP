@@ -112,11 +112,11 @@ class DacTrungSanPhamController extends Controller
                                 self::ma_san_pham => 'required',
                             ]);
                             if ($validator->fails()) {
-                                return response()->json(['error' => $validator->errors()->all()], 200);
+                                return response()->json(['error' => $validator->errors()->all()], 400);
                             }
                         }
                     } else {
-                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);
+                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
                     }
                 } else {
                     $arr_value = $request->all();
@@ -126,10 +126,10 @@ class DacTrungSanPhamController extends Controller
                             self::ma_san_pham => 'required',
                         ]);
                         if ($validator->fails()) {
-                            return response()->json(['error' => $validator->errors()->all()], 200);
+                            return response()->json(['error' => $validator->errors()->all()], 400);
                         }
                     } else {
-                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);
+                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
                     }
                 }
             } catch (\Throwable $e) {
@@ -156,20 +156,20 @@ class DacTrungSanPhamController extends Controller
                     if (DB::table(self::table)->update($params)) {
                         return response()->json(['success' => "Thêm mới thành công"], 201);
                     } else {
-                        return response()->json(['error' => 'Thêm mới thất bại'], 200);
+                        return response()->json(['error' => 'Thêm mới thất bại'], 400);
                     }
                 } else {
                     $params[self::so_luong] = $request->so_luong;
                     if (DB::table(self::table)->insert($params)) {
                         return response()->json(['success' => "Thêm mới thành công"], 201);
                     } else {
-                        return response()->json(['error' => 'Thêm mới thất bại'], 200);
+                        return response()->json(['error' => 'Thêm mới thất bại'], 400);
                     }
                 }
             }
 
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -248,7 +248,7 @@ class DacTrungSanPhamController extends Controller
         }
         DB::table(self::table)->where(self::id, '=', $id)->update($params);
         $obj = DB::table(self::table)->where(self::id, '=', $id)->get();
-        return response()->json(['data' => $obj], 200);
+        return response()->json(['data' => $obj], 201);
 //        } else {
 //            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
 //        }
@@ -268,7 +268,7 @@ class DacTrungSanPhamController extends Controller
             $this->base->destroy($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 }

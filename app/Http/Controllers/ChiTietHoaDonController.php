@@ -74,7 +74,7 @@ class ChiTietHoaDonController extends Controller
 //            }
             return response()->json(['data' => $objs], $code);
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -109,10 +109,10 @@ class ChiTietHoaDonController extends Controller
                             self::danh_sach_loai_dac_trung => 'required',
                         ]);
                         if ($validator->fails()) {
-                            return response()->json(['error' => $validator->errors()->all()], 200);
+                            return response()->json(['error' => $validator->errors()->all()], 400);
                         }
                         if ($obj[self::so_luong] < 1) {
-                            return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 200);
+                            return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 400);
                         }
                         $str = '[';
                         foreach ($obj[self::danh_sach_loai_dac_trung] as $item) {
@@ -125,10 +125,10 @@ class ChiTietHoaDonController extends Controller
                             ->where(self::ma_hoa_don, '=', $obj[self::ma_hoa_don])
                             ->where(self::danh_sach_loai_dac_trung, '=', $str)
                             ->where(self::isActive, '=', true)->first()) {
-                            return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã hóa đơn và mã sản phẩm'], 200);
+                            return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã hóa đơn và mã sản phẩm'], 400);
                         } elseif ($obj[self::so_luong] > DB::table(SanPhamController::table)->where(SanPhamController::id, '=', $obj[self::ma_san_pham])
                                 ->where(SanPhamController::isActive, '=', true)->select(SanPhamController::so_luong)->get()) {
-                            return response()->json(['error' => 'Thêm mới thất bại. Số lượng sản phẩm không đủ'], 200);
+                            return response()->json(['error' => 'Thêm mới thất bại. Số lượng sản phẩm không đủ'], 400);
                         }
                     }
 
@@ -155,7 +155,7 @@ class ChiTietHoaDonController extends Controller
                     }
                     return response()->json(['success' => 'Thêm mới thành công'], 201);
                 } else {
-                    return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);
+                    return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
                 }
             } else {
                 $arr_value = $request->all();
@@ -167,10 +167,10 @@ class ChiTietHoaDonController extends Controller
                         self::danh_sach_loai_dac_trung => 'required',
                     ]);
                     if ($validator->fails()) {
-                        return response()->json(['error' => $validator->errors()->all()], 200);
+                        return response()->json(['error' => $validator->errors()->all()], 400);
                     }
                     if ($arr_value[self::so_luong] < 1) {
-                        return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 200);
+                        return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 400);
                     }
                     $str = '[';
                     foreach ($arr_value[self::danh_sach_loai_dac_trung] as $item) {
@@ -183,10 +183,10 @@ class ChiTietHoaDonController extends Controller
                         ->where(self::ma_hoa_don, '=', $arr_value[self::ma_hoa_don])
                         ->where(self::danh_sach_loai_dac_trung, '=', $str)
                         ->where(self::isActive, '=', true)->first()) {
-                        return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã hóa đơn và mã sản phẩm'], 200);
+                        return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã hóa đơn và mã sản phẩm'], 400);
                     } elseif ($arr_value[self::so_luong] > DB::table(SanPhamController::table)->where(SanPhamController::id, '=', $arr_value[self::ma_san_pham])
                             ->where(SanPhamController::isActive, '=', true)->select(SanPhamController::so_luong)->get()) {
-                        return response()->json(['error' => 'Thêm mới thất bại. Số lượng sản phẩm không đủ'], 200);
+                        return response()->json(['error' => 'Thêm mới thất bại. Số lượng sản phẩm không đủ'], 400);
                     }
                     $ngay_lap = DB::table(HoaDonController::table)->where(HoaDonController::table . '.' . HoaDonController::id, '=', $arr_value[self::ma_hoa_don])
                         ->where(HoaDonController::table . '.' . HoaDonController::isActive, '=', true)
@@ -209,7 +209,7 @@ class ChiTietHoaDonController extends Controller
                     DB::table(self::table)->insert($arr_value);
                     return response()->json(['success' => 'Thêm mới thành công'], 201);
                 } else {
-                    return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);
+                    return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
                 }
             }
         } catch (\Throwable $e) {
@@ -289,7 +289,7 @@ class ChiTietHoaDonController extends Controller
             $this->base->update($request, $id);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 

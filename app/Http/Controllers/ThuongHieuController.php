@@ -67,13 +67,13 @@ class ThuongHieuController extends Controller
                 self::hinh_anh => 'required',
             ]);
             if ($validator->fails()) {
-                return response()->json(['error' => $validator->errors()->all()], 200);
+                return response()->json(['error' => $validator->errors()->all()], 400);
             }
 
             $this->base->store($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -91,7 +91,7 @@ class ThuongHieuController extends Controller
             $this->base->show($id);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -121,7 +121,7 @@ class ThuongHieuController extends Controller
             $this->base->update($request, $id);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -139,7 +139,7 @@ class ThuongHieuController extends Controller
             $this->base->destroy($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 }

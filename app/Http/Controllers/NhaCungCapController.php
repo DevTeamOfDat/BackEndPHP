@@ -40,7 +40,7 @@ class NhaCungCapController extends Controller
             $this->base->index();
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -75,11 +75,11 @@ class NhaCungCapController extends Controller
                                 self::so_dien_thoai => 'required',
                             ]);
                             if ($validator->fails()) {
-                                return response()->json(['error' => $validator->errors()->all()], 200);
+                                return response()->json(['error' => $validator->errors()->all()], 400);
                             }
                         }
                     } else {
-                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);
+                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
                     }
                 } else {
                     $arr_value = $request->all();
@@ -90,10 +90,10 @@ class NhaCungCapController extends Controller
                             self::so_dien_thoai => 'required',
                         ]);
                         if ($validator->fails()) {
-                            return response()->json(['error' => $validator->errors()->all()], 200);
+                            return response()->json(['error' => $validator->errors()->all()], 400);
                         }
                     } else {
-                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);
+                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
                     }
                 }
             } catch (\Throwable $e) {
@@ -103,7 +103,7 @@ class NhaCungCapController extends Controller
             $this->base->store($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -121,7 +121,7 @@ class NhaCungCapController extends Controller
             $this->base->show($id);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -151,7 +151,7 @@ class NhaCungCapController extends Controller
             $this->base->update($request, $id);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -169,7 +169,7 @@ class NhaCungCapController extends Controller
             $this->base->destroy($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 }

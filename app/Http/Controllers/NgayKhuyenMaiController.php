@@ -39,7 +39,7 @@ class NgayKhuyenMaiController extends Controller
 //            $objs = DB::table(self::table)->where(self::isActive, '=', true)
 //                ->orderBy(self::ngay_gio)->limit(3)->get();
 //            return response()->json(['data' => $objs], 200);
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -76,14 +76,14 @@ class NgayKhuyenMaiController extends Controller
                                 self::ngay_gio => 'required',
                             ]);
                             if ($validator->fails()) {
-                                return response()->json(['error' => $validator->errors()->all()], 200);
+                                return response()->json(['error' => $validator->errors()->all()], 400);
                             }
                             if ($obj[self::ngay_gio] < $date) {
-                                return response()->json(['error' => 'Ngày không hợp lệ'], 200);
+                                return response()->json(['error' => 'Ngày không hợp lệ'], 400);
                             }
                         }
                     } else {
-                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);
+                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
                     }
                 } else {
                     $arr_value = $request->all();
@@ -92,13 +92,13 @@ class NgayKhuyenMaiController extends Controller
                             self::ngay_gio => 'required',
                         ]);
                         if ($validator->fails()) {
-                            return response()->json(['error' => $validator->errors()->all()], 200);
+                            return response()->json(['error' => $validator->errors()->all()], 400);
                         }
                         if ($arr_value[self::ngay_gio] < $date) {
-                            return response()->json(['error' => 'Ngày không hợp lệ'], 200);
+                            return response()->json(['error' => 'Ngày không hợp lệ'], 400);
                         }
                     } else {
-                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 200);
+                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
                     }
                 }
             } catch (\Throwable $e) {
@@ -108,7 +108,7 @@ class NgayKhuyenMaiController extends Controller
             $this->base->store($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -126,7 +126,7 @@ class NgayKhuyenMaiController extends Controller
             $this->base->show($id);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -156,7 +156,7 @@ class NgayKhuyenMaiController extends Controller
             $this->base->update($request, $id);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -174,7 +174,7 @@ class NgayKhuyenMaiController extends Controller
             $this->base->destroy($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 }

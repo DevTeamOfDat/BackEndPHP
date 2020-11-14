@@ -85,7 +85,7 @@ class TaiKhoanController extends Controller
 //            }
             return response()->json(['data' => $objs], $code);
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -121,7 +121,7 @@ class TaiKhoanController extends Controller
                             self::loai_tai_khoan => 'required',
                         ]);
                         if ($validator->fails()) {
-                            return response()->json(['error' => $validator->errors()->all()], 200);
+                            return response()->json(['error' => $validator->errors()->all()], 400);
                         }
                     }
                 }
@@ -134,13 +134,13 @@ class TaiKhoanController extends Controller
                     self::loai_tai_khoan => 'required',
                 ]);
                 if ($validator->fails()) {
-                    return response()->json(['error' => $validator->errors()->all()], 200);
+                    return response()->json(['error' => $validator->errors()->all()], 400);
                 }
             }
             $this->base->store($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -165,7 +165,7 @@ class TaiKhoanController extends Controller
                 return response()->json(['error' => "Không tìm thấy"], 200);
             }
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -196,7 +196,7 @@ class TaiKhoanController extends Controller
             self::loai_tai_khoan => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->all()], 200);
+            return response()->json(['error' => $validator->errors()->all()], 400);
         }
         $this->base->update($request, $id);
         return response()->json($this->base->getMessage(), $this->base->getStatus());
@@ -219,17 +219,17 @@ class TaiKhoanController extends Controller
                         foreach ($listId as $id) {
                             if (DB::table(self::table)->where(self::table . '.' . self::loai_tai_khoan, '=', 'KH')
                                 ->where(self::table . '.' . self::id, '=', $id)->get()) {
-                                return response()->json(['error' => 'Xóa thất bại. Không thể xóa tài khoản khách hàng'], 200);
+                                return response()->json(['error' => 'Xóa thất bại. Không thể xóa tài khoản khách hàng'], 403);
                             }
                         }
                     } else {
-                        return response()->json(['error' => 'Xóa thất bại. Không có dữ liệu'], 200);
+                        return response()->json(['error' => 'Xóa thất bại. Không có dữ liệu'], 400);
                     }
                 } else {
                     $id = $request->get(BaseController::key_id);
                     if (DB::table(self::table)->where(self::table . '.' . self::loai_tai_khoan, '=', 'KH')
                         ->where(self::table . '.' . self::id, '=', $id)->get()) {
-                        return response()->json(['error' => 'Xóa thất bại. Không thể xóa tài khoản khách hàng'], 200);
+                        return response()->json(['error' => 'Xóa thất bại. Không thể xóa tài khoản khách hàng'], 403);
                     }
                 }
             } catch (\Throwable $e) {
@@ -239,7 +239,7 @@ class TaiKhoanController extends Controller
             $this->base->destroy($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
+            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }
 
@@ -258,7 +258,7 @@ class TaiKhoanController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->all()], 200);
+            return response()->json(['error' => $validator->errors()->all()], 400);
         }
 
         DB::table(self::table)->insert([
@@ -277,7 +277,7 @@ class TaiKhoanController extends Controller
 
         $token = $tk->createToken('WebsiteBanGiayPHP')->accessToken;
 
-        return response()->json(['token' => $token, 'data' => $tk], 200);
+        return response()->json(['token' => $token, 'data' => $tk], 201);
     }
 
     /**
@@ -291,7 +291,7 @@ class TaiKhoanController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->all()], 200);
+            return response()->json(['error' => $validator->errors()->all()], 400);
         }
 
         $email = $request->email;
@@ -303,7 +303,7 @@ class TaiKhoanController extends Controller
                 $token = $tk->createToken('WebsiteBanGiayPHP')->accessToken;
                 return response()->json(['token' => $token], 200);
             } else {
-                return response()->json(['error' => 'Password mismatch'], 200);
+                return response()->json(['error' => 'Password mismatch'], 400);
             }
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);

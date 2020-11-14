@@ -139,7 +139,7 @@ class BaseController extends Controller
                     $this->status = 201;
                 } else {
                     $this->message = ['error' => 'Thêm mới thất bại. Không có dữ liệu'];
-                    $this->status = 200;
+                    $this->status = 400;
                 }
             } else {
                 $arr_value = $request->all();
@@ -149,12 +149,12 @@ class BaseController extends Controller
                     $this->status = 201;
                 } else {
                     $this->message = ['error' => 'Thêm mới thất bại. Không có dữ liệu'];
-                    $this->status = 200;
+                    $this->status = 400;
                 }
             }
         } catch (\Throwable $e) {
             $this->message = ['error' => $e];
-            $this->status = 500;
+            $this->status = 400;
         }
     }
 
@@ -200,10 +200,10 @@ class BaseController extends Controller
         if (DB::table($this->table)->where($this->id, '=', $id)->update($request->all())) {
             $obj = DB::table($this->table)->where($this->id, '=', $id)->get();
             $this->message = ['data' => $obj];
-            $this->status = 200;
+            $this->status = 201;
         } else {
             $this->message = ['error' => "Chỉnh sửa thất bại"];
-            $this->status = 200;
+            $this->status = 400;
         }
     }
 
