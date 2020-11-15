@@ -49,8 +49,9 @@ class TaiKhoanController extends Controller
         if ($loai_tk == self::NV || $loai_tk == self::QT) {
             $objs = DB::table(self::table)
                 ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
-                ->select(self::id, self::ho_ten, self::email, self::dia_chi, self::so_dien_thoai, LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta, self::hinh_anh, self::table . '.' . self::isActive)
+                ->select(self::id, self::ho_ten, self::email, self::dia_chi, self::so_dien_thoai, self::loai_tai_khoan, LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta, self::hinh_anh, self::table . '.' . self::isActive)
                 ->where(self::table . '.' . self::loai_tai_khoan, '=', 'KH')
+                ->orWhere(self::table . '.' . self::loai_tai_khoan, '=', 'NV')
                 ->get();
             $code = 200;
 //            switch ($query) {
@@ -157,7 +158,7 @@ class TaiKhoanController extends Controller
         if ($loai_tk == self::NV || $loai_tk == self::QT) {
             $client = DB::table(self::table)
                 ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
-                ->select(self::id, self::ho_ten, self::email, self::dia_chi, self::so_dien_thoai, LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta, self::hinh_anh, self::table . '.' . self::isActive)
+                ->select(self::id, self::ho_ten, self::email, self::dia_chi, self::so_dien_thoai, self::loai_tai_khoan, LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta, self::hinh_anh, self::table . '.' . self::isActive)
                 ->where(self::table . '.' . self::id, '=', $id)->first();
             if ($client) {
                 return response()->json(['data' => $client], 200);
