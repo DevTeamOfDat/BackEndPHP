@@ -129,7 +129,7 @@ class ChiTietHoaDonController extends Controller
                             ->where(self::isActive, '=', true)->get();
                         if (count($data) > 0) {
                             return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã hóa đơn và mã sản phẩm'], 400);
-                        } elseif ($obj[self::so_luong] > DB::table(SanPhamController::table)->select(self::so_luong)->where(SanPhamController::id, '=', $obj[self::ma_san_pham])
+                        } elseif ($obj[self::so_luong] > DB::table(SanPhamController::table)->where(SanPhamController::id, '=', $obj[self::ma_san_pham])
                                 ->where(SanPhamController::isActive, '=', true)->select(SanPhamController::so_luong)->get()) {
                             return response()->json(['error' => 'Thêm mới thất bại. Số lượng sản phẩm không đủ'], 400);
                         }
@@ -190,8 +190,10 @@ class ChiTietHoaDonController extends Controller
                         ->where(self::isActive, '=', true)->get();
                     if (count($data) > 0) {
                         return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã hóa đơn và mã sản phẩm'], 400);
-                    } elseif ($arr_value[self::so_luong] > DB::table(SanPhamController::table)->select(self::so_luong)->where(SanPhamController::id, '=', $arr_value[self::ma_san_pham])
-                            ->where(SanPhamController::isActive, '=', true)->select(SanPhamController::so_luong)->get()) {
+                    }
+                    $sl = DB::table(SanPhamController::table)->select(SanPhamController::so_luong)->where(SanPhamController::id, '=', $arr_value[self::ma_san_pham])
+                        ->where(SanPhamController::isActive, '=', true)->get();
+                    if ($arr_value[self::so_luong] > $sl[0]->so_luong) {
                         return response()->json(['error' => 'Thêm mới thất bại. Số lượng sản phẩm không đủ'], 400);
                     }
                     $ngay_lap = DB::table(HoaDonController::table)->where(HoaDonController::table . '.' . HoaDonController::id, '=', $arr_value[self::ma_hoa_don])
