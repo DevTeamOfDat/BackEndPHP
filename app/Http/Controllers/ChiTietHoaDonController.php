@@ -198,18 +198,27 @@ class ChiTietHoaDonController extends Controller
                     }
                     $ngay_lap = DB::table(HoaDonController::table)->where(HoaDonController::table . '.' . HoaDonController::id, '=', $arr_value[self::ma_hoa_don])
                         ->where(HoaDonController::table . '.' . HoaDonController::isActive, '=', true)
-                        ->select(HoaDonController::ngay_lap)->first();
-                    $ma_ngay_km = DB::table(NgayKhuyenMaiController::table)->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, '=', $ngay_lap)
+                        ->select(HoaDonController::ngay_lap)->get();
+                    $ngay_lap = $ngay_lap[0]->ngay_lap;
+                    $ma_ngay_km = DB::table(NgayKhuyenMaiController::table)
+                        ->select(NgayKhuyenMaiController::id)
+                        ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, '=', $ngay_lap)
                         ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::isActive, '=', true)
-                        ->select(NgayKhuyenMaiController::id)->get();
+                        ->get();
+                    $muc_km = 0;
+                    if (count($ma_ngay_km) > 0) {
+                        $ma_ngay_km = $ma_ngay_km->ma_ngay_khuyen_mai;
+                        $muc_km = DB::table(KhuyenMaiSanPhamController::table)
+                            ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_san_pham, '=', $arr_value[self::ma_san_pham])
+                            ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_ngay_khuyen_mai, '=', $ma_ngay_km)
+                            ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::isActive, '=', true)
+                            ->select(KhuyenMaiSanPhamController::muc_khuyen_mai)->get();
+                    }
                     $gia_ban_sp = DB::table(SanPhamController::table)->where(SanPhamController::table . '.' . SanPhamController::id, '=', $arr_value[self::ma_san_pham])
                         ->where(SanPhamController::isActive, '=', true)
                         ->select(SanPhamController::gia_ban)->get();
-                    if ($muc_km = DB::table(KhuyenMaiSanPhamController::table)
-                        ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_san_pham, '=', $arr_value[self::ma_san_pham])
-                        ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_ngay_khuyen_mai, '=', $ma_ngay_km)
-                        ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::isActive, '=', true)
-                        ->select(KhuyenMaiSanPhamController::muc_khuyen_mai)->get()) {
+                    $gia_ban_sp = $gia_ban_sp[0]->gia_ban;
+                    if ($muc_km > 0) {
                         $arr_value[self::gia_ban] = $gia_ban_sp * (1 - $muc_km / 100);
                     } else {
                         $arr_value[self::gia_ban] = $gia_ban_sp;
