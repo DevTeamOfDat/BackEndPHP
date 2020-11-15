@@ -100,90 +100,44 @@ class ChiTietPhieuNhapController extends Controller
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             try {
-                if ($listObj = $request->get(BaseController::listObj)) {
-                    $count = count($listObj);
-                    if ($count > 0) {
-                        foreach ($listObj as $obj) {
-                            $validator = Validator::make($obj, [
-                                self::ma_phieu_nhap => 'required',
-                                self::ma_san_pham => 'required',
-                                self::danh_sach_loai_dac_trung => 'required',
-                                self::gia_nhap => 'required',
-                                self::so_luong => 'required',
-                            ]);
-                            if ($validator->fails()) {
-                                return response()->json(['error' => $validator->errors()->all()], 400);
-                            }
-                            if ($obj[self::gia_nhap] < 1) {
-                                return response()->json(['error' => 'Giá nhập phải lớn hơn 0'], 400);
-                            }
-                            if ($obj[self::so_luong] < 1) {
-                                return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 400);
-                            }
-                            $str = '[';
-                            foreach ($obj[self::danh_sach_loai_dac_trung] as $item) {
-                                $str = $str . $item . ',';
-                            }
-                            $str = substr($str, 0, strlen($str) - 1);
-                            $str = $str . ']';
-                            $obj[self::danh_sach_loai_dac_trung] = $str;
-                            $data = DB::table(self::table)
-                                ->select(self::table . '*')
-                                ->where(self::ma_san_pham, '=', $obj[self::ma_san_pham])
-                                ->where(self::ma_phieu_nhap, '=', $obj[self::ma_phieu_nhap])
-                                ->where(self::danh_sach_loai_dac_trung, '=', $str)
-                                ->where(self::isActive, '=', true)->get();
-                            if (count($data) > 0) {
-                                return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã phiếu nhập và mã sản phẩm'], 400);
-                            }
-                        }
-                        foreach ($listObj as $obj) {
-                            DB::table(self::table)->insert($obj);
-                        }
-                        return response()->json(['success' => 'Thêm mới thành công'], 201);
-                    } else {
-                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
+                $arr_value = $request->all();
+                if (count($arr_value) > 0) {
+                    $validator = Validator::make($arr_value, [
+                        self::ma_phieu_nhap => 'required',
+                        self::ma_san_pham => 'required',
+                        self::danh_sach_loai_dac_trung => 'required',
+                        self::gia_nhap => 'required',
+                        self::so_luong => 'required',
+                    ]);
+                    if ($validator->fails()) {
+                        return response()->json(['error' => $validator->errors()->all()], 400);
                     }
+                    if ($arr_value[self::gia_nhap] < 1) {
+                        return response()->json(['error' => 'Giá nhập phải lớn hơn 0'], 400);
+                    }
+                    if ($arr_value[self::so_luong] < 1) {
+                        return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 400);
+                    }
+                    $str = '[';
+                    foreach ($arr_value[self::danh_sach_loai_dac_trung] as $item) {
+                        $str = $str . $item . ',';
+                    }
+                    $str = substr($str, 0, strlen($str) - 1);
+                    $str = $str . ']';
+                    $arr_value[self::danh_sach_loai_dac_trung] = $str;
+                    $obj = DB::table(self::table)
+                        ->select(self::table . '.*')
+                        ->where(self::ma_san_pham, '=', $arr_value[self::ma_san_pham])
+                        ->where(self::ma_phieu_nhap, '=', $arr_value[self::ma_phieu_nhap])
+                        ->where(self::danh_sach_loai_dac_trung, '=', $str)
+                        ->where(self::isActive, '=', true)->get();
+                    if (count($obj) > 0) {
+                        return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã phiếu nhập và mã sản phẩm'], 400);
+                    }
+                    DB::table(self::table)->insert($arr_value);
+                    return response()->json(['success' => 'Thêm mới thành công'], 201);
                 } else {
-                    $arr_value = $request->all();
-                    if (count($arr_value) > 0) {
-                        $validator = Validator::make($arr_value, [
-                            self::ma_phieu_nhap => 'required',
-                            self::ma_san_pham => 'required',
-                            self::danh_sach_loai_dac_trung => 'required',
-                            self::gia_nhap => 'required',
-                            self::so_luong => 'required',
-                        ]);
-                        if ($validator->fails()) {
-                            return response()->json(['error' => $validator->errors()->all()], 400);
-                        }
-                        if ($arr_value[self::gia_nhap] < 1) {
-                            return response()->json(['error' => 'Giá nhập phải lớn hơn 0'], 400);
-                        }
-                        if ($arr_value[self::so_luong] < 1) {
-                            return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 400);
-                        }
-                        $str = '[';
-                        foreach ($arr_value[self::danh_sach_loai_dac_trung] as $item) {
-                            $str = $str . $item . ',';
-                        }
-                        $str = substr($str, 0, strlen($str) - 1);
-                        $str = $str . ']';
-                        $arr_value[self::danh_sach_loai_dac_trung] = $str;
-                        $obj = DB::table(self::table)
-                            ->select(self::table . '.*')
-                            ->where(self::ma_san_pham, '=', $arr_value[self::ma_san_pham])
-                            ->where(self::ma_phieu_nhap, '=', $arr_value[self::ma_phieu_nhap])
-                            ->where(self::danh_sach_loai_dac_trung, '=', $str)
-                            ->where(self::isActive, '=', true)->get();
-                        if (count($obj) > 0) {
-                            return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã phiếu nhập và mã sản phẩm'], 400);
-                        }
-                        DB::table(self::table)->insert($arr_value);
-                        return response()->json(['success' => 'Thêm mới thành công'], 201);
-                    } else {
-                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
-                    }
+                    return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
                 }
             } catch (\Throwable $e) {
                 return response()->json(['error' => $e], 500);

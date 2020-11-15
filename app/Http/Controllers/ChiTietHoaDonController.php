@@ -98,136 +98,72 @@ class ChiTietHoaDonController extends Controller
     public function store(Request $request)
     {
         try {
-            if ($listObj = $request->get(BaseController::listObj)) {
-                $count = count($listObj);
-                if ($count > 0) {
-                    foreach ($listObj as $obj) {
-                        $validator = Validator::make($obj, [
-                            self::ma_hoa_don => 'required',
-                            self::ma_san_pham => 'required',
-                            self::so_luong => 'required',
-                            self::danh_sach_loai_dac_trung => 'required',
-                        ]);
-                        if ($validator->fails()) {
-                            return response()->json(['error' => $validator->errors()->all()], 400);
-                        }
-                        if ($obj[self::so_luong] < 1) {
-                            return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 400);
-                        }
-                        $str = '[';
-                        foreach ($obj[self::danh_sach_loai_dac_trung] as $item) {
-                            $str = $str . $item . ',';
-                        }
-                        $str = substr($str, 0, strlen($str) - 1);
-                        $str = $str . ']';
-                        $obj[self::danh_sach_loai_dac_trung] = $str;
-                        $data = DB::table(self::table)
-                            ->select(self::table . '.*')
-                            ->where(self::ma_san_pham, '=', $obj[self::ma_san_pham])
-                            ->where(self::ma_hoa_don, '=', $obj[self::ma_hoa_don])
-                            ->where(self::danh_sach_loai_dac_trung, '=', $str)
-                            ->where(self::isActive, '=', true)->get();
-                        if (count($data) > 0) {
-                            return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã hóa đơn và mã sản phẩm'], 400);
-                        } elseif ($obj[self::so_luong] > DB::table(SanPhamController::table)->where(SanPhamController::id, '=', $obj[self::ma_san_pham])
-                                ->where(SanPhamController::isActive, '=', true)->select(SanPhamController::so_luong)->get()) {
-                            return response()->json(['error' => 'Thêm mới thất bại. Số lượng sản phẩm không đủ'], 400);
-                        }
-                    }
-
-                    foreach ($listObj as $obj) {
-                        $ngay_lap = DB::table(HoaDonController::table)->where(HoaDonController::table . '.' . HoaDonController::id, '=', $obj[self::ma_hoa_don])
-                            ->where(HoaDonController::table . '.' . HoaDonController::isActive, '=', true)
-                            ->select(HoaDonController::ngay_lap)->first();
-                        $ma_ngay_km = DB::table(NgayKhuyenMaiController::table)->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, '=', $ngay_lap)
-                            ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::isActive, '=', true)
-                            ->select(NgayKhuyenMaiController::id)->get();
-                        $gia_ban_sp = DB::table(SanPhamController::table)->where(SanPhamController::table . '.' . SanPhamController::id, '=', $obj[self::ma_san_pham])
-                            ->where(SanPhamController::isActive, '=', true)
-                            ->select(SanPhamController::gia_ban)->get();
-                        if ($muc_km = DB::table(KhuyenMaiSanPhamController::table)
-                            ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_san_pham, '=', $obj[self::ma_san_pham])
-                            ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_ngay_khuyen_mai, '=', $ma_ngay_km)
-                            ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::isActive, '=', true)
-                            ->select(KhuyenMaiSanPhamController::muc_khuyen_mai)->get()) {
-                            $obj[self::gia_ban] = $gia_ban_sp * (1 - $muc_km / 100);
-                        } else {
-                            $obj[self::gia_ban] = $gia_ban_sp;
-                        }
-                        DB::table(self::table)->insert($obj);
-                    }
-                    return response()->json(['success' => 'Thêm mới thành công'], 201);
-                } else {
-                    return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
+            $arr_value = $request->all();
+            if (count($arr_value) > 0) {
+                $validator = Validator::make($arr_value, [
+                    self::ma_hoa_don => 'required',
+                    self::ma_san_pham => 'required',
+                    self::so_luong => 'required',
+                    self::danh_sach_loai_dac_trung => 'required',
+                ]);
+                if ($validator->fails()) {
+                    return response()->json(['error' => $validator->errors()->all()], 400);
                 }
+                if ($arr_value[self::so_luong] < 1) {
+                    return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 400);
+                }
+                $str = '[';
+                foreach ($arr_value[self::danh_sach_loai_dac_trung] as $item) {
+                    $str = $str . $item . ',';
+                }
+                $str = substr($str, 0, strlen($str) - 1);
+                $str = $str . ']';
+                $arr_value[self::danh_sach_loai_dac_trung] = $str;
+                $data = DB::table(self::table)
+                    ->select(self::table . '.*')
+                    ->where(self::ma_san_pham, '=', $arr_value[self::ma_san_pham])
+                    ->where(self::ma_hoa_don, '=', $arr_value[self::ma_hoa_don])
+                    ->where(self::danh_sach_loai_dac_trung, '=', $str)
+                    ->where(self::isActive, '=', true)->get();
+                if (count($data) > 0) {
+                    return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã hóa đơn và mã sản phẩm'], 400);
+                }
+                $sl = DB::table(SanPhamController::table)->select(SanPhamController::so_luong)->where(SanPhamController::id, '=', $arr_value[self::ma_san_pham])
+                    ->where(SanPhamController::isActive, '=', true)->get();
+                if ($arr_value[self::so_luong] > $sl[0]->so_luong) {
+                    return response()->json(['error' => 'Thêm mới thất bại. Số lượng sản phẩm không đủ'], 400);
+                }
+                $ngay_lap = DB::table(HoaDonController::table)->where(HoaDonController::table . '.' . HoaDonController::id, '=', $arr_value[self::ma_hoa_don])
+                    ->where(HoaDonController::table . '.' . HoaDonController::isActive, '=', true)
+                    ->select(HoaDonController::ngay_lap)->get();
+                $ngay_lap = $ngay_lap[0]->ngay_lap;
+                $ma_ngay_km = DB::table(NgayKhuyenMaiController::table)
+                    ->select(NgayKhuyenMaiController::id)
+                    ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, '=', $ngay_lap)
+                    ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::isActive, '=', true)
+                    ->get();
+                $muc_km = 0;
+                if (count($ma_ngay_km) > 0) {
+                    $ma_ngay_km = $ma_ngay_km->ma_ngay_khuyen_mai;
+                    $muc_km = DB::table(KhuyenMaiSanPhamController::table)
+                        ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_san_pham, '=', $arr_value[self::ma_san_pham])
+                        ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_ngay_khuyen_mai, '=', $ma_ngay_km)
+                        ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::isActive, '=', true)
+                        ->select(KhuyenMaiSanPhamController::muc_khuyen_mai)->get();
+                }
+                $gia_ban_sp = DB::table(SanPhamController::table)->where(SanPhamController::table . '.' . SanPhamController::id, '=', $arr_value[self::ma_san_pham])
+                    ->where(SanPhamController::isActive, '=', true)
+                    ->select(SanPhamController::gia_ban)->get();
+                $gia_ban_sp = $gia_ban_sp[0]->gia_ban;
+                if ($muc_km > 0) {
+                    $arr_value[self::gia_ban] = $gia_ban_sp * (1 - $muc_km / 100);
+                } else {
+                    $arr_value[self::gia_ban] = $gia_ban_sp;
+                }
+                DB::table(self::table)->insert($arr_value);
+                return response()->json(['success' => 'Thêm mới thành công'], 201);
             } else {
-                $arr_value = $request->all();
-                if (count($arr_value) > 0) {
-                    $validator = Validator::make($arr_value, [
-                        self::ma_hoa_don => 'required',
-                        self::ma_san_pham => 'required',
-                        self::so_luong => 'required',
-                        self::danh_sach_loai_dac_trung => 'required',
-                    ]);
-                    if ($validator->fails()) {
-                        return response()->json(['error' => $validator->errors()->all()], 400);
-                    }
-                    if ($arr_value[self::so_luong] < 1) {
-                        return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 400);
-                    }
-                    $str = '[';
-                    foreach ($arr_value[self::danh_sach_loai_dac_trung] as $item) {
-                        $str = $str . $item . ',';
-                    }
-                    $str = substr($str, 0, strlen($str) - 1);
-                    $str = $str . ']';
-                    $arr_value[self::danh_sach_loai_dac_trung] = $str;
-                    $data = DB::table(self::table)
-                        ->select(self::table . '.*')
-                        ->where(self::ma_san_pham, '=', $arr_value[self::ma_san_pham])
-                        ->where(self::ma_hoa_don, '=', $arr_value[self::ma_hoa_don])
-                        ->where(self::danh_sach_loai_dac_trung, '=', $str)
-                        ->where(self::isActive, '=', true)->get();
-                    if (count($data) > 0) {
-                        return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã hóa đơn và mã sản phẩm'], 400);
-                    }
-                    $sl = DB::table(SanPhamController::table)->select(SanPhamController::so_luong)->where(SanPhamController::id, '=', $arr_value[self::ma_san_pham])
-                        ->where(SanPhamController::isActive, '=', true)->get();
-                    if ($arr_value[self::so_luong] > $sl[0]->so_luong) {
-                        return response()->json(['error' => 'Thêm mới thất bại. Số lượng sản phẩm không đủ'], 400);
-                    }
-                    $ngay_lap = DB::table(HoaDonController::table)->where(HoaDonController::table . '.' . HoaDonController::id, '=', $arr_value[self::ma_hoa_don])
-                        ->where(HoaDonController::table . '.' . HoaDonController::isActive, '=', true)
-                        ->select(HoaDonController::ngay_lap)->get();
-                    $ngay_lap = $ngay_lap[0]->ngay_lap;
-                    $ma_ngay_km = DB::table(NgayKhuyenMaiController::table)
-                        ->select(NgayKhuyenMaiController::id)
-                        ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, '=', $ngay_lap)
-                        ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::isActive, '=', true)
-                        ->get();
-                    $muc_km = 0;
-                    if (count($ma_ngay_km) > 0) {
-                        $ma_ngay_km = $ma_ngay_km->ma_ngay_khuyen_mai;
-                        $muc_km = DB::table(KhuyenMaiSanPhamController::table)
-                            ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_san_pham, '=', $arr_value[self::ma_san_pham])
-                            ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_ngay_khuyen_mai, '=', $ma_ngay_km)
-                            ->where(KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::isActive, '=', true)
-                            ->select(KhuyenMaiSanPhamController::muc_khuyen_mai)->get();
-                    }
-                    $gia_ban_sp = DB::table(SanPhamController::table)->where(SanPhamController::table . '.' . SanPhamController::id, '=', $arr_value[self::ma_san_pham])
-                        ->where(SanPhamController::isActive, '=', true)
-                        ->select(SanPhamController::gia_ban)->get();
-                    $gia_ban_sp = $gia_ban_sp[0]->gia_ban;
-                    if ($muc_km > 0) {
-                        $arr_value[self::gia_ban] = $gia_ban_sp * (1 - $muc_km / 100);
-                    } else {
-                        $arr_value[self::gia_ban] = $gia_ban_sp;
-                    }
-                    DB::table(self::table)->insert($arr_value);
-                    return response()->json(['success' => 'Thêm mới thành công'], 201);
-                } else {
-                    return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
-                }
+                return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
             }
         } catch (\Throwable $e) {
             return response()->json(['error' => $e], 500);
