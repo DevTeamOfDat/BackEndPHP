@@ -126,10 +126,14 @@ class ChiTietPhieuNhapController extends Controller
                             }
                             $str = substr($str, 0, strlen($str) - 1);
                             $str = $str . ']';
-                            if (DB::table(self::table)->where(self::ma_san_pham, '=', $obj[self::ma_san_pham])
+                            $obj[self::danh_sach_loai_dac_trung] = $str;
+                            $data = DB::table(self::table)
+                                ->select(self::table . '*')
+                                ->where(self::ma_san_pham, '=', $obj[self::ma_san_pham])
                                 ->where(self::ma_phieu_nhap, '=', $obj[self::ma_phieu_nhap])
                                 ->where(self::danh_sach_loai_dac_trung, '=', $str)
-                                ->where(self::isActive, '=', true)->first()) {
+                                ->where(self::isActive, '=', true)->get();
+                            if (count($data) > 0) {
                                 return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã phiếu nhập và mã sản phẩm'], 400);
                             }
                         }
@@ -165,10 +169,14 @@ class ChiTietPhieuNhapController extends Controller
                         }
                         $str = substr($str, 0, strlen($str) - 1);
                         $str = $str . ']';
-                        if (DB::table(self::table)->where(self::ma_san_pham, '=', $arr_value[self::ma_san_pham])
+                        $arr_value[self::danh_sach_loai_dac_trung] = $str;
+                        $obj = DB::table(self::table)
+                            ->select(self::table . '.*')
+                            ->where(self::ma_san_pham, '=', $arr_value[self::ma_san_pham])
                             ->where(self::ma_phieu_nhap, '=', $arr_value[self::ma_phieu_nhap])
                             ->where(self::danh_sach_loai_dac_trung, '=', $str)
-                            ->where(self::isActive, '=', true)->first()) {
+                            ->where(self::isActive, '=', true)->get();
+                        if (count($obj) > 0) {
                             return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã phiếu nhập và mã sản phẩm'], 400);
                         }
                         DB::table(self::table)->insert($arr_value);
