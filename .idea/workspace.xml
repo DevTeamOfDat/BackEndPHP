@@ -3,12 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="70d3bd3a-c755-4e24-9812-e31eb4158714" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ChiTietHoaDonController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ChiTietHoaDonController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_tai_khoans_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_tai_khoans_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_10_14_004211_create_nha_cung_caps_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_10_14_004211_create_nha_cung_caps_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_10_14_163956_create_thuong_hieus_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_10_14_163956_create_thuong_hieus_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_10_15_144412_create_hinh_anh_san_phams_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_10_15_144412_create_hinh_anh_san_phams_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_10_16_013408_create_tin_tucs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_10_16_013408_create_tin_tucs_table.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,11 +15,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ChiTietHoaDonController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="115" column="46" selection-start-line="115" selection-start-column="46" selection-end-line="115" selection-end-column="46" />
+            <state relative-caret-position="264">
+              <caret line="123" column="17" selection-start-line="123" selection-start-column="17" selection-end-line="123" selection-end-column="17" />
+              <folding>
+                <element signature="e#40#68#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ReportController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-105">
+              <caret line="151" column="58" lean-forward="true" selection-start-line="151" selection-start-column="58" selection-end-line="151" selection-end-column="58" />
               <folding>
                 <element signature="e#40#68#0#PHP" expanded="true" />
               </folding>
@@ -412,18 +418,19 @@
       <workItem from="1605440974664" duration="3939000" />
       <workItem from="1605448422630" duration="2383000" />
       <workItem from="1605454231831" duration="2882000" />
-      <workItem from="1605496514969" duration="260000" />
+      <workItem from="1605496514969" duration="338000" />
+      <workItem from="1605497145687" duration="728000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="250377000" />
+    <option name="totallyTimeSpent" value="251183000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18154311" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18381241" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -438,7 +445,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.072013095" />
+      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.10474632" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24962178" />
@@ -627,16 +634,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="171" column="89" selection-start-line="171" selection-start-column="89" selection-end-line="171" selection-end-column="89" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ReportController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3444">
-          <caret line="151" column="58" lean-forward="true" selection-start-line="151" selection-start-column="58" selection-end-line="151" selection-end-column="58" />
-          <folding>
-            <element signature="e#40#68#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -848,8 +845,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ChiTietHoaDonController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="115" column="46" selection-start-line="115" selection-start-column="46" selection-end-line="115" selection-end-column="46" />
+        <state relative-caret-position="264">
+          <caret line="123" column="17" selection-start-line="123" selection-start-column="17" selection-end-line="123" selection-end-column="17" />
+          <folding>
+            <element signature="e#40#68#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ReportController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-105">
+          <caret line="151" column="58" lean-forward="true" selection-start-line="151" selection-start-column="58" selection-end-line="151" selection-end-column="58" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
           </folding>
