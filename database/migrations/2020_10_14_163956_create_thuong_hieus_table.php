@@ -18,6 +18,7 @@ class CreateThuongHieusTable extends Migration
             $table->id('ma_thuong_hieu');
             $table->string('ten_thuong_hieu');
             $table->string('hinh_anh')->default('');
+            //            $table->longText('hinh_anh')->nullable();
             $table->boolean('isActive')->default(true);
         });
 

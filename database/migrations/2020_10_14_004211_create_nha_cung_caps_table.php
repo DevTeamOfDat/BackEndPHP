@@ -22,6 +22,7 @@ class CreateNhaCungCapsTable extends Migration
             $table->string('email')->default('');
             $table->string('so_dien_thoai', 10)->default('');
             $table->string('hinh_anh')->default('');
+            //            $table->longText('hinh_anh')->nullable();
             $table->boolean('isActive')->default(true);
         });
 

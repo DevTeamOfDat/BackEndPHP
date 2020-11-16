@@ -112,13 +112,7 @@ class ChiTietHoaDonController extends Controller
                 if ($arr_value[self::so_luong] < 1) {
                     return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 400);
                 }
-                $str = '[';
-                foreach ($arr_value[self::danh_sach_loai_dac_trung] as $item) {
-                    $str = $str . $item . ',';
-                }
-                $str = substr($str, 0, strlen($str) - 1);
-                $str = $str . ']';
-                $arr_value[self::danh_sach_loai_dac_trung] = $str;
+                $str = $arr_value[self::danh_sach_loai_dac_trung];
                 $data = DB::table(self::table)
                     ->select(self::table . '.*')
                     ->where(self::ma_san_pham, '=', $arr_value[self::ma_san_pham])

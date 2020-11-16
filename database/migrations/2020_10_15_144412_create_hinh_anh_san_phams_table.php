@@ -17,6 +17,7 @@ class CreateHinhAnhSanPhamsTable extends Migration
             $table->id();
             $table->bigInteger('ma_san_pham');
             $table->string('hinh_anh')->unique();
+            //            $table->longText('hinh_anh')->unique();
             $table->boolean('isActive')->default(true);
         });
 
