@@ -23,11 +23,11 @@ class CreateTrangThaisTable extends Migration
 
         DB::table('trang_thais')->insert([
             'gia_tri' => 'true',
-            'mo_ta' => 'Khách đã nhận hàng',
+            'mo_ta' => 'Hoàn thành',
         ]);
         DB::table('trang_thais')->insert([
             'gia_tri' => 'false',
-            'mo_ta' => 'Khách chưa nhận hàng',
+            'mo_ta' => 'Đang giao hàng',
         ]);
     }
 

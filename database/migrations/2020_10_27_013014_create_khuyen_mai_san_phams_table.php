@@ -21,21 +21,6 @@ class CreateKhuyenMaiSanPhamsTable extends Migration
             $table->integer('muc_khuyen_mai')->comment('%');
             $table->boolean('isActive')->default(true);
         });
-
-//        $faker = Faker\Factory::create();
-//        $limit = 20;
-//
-//        $sps = \Illuminate\Support\Facades\DB::table('san_phams')->pluck('ma_san_pham');
-//        $nkms = \Illuminate\Support\Facades\DB::table('ngay_khuyen_mais')->pluck('ma_ngay_khuyen_mai');
-//
-//        for ($i = 0; $i < $limit; $i++) {
-//            DB::table('khuyen_mai_san_phams')->insert([
-//                'ma_san_pham' => $faker->randomElement($sps),
-//                'ma_ngay_khuyen_mai' => $faker->randomElement($nkms),
-//                'muc_khuyen_mai' => rand(0, 100),
-//                'isActive' => $faker->randomElement([true, false]),
-//            ]);
-//        }
     }
 
     /**

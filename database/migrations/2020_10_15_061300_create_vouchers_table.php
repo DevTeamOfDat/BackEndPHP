@@ -20,21 +20,6 @@ class CreateVouchersTable extends Migration
             $table->integer('muc_voucher')->default(0);
             $table->boolean('isActive')->default(true);
         });
-
-//        $faker = Faker\Factory::create();
-//        $limit = 20;
-//
-//        $khs = \Illuminate\Support\Facades\DB::table('tai_khoans')->where('loai_tai_khoan', '=', 'KH')->pluck('ma_tai_khoan');
-//
-//        date_default_timezone_set('Asia/Ho_Chi_Minh');
-//
-//        for ($i = 0; $i < $limit; $i++) {
-//            DB::table('vouchers')->insert([
-//                'ma_khach_hang' => $faker->randomElement($khs),
-//                'muc_voucher' => rand(0, 100),
-//                'isActive' => $faker->randomElement([true, false]),
-//            ]);
-//        }
     }
 
     /**

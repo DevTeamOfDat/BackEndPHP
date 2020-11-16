@@ -25,20 +25,6 @@ class CreateNhaCungCapsTable extends Migration
             $table->boolean('isActive')->default(true);
         });
 
-//        $faker = Faker\Factory::create();
-//        $limit = 20;
-//
-//        for ($i = 0; $i < $limit; $i++) {
-//            DB::table('nha_cung_caps')->insert([
-//                'ten' => $faker->company,
-//                'dia_chi' => $faker->address,
-//                'hot_line' => $faker->randomNumber(),
-//                'email' => $faker->companyEmail,
-//                'so_dien_thoai' => $faker->randomNumber(),
-//                'hinh_anh' => $faker->imageUrl(),
-//                'isActive' => $faker->randomElement([true, false]),
-//            ]);
-//        }
     }
 
     /**

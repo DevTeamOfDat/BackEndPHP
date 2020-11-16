@@ -23,18 +23,6 @@ class CreateTinTucsTable extends Migration
             $table->string('ngay_dang')->default(date('Y-m-d', time()));
             $table->boolean('isActive')->default(true);
         });
-//        $faker = Faker\Factory::create();
-//        $limit = 20;
-//        for ($i = 0; $i < $limit; $i++) {
-//            DB::table('tin_tucs')->insert([
-//                'tieu_de' => $faker->title,
-//                'noi_dung' => $faker->text,
-//                'highlight' => strtoupper($faker->title),
-//                'thumbnail' => $faker->url,
-//                'url' => $faker->imageUrl(),
-//                'isActive' => $faker->randomElement([true, false]),
-//            ]);
-//        }
     }
 
     /**

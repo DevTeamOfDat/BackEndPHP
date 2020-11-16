@@ -20,17 +20,6 @@ class CreateLoaiSanPhamsTable extends Migration
             $table->string('mo_ta')->default('');
             $table->boolean('isActive')->default(true);
         });
-
-//                $faker = Faker\Factory::create();
-//        $limit = 20;
-//
-//        for ($i = 0; $i < $limit; $i++) {
-//            DB::table('loai_san_phams')->insert([
-//                'ten_loai_san_pham' => $faker->name,
-//                'mo_ta' => $faker->text,
-//                'isActive' => $faker->randomElement([true, false]),
-//            ]);
-//        }
     }
 
     /**

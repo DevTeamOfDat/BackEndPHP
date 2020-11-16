@@ -16,8 +16,6 @@ class CreateTaiKhoansTable extends Migration
     {
         Schema::create('tai_khoans', function (Blueprint $table) {
             $table->id('ma_tai_khoan');
-//            $table->string('ma_tai_khoan', 36)->index()->unique();
-//            $table->uuid('ma_tai_khoan')->primary();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->default(now());
             $table->string('mat_khau');
@@ -30,23 +28,16 @@ class CreateTaiKhoansTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
-//
-//        $faker = Faker\Factory::create();
-//        $limit = 20;
-//
-//        for ($i = 0; $i < $limit; $i++) {
-//            DB::table('tai_khoans')->insert([
-//                'email' => $faker->email,
-//                'email_verified_at' => $faker->date(now()),
-//                'mat_khau' => $faker->password(8),
-//                'ho_ten' => $faker->name,
-//                'dia_chi' => $faker->address,
-//                'so_dien_thoai' => $faker->randomNumber(),
-//                'hinh_anh' => $faker->imageUrl(),
-//                'loai_tai_khoan' => $faker->randomElement(['KH', 'NV', 'QT']),
-//                'isActive' => $faker->randomElement([true, false]),
-//            ]);
-//        }
+
+        DB::table('tai_khoans')->insert([
+            'email' => 'admin@gmail.com',
+            'mat_khau' => bcrypt('vannam212'),
+            'ho_ten' => 'Văn Nam',
+            'dia_chi' => 'Hà Nội',
+            'so_dien_thoai' => '0123456789',
+            'loai_tai_khoan' => 'QT'
+        ]);
+
     }
 
     /**
