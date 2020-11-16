@@ -34,13 +34,16 @@ class HinhAnhSanPhamController extends Controller
 //        $user = auth()->user();
 //        $loai_tk = $user->loai_tai_khoan;
 //        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $objs = null;
-            $code = null;
-            $objs = DB::table(self::table)
-                ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-                ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
-                ->get();
-            $code = 200;
+        $objs = null;
+        $code = null;
+        $objs = DB::table(self::table)
+            ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+            ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
+            ->get();
+        foreach ($objs as $obj) {
+            $obj[self::hinh_anh] = base64_decode($obj[self::hinh_anh]);
+        }
+        $code = 200;
 //        switch ($query) {
 //            case "all":
 //                $objs = DB::table(self::table)
@@ -68,7 +71,7 @@ class HinhAnhSanPhamController extends Controller
 //                $code = 200;
 //                break;
 //        }
-            return response()->json(['data' => $objs], $code);
+        return response()->json(['data' => $objs], $code);
 //        } else {
 //            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
 //        }
@@ -149,16 +152,17 @@ class HinhAnhSanPhamController extends Controller
 //        $user = auth()->user();
 //        $loai_tk = $user->loai_tai_khoan;
 //        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $obj = DB::table(self::table)
-                ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-                ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
-                ->where(self::table . '.' . self::ma_san_pham, '=', $id)
-                ->get();
-            if ($obj) {
-                return response()->json(['data' => $obj], 200);
-            } else {
-                return response()->json(['error' => 'Không tìm thấy'], 200);
-            }
+        $obj = DB::table(self::table)
+            ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
+            ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
+            ->where(self::table . '.' . self::ma_san_pham, '=', $id)
+            ->get();
+        if ($obj) {
+            $obj[self::hinh_anh] = base64_decode($obj[self::hinh_anh]);
+            return response()->json(['data' => $obj], 200);
+        } else {
+            return response()->json(['error' => 'Không tìm thấy'], 200);
+        }
 //        } else {
 //            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
 //        }

@@ -16,8 +16,7 @@ class CreateHinhAnhSanPhamsTable extends Migration
         Schema::create('hinh_anh_san_phams', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('ma_san_pham');
-            $table->string('hinh_anh')->unique();
-            //            $table->longText('hinh_anh')->unique();
+            $table->mediumText('hinh_anh')->nullable();
             $table->boolean('isActive')->default(true);
         });
 

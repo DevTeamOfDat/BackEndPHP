@@ -81,6 +81,13 @@ class BaseController extends Controller
         $objs = null;
         $code = null;
         $objs = DB::table($this->table)->get();
+        foreach ($objs as $obj) {
+            if ($obj['hinh_anh']) {
+                $obj['hinh_anh'] = base64_decode($obj['hinh_anh']);
+            } elseif ($obj['thumbnail']) {
+                $obj['thumbnail'] = base64_decode($obj['thumbnail']);
+            }
+        }
         $code = 200;
 //        switch ($query) {
 //            case "all":
@@ -133,6 +140,11 @@ class BaseController extends Controller
                 $count = count($listObj);
                 if ($count > 0) {
                     foreach ($listObj as $obj) {
+                        if ($obj['hinh_anh']) {
+                            $obj['hinh_anh'] = base64_encode($obj['hinh_anh']);
+                        } elseif ($obj['thumbnail']) {
+                            $obj['thumbnail'] = base64_decode($obj['thumbnail']);
+                        }
                         DB::table($this->table)->insert($obj);
                     }
                     $this->message = ['success' => "Thêm mới thành công"];
@@ -144,6 +156,11 @@ class BaseController extends Controller
             } else {
                 $arr_value = $request->all();
                 if (count($arr_value) > 0) {
+                    if ($arr_value['hinh_anh']) {
+                        $arr_value['hinh_anh'] = base64_encode($arr_value['hinh_anh']);
+                    } elseif ($arr_value['thumbnail']) {
+                        $arr_value['thumbnail'] = base64_decode($arr_value['thumbnail']);
+                    }
                     DB::table($this->table)->insert($arr_value);
                     $this->message = ['success' => "Thêm mới thành công"];
                     $this->status = 201;
@@ -167,7 +184,13 @@ class BaseController extends Controller
     public function show($id)
     {
 //        if (count($this->table) == 1) {
-        if ($obj = DB::table($this->table)->where($this->id, '=', $id)->get()) {
+        $obj = DB::table($this->table)->where($this->id, '=', $id)->get();
+        if ($obj) {
+            if ($obj['hinh_anh']) {
+                $obj['hinh_anh'] = base64_decode($obj['hinh_anh']);
+            } elseif ($obj['thumbnail']) {
+                $obj['thumbnail'] = base64_decode($obj['thumbnail']);
+            }
             $this->message = ['data' => $obj];
             $this->status = 200;
         } else {
@@ -197,7 +220,13 @@ class BaseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (DB::table($this->table)->where($this->id, '=', $id)->update($request->all())) {
+        $arr_value = $request->all();
+        if ($arr_value['hinh_anh']) {
+            $arr_value['hinh_anh'] = base64_encode($arr_value['hinh_anh']);
+        } elseif ($arr_value['thumbnail']) {
+            $arr_value['thumbnail'] = base64_decode($arr_value['thumbnail']);
+        }
+        if (DB::table($this->table)->where($this->id, '=', $id)->update($arr_value)) {
             $obj = DB::table($this->table)->where($this->id, '=', $id)->get();
             $this->message = ['data' => $obj];
             $this->status = 201;

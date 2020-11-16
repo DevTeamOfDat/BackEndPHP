@@ -53,6 +53,11 @@ class TaiKhoanController extends Controller
                 ->where(self::table . '.' . self::loai_tai_khoan, '=', 'KH')
                 ->orWhere(self::table . '.' . self::loai_tai_khoan, '=', 'NV')
                 ->get();
+            foreach ($objs as $obj) {
+                if ($obj[self::hinh_anh]) {
+                    $obj[self::hinh_anh] = base64_decode($obj[self::hinh_anh]);
+                }
+            }
             $code = 200;
 //            switch ($query) {
 //                case "all":
@@ -161,6 +166,7 @@ class TaiKhoanController extends Controller
                 ->select(self::id, self::ho_ten, self::email, self::dia_chi, self::so_dien_thoai, self::loai_tai_khoan, LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta, self::hinh_anh, self::table . '.' . self::isActive)
                 ->where(self::table . '.' . self::id, '=', $id)->first();
             if ($client) {
+                $client[self::hinh_anh] = base64_decode($client[self::hinh_anh]);
                 return response()->json(['data' => $client], 200);
             } else {
                 return response()->json(['error' => "Không tìm thấy"], 200);
@@ -262,6 +268,12 @@ class TaiKhoanController extends Controller
             return response()->json(['error' => $validator->errors()->all()], 400);
         }
 
+        $img = null;
+
+        if ($request->hinh_anh) {
+            $img = base64_encode($request->hinh_anh);
+        }
+
         DB::table(self::table)->insert([
             self::ho_ten => $request->ho_ten,
             self::email => $request->email,
@@ -269,6 +281,7 @@ class TaiKhoanController extends Controller
             self::mat_khau => bcrypt($request->mat_khau),
             self::dia_chi => $request->dia_chi,
             self::so_dien_thoai => $request->so_dien_thoai,
+            self::hinh_anh => $img
 //            self::loai_tai_khoan => $request->loai_tai_khoan,
         ]);
 
@@ -302,6 +315,7 @@ class TaiKhoanController extends Controller
         if ($tk) {
             if (Hash::check($request->mat_khau, $tk->mat_khau)) {
                 $token = $tk->createToken('WebsiteBanGiayPHP')->accessToken;
+                $tk[self::hinh_anh] = base64_decode($tk[self::hinh_anh]);
                 return response()->json(['token' => $token, 'data' => $tk], 200);
             } else {
                 return response()->json(['error' => 'Password mismatch'], 400);
@@ -314,6 +328,7 @@ class TaiKhoanController extends Controller
     public function userInfo()
     {
         $user = auth()->user();
+        $user[self::hinh_anh] = base64_decode($user[self::hinh_anh]);
         return response()->json(['data' => $user], 200);
     }
 
