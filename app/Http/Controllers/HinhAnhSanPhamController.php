@@ -40,9 +40,9 @@ class HinhAnhSanPhamController extends Controller
             ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
             ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
             ->get();
-        foreach ($objs as $obj) {
-            $obj[self::hinh_anh] = base64_decode($obj[self::hinh_anh]);
-        }
+//        foreach ($objs as $obj) {
+//            $obj[self::hinh_anh] = base64_decode($obj[self::hinh_anh]);
+//        }
         $code = 200;
 //        switch ($query) {
 //            case "all":
@@ -158,7 +158,7 @@ class HinhAnhSanPhamController extends Controller
             ->where(self::table . '.' . self::ma_san_pham, '=', $id)
             ->get();
         if ($obj) {
-            $obj[self::hinh_anh] = base64_decode($obj[self::hinh_anh]);
+//            $obj[self::hinh_anh] = base64_decode($obj[self::hinh_anh]);
             return response()->json(['data' => $obj], 200);
         } else {
             return response()->json(['error' => 'Không tìm thấy'], 200);

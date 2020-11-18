@@ -60,6 +60,11 @@ class SanPhamController extends Controller
 //                    ->get();
                 $objs = DB::table('products')->get();
             }
+//            foreach ($objs as $obj) {
+//                if ($obj['image']) {
+//                    $obj['image'] = base64_decode($obj['image']);
+//                }
+//            }
             $code = 200;
 //        switch ($query) {
 //            case "all":
@@ -99,6 +104,11 @@ class SanPhamController extends Controller
 //                ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
 //                ->get();
             $objs = DB::table('products')->get();
+//            foreach ($objs as $obj) {
+//                if ($obj->image) {
+//                    $obj->image = base64_decode($obj->image);
+//                }
+//            }
             return response()->json(['data' => $objs], 200);
         }
 //        } else {

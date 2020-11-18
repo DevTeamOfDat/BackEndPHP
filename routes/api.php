@@ -53,7 +53,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/accounts', [TaiKhoanController::class, 'store']);
 
-    Route::put('/accounts/{id}', [TaiKhoanController::class, 'update']);
+    Route::put('/accounts', [TaiKhoanController::class, 'update']);
 
     Route::post('/accounts/delete', [TaiKhoanController::class, 'destroy']);
 
