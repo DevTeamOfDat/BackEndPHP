@@ -20,7 +20,7 @@ class CreateNhaCungCapsTable extends Migration
             $table->string('dia_chi')->default('');
             $table->string('hot_line')->default('');
             $table->string('email')->default('');
-            $table->string('so_dien_thoai', 10)->default('');
+            $table->string('so_dien_thoai')->default('');
             $table->mediumText('hinh_anh')->nullable();
             $table->boolean('isActive')->default(true);
         });

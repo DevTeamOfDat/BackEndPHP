@@ -20,7 +20,7 @@ class CreateTinTucsTable extends Migration
             $table->string('highlight')->default('');
             $table->mediumText('thumbnail')->nullable();
             $table->string('url')->default('');
-            $table->string('ngay_dang')->default(date('Y-m-d', time()));
+            $table->date('ngay_dang');
             $table->boolean('isActive')->default(true);
         });
     }
