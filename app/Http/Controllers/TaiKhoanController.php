@@ -213,7 +213,7 @@ class TaiKhoanController extends Controller
         if ($user->mat_khau != $request->mat_khau_cu) {
             return response()->json(['error' => 'Chỉnh sửa thất bại. Mật khẩu cũ không chính xác'], 400);
         }
-        DB::table(self::table)->update($request);
+        DB::table(self::table)->update($request->all());
         return response()->json($this->base->getMessage(), $this->base->getStatus());
     }
 
