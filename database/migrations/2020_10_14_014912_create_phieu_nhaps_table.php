@@ -18,9 +18,9 @@ class CreatePhieuNhapsTable extends Migration
             $table->id('ma_phieu_nhap');
             $table->bigInteger('ma_nhan_vien');
             $table->bigInteger('ma_nha_cung_cap');
-            $table->date('ngay_nhap')->default(now());
+            $table->date('ngay_nhap')->nullable();
             $table->double('tong_tien', 15, 2)->default(0.00);
-            $table->string('ghi_chu')->default('');
+            $table->string('ghi_chu')->nullable();
             $table->boolean('isActive')->default(true);
         });
 

@@ -17,7 +17,7 @@ class CreateTrangThaisTable extends Migration
         Schema::create('trang_thais', function (Blueprint $table) {
             $table->id();
             $table->string('gia_tri');
-            $table->string('mo_ta')->default('');
+            $table->string('mo_ta')->nullable();
             $table->boolean('isActive')->default(true);
         });
 

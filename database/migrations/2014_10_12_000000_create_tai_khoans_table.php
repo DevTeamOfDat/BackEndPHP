@@ -17,11 +17,11 @@ class CreateTaiKhoansTable extends Migration
         Schema::create('tai_khoans', function (Blueprint $table) {
             $table->id('ma_tai_khoan');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->default(now());
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('mat_khau');
             $table->string('ho_ten', 50);
-            $table->string('dia_chi')->default('');
-            $table->string('so_dien_thoai')->default('');
+            $table->string('dia_chi')->nullable();
+            $table->string('so_dien_thoai')->nullable();
             $table->mediumText('hinh_anh')->nullable();
             $table->string('loai_tai_khoan')->default('KH');
             $table->boolean('isActive')->default(true);

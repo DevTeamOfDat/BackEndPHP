@@ -19,7 +19,7 @@ class CreateHoaDonsTable extends Migration
             $table->bigInteger('ma_nhan_vien')->nullable();
             $table->bigInteger('ma_khach_hang')->nullable();
             $table->bigInteger('ma_voucher')->nullable();
-            $table->date('ngay_lap')->default(now());
+            $table->date('ngay_lap')->nullable();
             $table->boolean('loai_don')->default(true);
             $table->boolean('trang_thai')->default(true);
             $table->double('tong_tien', 15, 2)->default(0.00);

@@ -18,7 +18,7 @@ class CreateKhuyenMaiSanPhamsTable extends Migration
             $table->id();
             $table->bigInteger('ma_san_pham');
             $table->bigInteger('ma_ngay_khuyen_mai');
-            $table->integer('muc_khuyen_mai')->comment('%');
+            $table->integer('muc_khuyen_mai')->comment('%')->default(0);
             $table->boolean('isActive')->default(true);
         });
     }

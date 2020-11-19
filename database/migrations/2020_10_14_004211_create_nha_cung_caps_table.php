@@ -17,10 +17,10 @@ class CreateNhaCungCapsTable extends Migration
         Schema::create('nha_cung_caps', function (Blueprint $table) {
             $table->id('ma_nha_cung_cap');
             $table->string('ten');
-            $table->string('dia_chi')->default('');
-            $table->string('hot_line')->default('');
-            $table->string('email')->default('');
-            $table->string('so_dien_thoai')->default('');
+            $table->string('dia_chi');
+            $table->string('hot_line')->nullable();
+            $table->string('email')->nullable();
+            $table->string('so_dien_thoai');
             $table->mediumText('hinh_anh')->nullable();
             $table->boolean('isActive')->default(true);
         });

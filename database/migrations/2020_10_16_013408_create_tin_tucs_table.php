@@ -17,10 +17,10 @@ class CreateTinTucsTable extends Migration
             $table->id();
             $table->string('tieu_de');
             $table->text('noi_dung');
-            $table->string('highlight')->default('');
+            $table->string('highlight')->nullable();
             $table->mediumText('thumbnail')->nullable();
-            $table->string('url')->default('');
-            $table->date('ngay_dang');
+            $table->string('url')->nullable();
+            $table->date('ngay_dang')->nullable();
             $table->boolean('isActive')->default(true);
         });
     }
