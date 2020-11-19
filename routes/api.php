@@ -125,7 +125,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/bills', [\App\Http\Controllers\HoaDonController::class, 'store']);
 
-    Route::put('/bills/{id}', [\App\Http\Controllers\HoaDonController::class, 'update']);
+//    Route::put('/bills/{id}', [\App\Http\Controllers\HoaDonController::class, 'update']);
 
     Route::post('/bills/delete', [\App\Http\Controllers\HoaDonController::class, 'destroy']);
 

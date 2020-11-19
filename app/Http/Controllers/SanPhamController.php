@@ -173,7 +173,8 @@ class SanPhamController extends Controller
 //            ->get();
         date_default_timezone_set(BaseController::timezone);
         $date = date('Y-m-d');
-        $obj = $objs = DB::select('call itemProduct(?,?)', array($date, $id));
+        $obj = DB::select('call itemProduct(?,?)', array($date, $id));
+//        $obj[0]->image = base64_decode($obj[0]->image);
 //        $listImg = DB::table(HinhAnhSanPhamController::table)
 //            ->where(HinhAnhSanPhamController::table . '.' . HinhAnhSanPhamController::ma_san_pham, '=', $id)
 //            ->get(HinhAnhSanPhamController::hinh_anh);
