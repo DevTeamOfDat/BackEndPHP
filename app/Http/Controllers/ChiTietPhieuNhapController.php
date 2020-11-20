@@ -194,16 +194,21 @@ class ChiTietPhieuNhapController extends Controller
             $speciality = $speciality_id->danh_sach_loai_dac_trung;
             $speciality = substr($speciality, 1, strlen($speciality) - 2);
             $arr = explode(',', $speciality);
-            $str = '';
+//            $str = '';
             foreach ($arr as $item) {
-                $ten_dac_trung = DB::table(DacTrungController::table)
-                    ->select(DacTrungController::ten_dac_trung)
+                $dac_trung = DB::table(DacTrungController::table)
+                    ->select(DacTrungController::ten_dac_trung, DacTrungController::mo_ta)
                     ->where(DacTrungController::id, '=', $item)
                     ->get();
-                $str = $str . $ten_dac_trung[0]->ten_dac_trung . ', ';
+                if($dac_trung[0]->mo_ta == "màu"){
+                    $obj[$index]->mau = $dac_trung[0]->ten_dac_trung;
+                } elseif ($dac_trung[0]->mo_ta == "size"){
+                    $obj[$index]->size = $dac_trung[0]->ten_dac_trung;
+                }
+//                $str = $str . $ten_dac_trung[0]->ten_dac_trung . ', ';
             }
-            $str = substr($str, 0, strlen($str) - 2);
-            $obj[$index]->ten_dac_trung = $str;
+//            $str = substr($str, 0, strlen($str) - 2);
+//            $obj[$index]->ten_dac_trung = $str;
         }
         if ($obj) {
             return response()->json(['data' => $obj], 200);

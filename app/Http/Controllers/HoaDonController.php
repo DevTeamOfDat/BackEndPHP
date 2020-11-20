@@ -124,16 +124,16 @@ class HoaDonController extends Controller
                 $arr_value[self::ma_kh] = $request->ma_khach_hang;
             }
             $arr_value[self::ngay_lap] = date('Y-m-d');
-            $arr_value[self::loai_don] = false;
-            $arr_value[self::trang_thai] = true;
+            $arr_value[self::loai_don] = 2;
+            $arr_value[self::trang_thai] = 1;
             DB::table(self::table)->insert($request->all());
             return response()->json(['success' => "Thêm mới thành công"], 201);
         } else {
             $arr_value = [];
             $arr_value[self::ma_kh] = $ma_tk;
             $arr_value[self::ngay_lap] = date('Y-m-d');
-            $arr_value[self::loai_don] = true;
-            $arr_value[self::trang_thai] = false;
+            $arr_value[self::loai_don] = 1;
+            $arr_value[self::trang_thai] = 2;
             DB::table(self::table)->insert($arr_value);
             return response()->json(['success' => "Thêm mới thành công"], 201);
         }
@@ -153,15 +153,12 @@ class HoaDonController extends Controller
             $obj = DB::table(self::table)
                 ->join(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
                 ->join(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
-                ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang')
+                ->join(TrangThaiController::table, TrangThaiController::table . '.' . TrangThaiController::id, '=', self::table . '.' . self::trang_thai)
+                ->join(LoaiDonController::table, LoaiDonController::table . '.' . LoaiDonController::id, '=', self::table . '.' . self::loai_don)
+                ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang', TrangThaiController::table . '.' . TrangThaiController::mo_ta . ' as gia_tri_trang_thai', LoaiDonController::table . '.' . LoaiDonController::mo_ta . ' as gia_tri_loai_don')
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->get();
-
-//            $listBillDetail = DB::table(ChiTietHoaDonController::table)
-//                ->join(SanPhamController::table, ChiTietHoaDonController::table . '.' . ChiTietHoaDonController::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-//                ->select(ChiTietHoaDonController::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
-//                ->where(ChiTietHoaDonController::ma_hoa_don, '=', $id)
-//                ->get();
+//            $obj[0]->tong_tien = money_format("%10.2n", $obj[0]->tong_tien);
             if ($obj) {
                 return response()->json([
                     'data' => $obj
