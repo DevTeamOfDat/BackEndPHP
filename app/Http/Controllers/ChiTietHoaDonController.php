@@ -44,6 +44,27 @@ class ChiTietHoaDonController extends Controller
                 ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
                 ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
                 ->get();
+            foreach ($objs as $obj){
+                $list_speciality_id = DB::table(self::table)
+                    ->select(self::danh_sach_loai_dac_trung)
+                    ->where(self::table . '.' . self::id, '=', $obj->id)
+                    ->get();
+                foreach ($list_speciality_id as $index => $speciality_id) {
+                    $speciality = $speciality_id->danh_sach_loai_dac_trung;
+                    $speciality = substr($speciality, 1, strlen($speciality) - 2);
+                    $arr = explode(',', $speciality);
+                    $str = '';
+                    foreach ($arr as $item) {
+                        $ten_dac_trung = DB::table(DacTrungController::table)
+                            ->select(DacTrungController::ten_dac_trung)
+                            ->where(DacTrungController::id, '=', $item)
+                            ->get();
+                        $str = $str . $ten_dac_trung[0]->ten_dac_trung . ', ';
+                    }
+                    $str = substr($str, 0, strlen($str) - 2);
+                    $obj->ten_dac_trung = $str;
+                }
+            }
             $code = 200;
 //            switch ($query) {
 //                case "all":
@@ -178,11 +199,11 @@ class ChiTietHoaDonController extends Controller
         $obj = DB::table(self::table)
             ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
             ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
-            ->where(self::table . '.' . self::ma_hoa_don, '=', $id)
+            ->where(self::table . '.' . self::id, '=', $id)
             ->get();
         $list_speciality_id = DB::table(self::table)
             ->select(self::danh_sach_loai_dac_trung)
-            ->where(self::table . '.' . self::ma_hoa_don, '=', $id)
+            ->where(self::table . '.' . self::id, '=', $id)
             ->get();
 
         foreach ($list_speciality_id as $index => $speciality_id) {
