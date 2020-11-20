@@ -102,7 +102,7 @@ class TaiKhoanController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -148,7 +148,7 @@ class TaiKhoanController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -173,7 +173,7 @@ class TaiKhoanController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -183,12 +183,20 @@ class TaiKhoanController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
+        $user = auth()->user();
+//        $tk = DB::table(self::table)->select('*')
+//            ->where(self::id, '=', $id)
+//            ->where(self::email, '=', $user->email)
+//            ->get();
+//        if (count($tk) == 0) {
+//            return response()->json(['error' => 'Chỉnh sửa thất bại. Không thể chỉnh sửa tài khoản khác'], 403);
+//        }
         $validator = Validator::make($request->all(), [
             self::email => 'required|email',
             self::mat_khau => 'required|min:8',
@@ -199,6 +207,15 @@ class TaiKhoanController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()->all()], 400);
         }
+
+        $tk = DB::table(self::table)->select('*')
+            ->where(self::id, '=', $id)
+            ->where(self::mat_khau, '=' , $request->mat_khau)
+            ->get();
+//        if (count($tk) == 0) {
+            return response()->json(['error' => $tk], 200);
+//        }
+
         $this->base->update($request, $id);
         return response()->json($this->base->getMessage(), $this->base->getStatus());
     }
@@ -206,7 +223,7 @@ class TaiKhoanController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)

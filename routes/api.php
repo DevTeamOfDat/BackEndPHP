@@ -58,7 +58,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/accounts/delete', [TaiKhoanController::class, 'destroy']);
 
 //chi tiết hóa đơn
-//    Route::get('/bill-details', [\App\Http\Controllers\ChiTietHoaDonController::class, 'index']);
+    Route::get('/bill-details', [\App\Http\Controllers\ChiTietHoaDonController::class, 'index']);
 
     //lấy ra list chi tiết hóa đơn theo mã hóa đơn
     Route::get('/bill-details/{id}', [\App\Http\Controllers\ChiTietHoaDonController::class, 'show']);
@@ -70,7 +70,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/bill-details/delete', [\App\Http\Controllers\ChiTietHoaDonController::class, 'destroy']);
 
 //chi tiết phiếu nhập
-//    Route::get('/coupon-details', [\App\Http\Controllers\ChiTietPhieuNhapController::class, 'index']);
+    Route::get('/coupon-details', [\App\Http\Controllers\ChiTietPhieuNhapController::class, 'index']);
 
     //lấy ra list chi tiết phiếu nhập theo mã phiếu nhập
     Route::get('/coupon-details/{id}', [\App\Http\Controllers\ChiTietPhieuNhapController::class, 'show']);
