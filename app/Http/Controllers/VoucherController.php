@@ -41,33 +41,6 @@ class VoucherController extends Controller
                 ->select(self::table . '.*', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten)
                 ->get();
             $code = 200;
-//        switch ($query) {
-//            case "all":
-//                $objs = DB::table(self::table)
-//                    ->join(TaiKhoanController::table, self::table . '.' . self::ma_khach_hang, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
-//                    ->select(self::table . '.*', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten)
-//                    ->get();
-//                $code = 200;
-//                break;
-//            case "active":
-//                $objs = DB::table(self::table)
-//                    ->join(TaiKhoanController::table, self::table . '.' . self::ma_khach_hang, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
-//                    ->select(self::table . '.*', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten)
-//                    ->where(self::table . '.' . self::isActive, '=', true)->get();
-//                $code = 200;
-//                break;
-//            case "inactive":
-//                $objs = DB::table(self::table)
-//                    ->join(TaiKhoanController::table, self::table . '.' . self::ma_khach_hang, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
-//                    ->select(self::table . '.*', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten)
-//                    ->where(self::table . '.' . self::isActive, '=', false)->get();
-//                $code = 200;
-//                break;
-//            default:
-//                $objs = "Không tìm thấy";
-//                $code = 200;
-//                break;
-//        }
             return response()->json(['data' => $objs], $code);
         } else {
             $objs = DB::table(self::table)

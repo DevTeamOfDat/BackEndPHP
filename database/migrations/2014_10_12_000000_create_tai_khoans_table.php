@@ -22,7 +22,7 @@ class CreateTaiKhoansTable extends Migration
             $table->string('ho_ten', 50);
             $table->string('dia_chi')->nullable();
             $table->string('so_dien_thoai')->nullable();
-            $table->mediumText('hinh_anh')->nullable();
+            $table->string('hinh_anh')->nullable();
             $table->string('loai_tai_khoan')->default('KH');
             $table->boolean('isActive')->default(true);
             $table->rememberToken();

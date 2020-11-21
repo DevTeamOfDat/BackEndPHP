@@ -18,7 +18,7 @@ class CreateTinTucsTable extends Migration
             $table->string('tieu_de');
             $table->text('noi_dung');
             $table->string('highlight')->nullable();
-            $table->mediumText('thumbnail')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->string('url')->nullable();
             $table->date('ngay_dang')->nullable();
             $table->boolean('isActive')->default(true);

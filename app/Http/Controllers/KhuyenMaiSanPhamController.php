@@ -34,15 +34,6 @@ class KhuyenMaiSanPhamController extends Controller
     {
         date_default_timezone_set(BaseController::timezone);
         $date = date('d-m-Y');
-//        $ngay_km = DB::table(NgayKhuyenMaiController::table)
-//            ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, '<', $date)
-//            ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::isActive, '=', true)
-//            ->get(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id);
-
-//        DB::table(NgayKhuyenMaiController::table)
-//            ->whereIn(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id, $ngay_km)
-//            ->update([NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::isActive => false]);
-
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {

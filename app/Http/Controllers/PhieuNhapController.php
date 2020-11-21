@@ -45,36 +45,6 @@ class PhieuNhapController extends Controller
                 ->select(self::table . '.*', NhaCungCapController::table . '.' . NhaCungCapController::ten . ' as ten_nha_cung_cap', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien')
                 ->get();
             $code = 200;
-//        switch ($query) {
-//            case "all":
-//                $objs = DB::table(self::table)
-//                    ->join(NhaCungCapController::table, NhaCungCapController::table . '.' . NhaCungCapController::id, '=', self::table . '.' . self::ma_nha_cung_cap)
-//                    ->join(TaiKhoanController::table, self::table . '.' . self::ma_nhan_vien, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
-//                    ->select('phieu_nhaps.*', NhaCungCapController::table . '.' . NhaCungCapController::ten . ' as ten_nha_cung_cap', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien')
-//                    ->get();
-//                $code = 200;
-//                break;
-//            case "active":
-//                $objs = DB::table(self::table)
-//                    ->join(NhaCungCapController::table, NhaCungCapController::table . '.' . NhaCungCapController::id, '=', self::table . '.' . self::ma_nha_cung_cap)
-//                    ->join(TaiKhoanController::table, self::table . '.' . self::ma_nhan_vien, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
-//                    ->select('phieu_nhaps.*', NhaCungCapController::table . '.' . NhaCungCapController::ten . ' as ten_nha_cung_cap', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien')
-//                    ->where(self::table . '.' . self::isActive, '=', true)->get();
-//                $code = 200;
-//                break;
-//            case "inactive":
-//                $objs = DB::table(self::table)
-//                    ->join(NhaCungCapController::table, NhaCungCapController::table . '.' . NhaCungCapController::id, '=', self::table . '.' . self::ma_nha_cung_cap)
-//                    ->join(TaiKhoanController::table, self::table . '.' . self::ma_nhan_vien, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
-//                    ->select('phieu_nhaps.*', NhaCungCapController::table . '.' . NhaCungCapController::ten . ' as ten_nha_cung_cap', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien')
-//                    ->where(self::table . '.' . self::isActive, '=', false)->get();
-//                $code = 200;
-//                break;
-//            default:
-//                $objs = "Không tìm thấy";
-//                $code = 200;
-//                break;
-//        }
             return response()->json(['data' => $objs], $code);
         } else {
             return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
@@ -143,11 +113,6 @@ class PhieuNhapController extends Controller
                 ->select(self::table . '.*', NhaCungCapController::table . '.' . NhaCungCapController::ten . ' as ten_nha_cung_cap', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien')
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->get();
-//            $listCouponDetail = DB::table(ChiTietPhieuNhapController::table)
-//                ->join(SanPhamController::table, ChiTietPhieuNhapController::table . '.' . ChiTietPhieuNhapController::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-//                ->select(ChiTietPhieuNhapController::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
-//                ->where(ChiTietPhieuNhapController::ma_phieu_nhap, '=', $id)
-//                ->get();
             if ($obj) {
                 return response()->json([
                     'data' => $obj

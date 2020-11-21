@@ -49,36 +49,6 @@ class HoaDonController extends Controller
                 ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang', VoucherController::table . '.' . VoucherController::muc_voucher)
                 ->get();
             $code = 200;
-//        switch ($query) {
-//            case "all":
-//                $objs = DB::table(self::table)
-//                    ->join(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
-//                    ->join(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
-//                    ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang')
-//                    ->get();
-//                $code = 200;
-//                break;
-//            case "active":
-//                $objs = DB::table(self::table)
-//                    ->join(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
-//                    ->join(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
-//                    ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang')
-//                    ->where(self::table . '.' . self::isActive, '=', true)->get();
-//                $code = 200;
-//                break;
-//            case "inactive":
-//                $objs = DB::table(self::table)
-//                    ->join(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
-//                    ->join(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
-//                    ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang')
-//                    ->where(self::table . '.' . self::isActive, '=', false)->get();
-//                $code = 200;
-//                break;
-//            default:
-//                $objs = "Không tìm thấy";
-//                $code = 200;
-//                break;
-//        }
             return response()->json(['data' => $objs], $code);
         } else {
             $objs = null;
@@ -158,7 +128,6 @@ class HoaDonController extends Controller
                 ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang', TrangThaiController::table . '.' . TrangThaiController::mo_ta . ' as gia_tri_trang_thai', LoaiDonController::table . '.' . LoaiDonController::mo_ta . ' as gia_tri_loai_don')
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->get();
-//            $obj[0]->tong_tien = money_format("%10.2n", $obj[0]->tong_tien);
             if ($obj) {
                 return response()->json([
                     'data' => $obj
@@ -174,12 +143,6 @@ class HoaDonController extends Controller
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->where(self::table . '.' . self::ma_kh, '=', $user->ma_tai_khoan)
                 ->get();
-//            $listBillDetail = DB::table(ChiTietHoaDonController::table)
-//                ->join(SanPhamController::table, ChiTietHoaDonController::table . '.' . ChiTietHoaDonController::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-//                ->select(ChiTietHoaDonController::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
-//                ->where(ChiTietHoaDonController::ma_hoa_don, '=', $id)
-//                ->where(self::table . '.' . self::ma_kh, '=', $user->ma_tai_khoan)
-//                ->get();
             if ($obj) {
                 return response()->json([
                     'data' => $obj

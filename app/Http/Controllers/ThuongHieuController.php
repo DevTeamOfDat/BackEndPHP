@@ -30,14 +30,8 @@ class ThuongHieuController extends Controller
      */
     public function index()
     {
-//        $user = auth()->user();
-//        $loai_tk = $user->loai_tai_khoan;
-//        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            $this->base->index();
-            return response()->json($this->base->getMessage(), $this->base->getStatus());
-//        } else {
-//            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
-//        }
+        $this->base->index();
+        return response()->json($this->base->getMessage(), $this->base->getStatus());
     }
 
     /**

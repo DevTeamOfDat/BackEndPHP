@@ -21,7 +21,7 @@ class CreateNhaCungCapsTable extends Migration
             $table->string('hot_line')->nullable();
             $table->string('email')->nullable();
             $table->string('so_dien_thoai');
-            $table->mediumText('hinh_anh')->nullable();
+            $table->string('hinh_anh')->nullable();
             $table->boolean('isActive')->default(true);
         });
 

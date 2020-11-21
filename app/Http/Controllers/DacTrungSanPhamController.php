@@ -33,51 +33,6 @@ class DacTrungSanPhamController extends Controller
      */
     public function index()
     {
-//        $user = auth()->user();
-//        $loai_tk = $user->loai_tai_khoan;
-//        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-//            $objs = null;
-//            $code = null;
-//            $objs = DB::table(self::table)
-//                ->join(DacTrungController::table, self::table . '.' . self::loai_dac_trung, '=', DacTrungController::table . '.' . DacTrungController::id)
-//                ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-//                ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, DacTrungController::table . '.' . DacTrungController::ten_dac_trung)
-//                ->get();
-//            $code = 200;
-//        switch ($query) {
-//            case "all":
-//                $objs = DB::table(self::table)
-//                    ->join(DacTrungController::table, self::table . '.' . self::loai_dac_trung, '=', DacTrungController::table . '.' . DacTrungController::id)
-//                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-//                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, DacTrungController::table . '.' . DacTrungController::ten_dac_trung)
-//                    ->get();
-//                $code = 200;
-//                break;
-//            case "active":
-//                $objs = DB::table(self::table)
-//                    ->join(DacTrungController::table, self::table . '.' . self::loai_dac_trung, '=', DacTrungController::table . '.' . DacTrungController::id)
-//                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-//                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, DacTrungController::table . '.' . DacTrungController::ten_dac_trung)
-//                    ->where(self::table . '.' . self::isActive, '=', true)->get();
-//                $code = 200;
-//                break;
-//            case "inactive":
-//                $objs = DB::table(self::table)
-//                    ->join(DacTrungController::table, self::table . '.' . self::loai_dac_trung, '=', DacTrungController::table . '.' . DacTrungController::id)
-//                    ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
-//                    ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham, DacTrungController::table . '.' . DacTrungController::ten_dac_trung)
-//                    ->where(self::table . '.' . self::isActive, '=', false)->get();
-//                $code = 200;
-//                break;
-//            default:
-//                $objs = "Không tìm thấy";
-//                $code = 200;
-//                break;
-//        }
-//            return response()->json(['data' => $objs], $code);
-//        } else {
-//            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
-//        }
     }
 
     /**
@@ -234,10 +189,6 @@ class DacTrungSanPhamController extends Controller
      */
     public function update(Request $request, $id)
     {
-//        $user = auth()->user();
-//        $loai_tk = $user->loai_tai_khoan;
-//        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-
         $params = [];
         if ($request->so_luong) {
             $sl = DB::table(self::table)
@@ -249,9 +200,6 @@ class DacTrungSanPhamController extends Controller
         DB::table(self::table)->where(self::id, '=', $id)->update($params);
         $obj = DB::table(self::table)->where(self::id, '=', $id)->get();
         return response()->json(['data' => $obj], 201);
-//        } else {
-//            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
-//        }
     }
 
     /**

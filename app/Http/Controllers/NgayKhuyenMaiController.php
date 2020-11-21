@@ -36,9 +36,6 @@ class NgayKhuyenMaiController extends Controller
             $this->base->index();
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
-//            $objs = DB::table(self::table)->where(self::isActive, '=', true)
-//                ->orderBy(self::ngay_gio)->limit(3)->get();
-//            return response()->json(['data' => $objs], 200);
             return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
     }

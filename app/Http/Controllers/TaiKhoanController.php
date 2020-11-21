@@ -53,42 +53,7 @@ class TaiKhoanController extends Controller
                 ->where(self::table . '.' . self::loai_tai_khoan, '=', 'KH')
                 ->orWhere(self::table . '.' . self::loai_tai_khoan, '=', 'NV')
                 ->get();
-//            foreach ($objs as $obj) {
-//                if ($obj[self::hinh_anh]) {
-//                    $obj[self::hinh_anh] = base64_decode($obj[self::hinh_anh]);
-//                }
-//            }
             $code = 200;
-//            switch ($query) {
-//                case "all":
-//                    $objs = DB::table(self::table)
-//                        ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
-//                        ->select(self::id, self::ho_ten, self::email, self::dia_chi, self::so_dien_thoai, LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta, self::hinh_anh, self::table . '.' . self::isActive)
-//                        ->where(self::table . '.' . self::loai_tai_khoan, '=', 'KH')
-//                        ->get();
-//                    $code = 200;
-//                    break;
-//                case "active":
-//                    $objs = DB::table(self::table)
-//                        ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
-//                        ->select(self::id, self::ho_ten, self::email, self::dia_chi, self::so_dien_thoai, LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta, self::hinh_anh, self::table . '.' . self::isActive)
-//                        ->where(self::table . '.' . self::isActive, '=', true)
-//                        ->where(self::table . '.' . self::loai_tai_khoan, '=', 'KH')->get();
-//                    $code = 200;
-//                    break;
-//                case "inactive":
-//                    $objs = DB::table(self::table)
-//                        ->join(LoaiTaiKhoanController::table, self::table . '.' . self::loai_tai_khoan, '=', LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::gia_tri)
-//                        ->select(self::id, self::ho_ten, self::email, self::dia_chi, self::so_dien_thoai, LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta, self::hinh_anh, self::table . '.' . self::isActive)
-//                        ->where(self::table . '.' . self::isActive, '=', false)
-//                        ->where(self::table . '.' . self::loai_tai_khoan, '=', 'KH')->get();
-//                    $code = 200;
-//                    break;
-//                default:
-//                    $objs = "Không tìm thấy";
-//                    $code = 200;
-//                    break;
-//            }
             return response()->json(['data' => $objs], $code);
         } else {
             return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
@@ -143,8 +108,29 @@ class TaiKhoanController extends Controller
                     return response()->json(['error' => $validator->errors()->all()], 400);
                 }
             }
-            $this->base->store($request);
-            return response()->json($this->base->getMessage(), $this->base->getStatus());
+            $array = [];
+            $array[self::ho_ten] = $request->ho_ten;
+            $array[self::email] = $request->email;
+            $array[self::email_verified_at] = date('Y-m-d');
+            $array[self::mat_khau] = bcrypt($request->mat_khau);
+            if ($request->dia_chi != null) {
+                $array[self::dia_chi] = $request->dia_chi;
+            }
+            $array[self::so_dien_thoai] = $request->so_dien_thoai;
+            $array[self::so_dien_thoai] = $request->so_dien_thoai;
+            if ($request->hinh_anh != null) {
+                $array[self::hinh_anh] = $request->hinh_anh;
+            }
+            $array[self::loai_tai_khoan] = $request->loai_tai_khoan;
+
+            DB::table(self::table)->insert($array);
+
+            $email = $request->email;
+
+            $tk = TaiKhoan::where(self::email, $email)->first();
+
+            $token = $tk->createToken('WebsiteBanGiayPHP')->accessToken;
+            return response()->json(['token' => $token, 'data' => $tk], 201);
         } else {
             return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
@@ -166,7 +152,6 @@ class TaiKhoanController extends Controller
                 ->select(self::id, self::ho_ten, self::email, self::dia_chi, self::so_dien_thoai, self::loai_tai_khoan, LoaiTaiKhoanController::table . '.' . LoaiTaiKhoanController::mo_ta, self::hinh_anh, self::table . '.' . self::isActive)
                 ->where(self::table . '.' . self::id, '=', $id)->first();
             if ($client) {
-//                $client[self::hinh_anh] = base64_decode($client[self::hinh_anh]);
                 return response()->json(['data' => $client], 200);
             } else {
                 return response()->json(['error' => "Không tìm thấy"], 200);
@@ -276,22 +261,17 @@ class TaiKhoanController extends Controller
             return response()->json(['error' => $validator->errors()->all()], 400);
         }
 
-        $img = null;
-
-//        if ($request->hinh_anh) {
-//            $img = base64_encode($request->hinh_anh);
-//        }
-
-        DB::table(self::table)->insert([
-            self::ho_ten => $request->ho_ten,
-            self::email => $request->email,
-            self::email_verified_at => date('Y-m-d'),
-            self::mat_khau => bcrypt($request->mat_khau),
-            self::dia_chi => $request->dia_chi,
-            self::so_dien_thoai => $request->so_dien_thoai,
-            self::hinh_anh => $img,
-//            self::loai_tai_khoan => $request->loai_tai_khoan,
-        ]);
+        $array = [];
+        $array[self::ho_ten] = $request->ho_ten;
+        $array[self::email] = $request->email;
+        $array[self::email_verified_at] = date('Y-m-d');
+        $array[self::mat_khau] = bcrypt($request->mat_khau);
+        $array[self::dia_chi] = $request->dia_chi;
+        $array[self::so_dien_thoai] = $request->so_dien_thoai;
+        if ($request->hinh_anh != null) {
+            $array[self::hinh_anh] = $request->hinh_anh;
+        }
+        DB::table(self::table)->insert($array);
 
         $email = $request->email;
 
@@ -323,7 +303,6 @@ class TaiKhoanController extends Controller
         if ($tk) {
             if (Hash::check($request->mat_khau, $tk->mat_khau)) {
                 $token = $tk->createToken('WebsiteBanGiayPHP')->accessToken;
-//                $tk[self::hinh_anh] = base64_decode($tk[self::hinh_anh]);
                 return response()->json(['token' => $token, 'data' => $tk], 200);
             } else {
                 return response()->json(['error' => 'Password mismatch'], 400);
@@ -336,7 +315,6 @@ class TaiKhoanController extends Controller
     public function userInfo()
     {
         $user = auth()->user();
-//        $user[self::hinh_anh] = base64_decode($user[self::hinh_anh]);
         return response()->json(['data' => $user], 200);
     }
 

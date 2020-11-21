@@ -36,84 +36,19 @@ class SanPhamController extends Controller
     {
         date_default_timezone_set(BaseController::timezone);
         $date = date('Y-m-d');
-//        $user = auth()->user();
-//        $loai_tk = $user->loai_tai_khoan;
-//        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
         $objs = null;
         $code = null;
         try {
-//            $objs = DB::table(self::table)
-//                ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
-//                ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
-//                ->leftJoin(KhuyenMaiSanPhamController::table, self::table . '.' . self::id, KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_san_pham)
-//                ->leftJoin(NgayKhuyenMaiController::table, NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::id, KhuyenMaiSanPhamController::table . '.' . KhuyenMaiSanPhamController::ma_ngay_khuyen_mai)
-//                ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham, KhuyenMaiSanPhamController::muc_khuyen_mai, DB::raw('gia_ban*(1-muc_khuyen_mai/100) as gia_moi'), DB::select('(SELECT ' . HinhAnhSanPhamController::hinh_anh . ' FROM ' . HinhAnhSanPhamController::table . ' WHERE ' . HinhAnhSanPhamController::table . '.' . HinhAnhSanPhamController::ma_san_pham . ' = ' . SanPhamController::table . '.' . SanPhamController::id . ' AND ' . HinhAnhSanPhamController::hinh_anh . ' IS NOT NULL' . ' LIMIT 1) AS image'))
-//                ->where(NgayKhuyenMaiController::table . '.' . NgayKhuyenMaiController::ngay_gio, '=', $date)
-//                ->get();
-//            $objs = DB::table('listproduct')->get();
             $objs = DB::select('call listProduct(?)', array($date));
             if (count($objs) == 0) {
-//                $objs = DB::table(self::table)
-//                    ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
-//                    ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
-//                    ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
-//                    ->get();
                 $objs = DB::table('products')->get();
             }
-//            foreach ($objs as $obj) {
-//                if ($obj['image']) {
-//                    $obj['image'] = base64_decode($obj['image']);
-//                }
-//            }
             $code = 200;
-//        switch ($query) {
-//            case "all":
-//                $objs = DB::table(self::table)
-//                    ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
-//                    ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
-//                    ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
-//                    ->get();
-//                $code = 200;
-//                break;
-//            case "active":
-//                $objs = DB::table(self::table)
-//                    ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
-//                    ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
-//                    ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
-//                    ->where(self::table . '.' . self::isActive, '=', true)->get();
-//                $code = 200;
-//                break;
-//            case "inactive":
-//                $objs = DB::table(self::table)
-//                    ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
-//                    ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
-//                    ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
-//                    ->where(self::table . '.' . self::isActive, '=', false)->get();
-//                $code = 200;
-//                break;
-//            default:
-//                $objs = "Không tìm thấy";
-//                $code = 200;
-//                break;
-//        }
             return response()->json(['data' => $objs], $code);
         } catch (\Throwable $e) {
-//            $objs = DB::table(self::table)
-//                ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
-//                ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
-//                ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
-//                ->get();
             $objs = DB::table('products')->get();
-//            foreach ($objs as $obj) {
-//                if ($obj->image) {
-//                    $obj->image = base64_decode($obj->image);
-//                }
-//            }
             return response()->json(['data' => $objs], 200);
         }
-//        } else {
-//            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
-//        }
     }
 
     /**
@@ -162,30 +97,14 @@ class SanPhamController extends Controller
      */
     public function show($id)
     {
-//        $user = auth()->user();
-//        $loai_tk = $user->loai_tai_khoan;
-//        if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-//        $obj = DB::table(self::table)
-//            ->join(ThuongHieuController::table, self::table . '.' . self::ma_thuong_hieu, '=', ThuongHieuController::table . '.' . ThuongHieuController::id)
-//            ->join(LoaiSanPhamController::table, self::table . '.' . self::ma_loai_san_pham, '=', LoaiSanPhamController::table . '.' . LoaiSanPhamController::id)
-//            ->select(self::table . '.*', ThuongHieuController::table . '.' . ThuongHieuController::ten_thuong_hieu, LoaiSanPhamController::table . '.' . LoaiSanPhamController::ten_loai_san_pham)
-//            ->where(self::table . '.' . self::id, '=', $id)
-//            ->get();
         date_default_timezone_set(BaseController::timezone);
         $date = date('Y-m-d');
         $obj = DB::select('call itemProduct(?,?)', array($date, $id));
-//        $obj[0]->image = base64_decode($obj[0]->image);
-//        $listImg = DB::table(HinhAnhSanPhamController::table)
-//            ->where(HinhAnhSanPhamController::table . '.' . HinhAnhSanPhamController::ma_san_pham, '=', $id)
-//            ->get(HinhAnhSanPhamController::hinh_anh);
         if ($obj) {
             return response()->json(['data' => $obj], 200);
         } else {
             return response()->json(['error' => 'Không tìm thấy'], 200);
         }
-//        } else {
-//            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 200);
-//        }
     }
 
     /**
