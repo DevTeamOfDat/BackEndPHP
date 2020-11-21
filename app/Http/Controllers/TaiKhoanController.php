@@ -180,26 +180,31 @@ class TaiKhoanController extends Controller
      */
     public function update(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            self::email => 'required|email',
-            self::mat_khau => 'required|min:8',
-            'mat_khau_cu' => 'required',
-            self::ho_ten => 'required',
-            self::so_dien_thoai => 'required',
-            self::loai_tai_khoan => 'required',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->all()], 400);
+        $tk = TaiKhoan::where(self::email, $request->email)->first();
+        $array = [];
+        $array[self::email] = $request->email;
+        if ($request->ho_ten != null) {
+            $array[self::ho_ten] = $request->ho_ten;
         }
-        $user = auth()->user();
-        if ($user->email != $request->email) {
-            return response()->json(['error' => 'Chỉnh sửa thất bại. Không thể chỉnh sửa tài khoản khác'], 403);
+        if ($request->dia_chi != null) {
+            $array[self::dia_chi] = $request->dia_chi;
         }
-        if ($user->mat_khau != $request->mat_khau_cu) {
+        if ($request->so_dien_thoai != null) {
+            $array[self::so_dien_thoai] = $request->so_dien_thoai;
+        }
+        if ($request->hinh_anh != null) {
+            $array[self::hinh_anh] = $request->hinh_anh;
+        }
+        if ($request->mat_khau_moi != null && !Hash::check($request->mat_khau_cu, $tk->mat_khau)) {
             return response()->json(['error' => 'Chỉnh sửa thất bại. Mật khẩu cũ không chính xác'], 400);
+        } elseif ($request->mat_khau_moi == $request->mat_khau_cu) {
+            return response()->json(['error' => 'Chỉnh sửa thất bại. Mật khẩu mới phải khác mật khẩu cũ'], 400);
+        } elseif ($request->mat_khau_moi != null && $request->mat_khau_cu != null && $request->mat_khau_moi != $request->mat_khau_cu && Hash::check($request->mat_khau_cu, $tk->mat_khau)) {
+            $array[self::mat_khau] = bcrypt($request->mat_khau_moi);
         }
-        DB::table(self::table)->update($request->all());
-        return response()->json($this->base->getMessage(), $this->base->getStatus());
+        $tk = DB::table(self::table)->where(self::email, $request->email)->update($array);
+        $token = $tk->createToken('WebsiteBanGiayPHP')->accessToken;
+        return response()->json(['token' => $token, 'data' => $tk], 200);
     }
 
     /**
