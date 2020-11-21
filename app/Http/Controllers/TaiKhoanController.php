@@ -180,7 +180,17 @@ class TaiKhoanController extends Controller
      */
     public function update(Request $request)
     {
-        $tk = TaiKhoan::where(self::email, $request->email)->first();
+        $validator = Validator::make($request->all(), [
+            self::email => 'required|email'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->all()], 400);
+        }
+        $tk = DB::table(self::table)->where(self::email, $request->email)->get();
+        if (count($tk) == 0) {
+            return response()->json(['error' => 'Email không chính xác'], 400);
+        }
+        $tk = $tk[0];
         $array = [];
         $array[self::email] = $request->email;
         if ($request->ho_ten != null) {
@@ -197,14 +207,21 @@ class TaiKhoanController extends Controller
         }
         if ($request->mat_khau_moi != null && !Hash::check($request->mat_khau_cu, $tk->mat_khau)) {
             return response()->json(['error' => 'Chỉnh sửa thất bại. Mật khẩu cũ không chính xác'], 400);
-        } elseif ($request->mat_khau_moi == $request->mat_khau_cu) {
+        } elseif ($request->mat_khau_moi != null && $request->mat_khau_cu != null && $request->mat_khau_moi == $request->mat_khau_cu) {
             return response()->json(['error' => 'Chỉnh sửa thất bại. Mật khẩu mới phải khác mật khẩu cũ'], 400);
         } elseif ($request->mat_khau_moi != null && $request->mat_khau_cu != null && $request->mat_khau_moi != $request->mat_khau_cu && Hash::check($request->mat_khau_cu, $tk->mat_khau)) {
             $array[self::mat_khau] = bcrypt($request->mat_khau_moi);
         }
-        $tk = DB::table(self::table)->where(self::email, $request->email)->update($array);
-        $token = $tk->createToken('WebsiteBanGiayPHP')->accessToken;
-        return response()->json(['token' => $token, 'data' => $tk], 200);
+        if (count($array) == 1) {
+            return response()->json(['error' => 'Chỉnh sửa thất bại. Thiếu thông tin'], 400);
+        }
+        DB::table(self::table)->where(self::email, $request->email)->update($array);
+        $tk = TaiKhoan::where(self::email, $request->email)->first();
+        if ($request->mat_khau_moi != null) {
+            $token = $tk->createToken('WebsiteBanGiayPHP')->accessToken;
+            return response()->json(['token' => $token, 'data' => $tk], 200);
+        }
+        return response()->json(['data' => $tk], 200);
     }
 
     /**
