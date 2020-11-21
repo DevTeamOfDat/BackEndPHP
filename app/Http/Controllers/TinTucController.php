@@ -57,6 +57,7 @@ class TinTucController extends Controller
      */
     public function store(Request $request)
     {
+        date_default_timezone_set(BaseController::timezone);
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
@@ -67,7 +68,6 @@ class TinTucController extends Controller
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()->all()], 400);
             }
-
             $this->base->store($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {

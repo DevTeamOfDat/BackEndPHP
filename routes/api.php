@@ -91,7 +91,6 @@ Route::middleware('auth:api')->group(function () {
 //hình ảnh sản phẩm
     Route::get('/image-products', [\App\Http\Controllers\HinhAnhSanPhamController::class, 'index']);
 
-    //lấy ra list hình ảnh theo mã sản phẩm
     Route::get('/image-products/{id}', [\App\Http\Controllers\HinhAnhSanPhamController::class, 'show']);
 
     Route::post('/image-products', [\App\Http\Controllers\HinhAnhSanPhamController::class, 'store']);
@@ -175,6 +174,8 @@ Route::middleware('auth:api')->group(function () {
 
 //thương hiệu
     Route::get('/trademarks', [\App\Http\Controllers\ThuongHieuController::class, 'index']);
+
+    Route::get('/trademarks/{id}', [\App\Http\Controllers\ThuongHieuController::class, 'index']);
 
     Route::post('/trademarks', [\App\Http\Controllers\ThuongHieuController::class, 'store']);
 

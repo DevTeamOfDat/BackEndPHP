@@ -64,42 +64,20 @@ class NhaCungCapController extends Controller
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            try {
-                if ($listObj = $request->get(BaseController::listObj)) {
-                    $count = count($listObj);
-                    if ($count > 0) {
-                        foreach ($listObj as $obj) {
-                            $validator = Validator::make($obj, [
-                                self::ten => 'required',
-                                self::dia_chi => 'required',
-                                self::so_dien_thoai => 'required',
-                            ]);
-                            if ($validator->fails()) {
-                                return response()->json(['error' => $validator->errors()->all()], 400);
-                            }
-                        }
-                    } else {
-                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
-                    }
-                } else {
-                    $arr_value = $request->all();
-                    if (count($arr_value) > 0) {
-                        $validator = Validator::make($arr_value, [
-                            self::ten => 'required',
-                            self::dia_chi => 'required',
-                            self::so_dien_thoai => 'required',
-                        ]);
-                        if ($validator->fails()) {
-                            return response()->json(['error' => $validator->errors()->all()], 400);
-                        }
-                    } else {
-                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
-                    }
+            $arr_value = $request->all();
+            if (count($arr_value) > 0) {
+                $validator = Validator::make($arr_value, [
+                    self::ten => 'required',
+                    self::dia_chi => 'required',
+                    self::so_dien_thoai => 'required',
+                    self::email => 'email',
+                ]);
+                if ($validator->fails()) {
+                    return response()->json(['error' => $validator->errors()->all()], 400);
                 }
-            } catch (\Throwable $e) {
-                return response()->json(['error' => $e], 500);
+            } else {
+                return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
             }
-
             $this->base->store($request);
             return response()->json($this->base->getMessage(), $this->base->getStatus());
         } else {
