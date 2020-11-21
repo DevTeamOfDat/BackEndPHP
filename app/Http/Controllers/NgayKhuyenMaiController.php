@@ -64,46 +64,43 @@ class NgayKhuyenMaiController extends Controller
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
-            try {
-                if ($listObj = $request->get(BaseController::listObj)) {
-                    $count = count($listObj);
-                    if ($count > 0) {
-                        foreach ($listObj as $obj) {
-                            $validator = Validator::make($obj, [
-                                self::ngay_gio => 'required',
-                            ]);
-                            if ($validator->fails()) {
-                                return response()->json(['error' => $validator->errors()->all()], 400);
-                            }
-                            if ($obj[self::ngay_gio] < $date) {
-                                return response()->json(['error' => 'Ngày không hợp lệ'], 400);
-                            }
-                        }
-                    } else {
-                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
-                    }
-                } else {
-                    $arr_value = $request->all();
-                    if (count($arr_value) > 0) {
-                        $validator = Validator::make($arr_value, [
-                            self::ngay_gio => 'required',
-                        ]);
-                        if ($validator->fails()) {
-                            return response()->json(['error' => $validator->errors()->all()], 400);
-                        }
-                        if ($arr_value[self::ngay_gio] < $date) {
-                            return response()->json(['error' => 'Ngày không hợp lệ'], 400);
-                        }
-                    } else {
-                        return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
-                    }
+            $arr_value = $request->all();
+            if (count($arr_value) > 0) {
+                $validator = Validator::make($arr_value, [
+                    self::ngay_gio => 'required',
+                    'muc_khuyen_mai' => 'required',
+                ]);
+                if ($validator->fails()) {
+                    return response()->json(['error' => $validator->errors()->all()], 400);
                 }
-            } catch (\Throwable $e) {
-                return response()->json(['error' => $e], 500);
+                $time = strtotime($arr_value[self::ngay_gio]);
+                $ngay = date('Y-m-d', $time);
+                if (date('d-m-Y', $time) < $date) {
+                    return response()->json(['error' => 'Ngày không hợp lệ. Ngày nhập phải lớn hơn ngày hiện tại'], 400);
+                }
+                $ngay_km = DB::table(self::table)->whereDate(self::ngay_gio, '=', date('Y-m-d', $time))->get();
+                if (count($ngay_km) > 0) {
+                    return response()->json(['error' => 'Dữ liệu đã tồn tại'], 400);
+                }
+                if ((int)$arr_value['muc_khuyen_mai'] < 0 || (int)$arr_value['muc_khuyen_mai'] > 100) {
+                    return response()->json(['error' => 'Mức khuyến mãi không hợp lệ'], 400);
+                }
+            } else {
+                return response()->json(['error' => 'Thêm mới thất bại. Không có dữ liệu'], 400);
             }
 
-            $this->base->store($request);
-            return response()->json($this->base->getMessage(), $this->base->getStatus());
+            DB::table(self::table)->insert([self::ngay_gio => $arr_value[self::ngay_gio]]);
+            $products = DB::table(SanPhamController::table)->where(self::isActive, '=', true)->get();
+            $ma_ngay_km = DB::table(self::table)->select(self::id)
+                ->whereDate(self::ngay_gio, '=', $ngay)
+                ->where(self::isActive, '=', true)->first();
+            foreach ($products as $product) {
+                DB::table(KhuyenMaiSanPhamController::table)
+                    ->insert([KhuyenMaiSanPhamController::ma_san_pham => $product->ma_san_pham,
+                        KhuyenMaiSanPhamController::ma_ngay_khuyen_mai => $ma_ngay_km->ma_ngay_khuyen_mai,
+                        KhuyenMaiSanPhamController::muc_khuyen_mai => $arr_value['muc_khuyen_mai']]);
+            }
+            return response()->json(['success' => "Thêm mới thành công"], 201);
         } else {
             return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
         }
