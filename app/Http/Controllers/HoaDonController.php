@@ -182,13 +182,13 @@ class HoaDonController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             $hd = DB::table(self::table)->where(self::id, '=', $id)->first();
-            if ($hd->trang_thai == 2 && $request->get(self::trang_thai) == 1) {
+            if ($hd->trang_thai == 2) {
                 DB::table(self::table)->where(self::id, '=', $id)->update([self::trang_thai => 1]);
                 return response()->json(['success' => 'Cập nhật thành công'], 201);
             } else {

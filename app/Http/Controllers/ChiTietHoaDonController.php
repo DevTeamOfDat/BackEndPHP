@@ -39,33 +39,26 @@ class ChiTietHoaDonController extends Controller
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             $objs = null;
-            $code = null;
+            $code = 200;
             $objs = DB::table(self::table)
                 ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
                 ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
                 ->get();
             foreach ($objs as $obj) {
-                $list_speciality_id = DB::table(self::table)
-                    ->select(self::danh_sach_loai_dac_trung)
-                    ->where(self::table . '.' . self::id, '=', $obj->id)
-                    ->get();
-                foreach ($list_speciality_id as $index => $speciality_id) {
-                    $speciality = $speciality_id->danh_sach_loai_dac_trung;
-                    $speciality = substr($speciality, 1, strlen($speciality) - 2);
-                    $arr = explode(',', $speciality);
-                    $str = '';
-                    foreach ($arr as $item) {
-                        $ten_dac_trung = DB::table(DacTrungController::table)
-                            ->select(DacTrungController::ten_dac_trung)
-                            ->where(DacTrungController::id, '=', $item)
-                            ->get();
-                        $str = $str . $ten_dac_trung[0]->ten_dac_trung . ', ';
-                    }
-                    $str = substr($str, 0, strlen($str) - 2);
-                    $obj->ten_dac_trung = $str;
+                $list_speciality_id = $obj->danh_sach_loai_dac_trung;
+                $list_speciality_id = substr($list_speciality_id, 1, strlen($list_speciality_id) - 2);
+                $arr = explode(',', $list_speciality_id);
+                $str = '';
+                foreach ($arr as $item) {
+                    $ten_dac_trung = DB::table(DacTrungController::table)
+                        ->select(DacTrungController::ten_dac_trung)
+                        ->where(DacTrungController::id, '=', $item)
+                        ->first();
+                    $str = $str . $ten_dac_trung->ten_dac_trung . ', ';
                 }
+                $str = substr($str, 0, strlen($str) - 2);
+                $obj->ten_dac_trung = $str;
             }
-            $code = 200;
             return response()->json(['data' => $objs], $code);
         } else {
             return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);

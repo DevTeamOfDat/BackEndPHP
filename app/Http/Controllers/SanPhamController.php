@@ -101,7 +101,7 @@ class SanPhamController extends Controller
         $date = date('Y-m-d');
         $obj = DB::select('call itemProduct(?,?)', array($date, $id));
         if ($obj) {
-            return response()->json(['data' => $obj], 200);
+            return response()->json(['data' => $obj[0]], 200);
         } else {
             return response()->json(['error' => 'Không tìm thấy'], 200);
         }
