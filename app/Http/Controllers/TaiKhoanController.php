@@ -209,7 +209,7 @@ class TaiKhoanController extends Controller
             return response()->json(['error' => 'Chỉnh sửa thất bại. Mật khẩu cũ không chính xác'], 400);
         } elseif ($request->mat_khau_moi != null && $request->mat_khau_cu != null && $request->mat_khau_moi == $request->mat_khau_cu) {
             return response()->json(['error' => 'Chỉnh sửa thất bại. Mật khẩu mới phải khác mật khẩu cũ'], 400);
-        } elseif (strlen($request->mat_khau_moi) < 8) {
+        } elseif ($request->mat_khau_moi != null && strlen($request->mat_khau_moi) < 8) {
             return response()->json(['error' => 'Chỉnh sửa thất bại. Mật khẩu mới phải nhiều hơn 8 ký tự'], 400);
         } elseif ($request->mat_khau_moi != null && $request->mat_khau_cu != null && $request->mat_khau_moi != $request->mat_khau_cu && Hash::check($request->mat_khau_cu, $tk->mat_khau)) {
             $array[self::mat_khau] = bcrypt($request->mat_khau_moi);
