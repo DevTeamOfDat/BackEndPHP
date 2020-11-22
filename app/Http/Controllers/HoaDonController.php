@@ -46,8 +46,10 @@ class HoaDonController extends Controller
             $objs = DB::table(self::table)
                 ->leftJoin(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
                 ->leftJoin(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
+                ->join(TrangThaiController::table, TrangThaiController::table . '.' . TrangThaiController::id, '=', self::table . '.' . self::trang_thai)
+                ->join(LoaiDonController::table, LoaiDonController::table . '.' . LoaiDonController::id, '=', self::table . '.' . self::loai_don)
                 ->leftJoin(VoucherController::table, VoucherController::table . '.' . VoucherController::id, self::table . '.' . self::ma_voucher)
-                ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang', VoucherController::table . '.' . VoucherController::muc_voucher)
+                ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang', TrangThaiController::table . '.' . TrangThaiController::mo_ta . ' as gia_tri_trang_thai', LoaiDonController::table . '.' . LoaiDonController::mo_ta . ' as gia_tri_loai_don', VoucherController::table . '.' . VoucherController::muc_voucher)
                 ->get();
             $code = 200;
             return response()->json(['data' => $objs], $code);
@@ -55,9 +57,12 @@ class HoaDonController extends Controller
             $objs = null;
             $code = null;
             $objs = DB::table(self::table)
-                ->join(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
-                ->join(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
-                ->select(self::id, 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang', self::ngay_lap, self::loai_don, self::trang_thai, self::tong_tien)
+                ->leftJoin(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
+                ->leftJoin(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
+                ->join(TrangThaiController::table, TrangThaiController::table . '.' . TrangThaiController::id, '=', self::table . '.' . self::trang_thai)
+                ->join(LoaiDonController::table, LoaiDonController::table . '.' . LoaiDonController::id, '=', self::table . '.' . self::loai_don)
+                ->leftJoin(VoucherController::table, VoucherController::table . '.' . VoucherController::id, self::table . '.' . self::ma_voucher)
+                ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang', TrangThaiController::table . '.' . TrangThaiController::mo_ta . ' as gia_tri_trang_thai', LoaiDonController::table . '.' . LoaiDonController::mo_ta . ' as gia_tri_loai_don', VoucherController::muc_voucher)
                 ->where(self::table . '.' . self::ma_kh, '=', $user->ma_tai_khoan)
                 ->get();
             $code = 200;
@@ -118,16 +123,17 @@ class HoaDonController extends Controller
      */
     public function show($id)
     {
-        setlocale(LC_MONETARY,"en_US");
+        setlocale(LC_MONETARY, "en_US");
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             $obj = DB::table(self::table)
-                ->join(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
-                ->join(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
+                ->leftJoin(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
+                ->leftJoin(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
                 ->join(TrangThaiController::table, TrangThaiController::table . '.' . TrangThaiController::id, '=', self::table . '.' . self::trang_thai)
                 ->join(LoaiDonController::table, LoaiDonController::table . '.' . LoaiDonController::id, '=', self::table . '.' . self::loai_don)
-                ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang', TrangThaiController::table . '.' . TrangThaiController::mo_ta . ' as gia_tri_trang_thai', LoaiDonController::table . '.' . LoaiDonController::mo_ta . ' as gia_tri_loai_don')
+                ->leftJoin(VoucherController::table, VoucherController::table . '.' . VoucherController::id, self::table . '.' . self::ma_voucher)
+                ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang', TrangThaiController::table . '.' . TrangThaiController::mo_ta . ' as gia_tri_trang_thai', LoaiDonController::table . '.' . LoaiDonController::mo_ta . ' as gia_tri_loai_don', VoucherController::muc_voucher)
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->get();
             if ($obj) {
@@ -139,9 +145,12 @@ class HoaDonController extends Controller
             }
         } else {
             $obj = DB::table(self::table)
-                ->join(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
-                ->join(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
-                ->select(self::id, 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang', self::ngay_lap, self::loai_don, self::trang_thai, self::tong_tien)
+                ->leftJoin(TaiKhoanController::table . ' as nvs', self::table . '.' . self::ma_nv, '=', 'nvs.' . TaiKhoanController::id)
+                ->leftJoin(TaiKhoanController::table . ' as khs', self::table . '.' . self::ma_kh, '=', 'khs.' . TaiKhoanController::id)
+                ->join(TrangThaiController::table, TrangThaiController::table . '.' . TrangThaiController::id, '=', self::table . '.' . self::trang_thai)
+                ->join(LoaiDonController::table, LoaiDonController::table . '.' . LoaiDonController::id, '=', self::table . '.' . self::loai_don)
+                ->leftJoin(VoucherController::table, VoucherController::table . '.' . VoucherController::id, self::table . '.' . self::ma_voucher)
+                ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang', TrangThaiController::table . '.' . TrangThaiController::mo_ta . ' as gia_tri_trang_thai', LoaiDonController::table . '.' . LoaiDonController::mo_ta . ' as gia_tri_loai_don', VoucherController::muc_voucher)
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->where(self::table . '.' . self::ma_kh, '=', $user->ma_tai_khoan)
                 ->get();
