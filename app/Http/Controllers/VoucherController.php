@@ -131,7 +131,7 @@ class VoucherController extends Controller
             $obj = DB::table(self::table)
                 ->join(TaiKhoanController::table, self::table . '.' . self::ma_khach_hang, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
                 ->select(self::table . '.*', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten)
-                ->where(self::table . '.' . self::id, '=', $id)
+                ->where(self::table . '.' . self::ma_khach_hang, '=', $id)
                 ->get();
             if ($obj) {
                 return response()->json(['data' => $obj], 200);
@@ -139,7 +139,16 @@ class VoucherController extends Controller
                 return response()->json(['error' => 'Không tìm thấy'], 200);
             }
         } else {
-            return response()->json(['error' => 'Tài khoản không đủ quyền truy cập'], 403);
+            $obj = DB::table(self::table)
+                ->join(TaiKhoanController::table, self::table . '.' . self::ma_khach_hang, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
+                ->select(self::table . '.*', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten)
+                ->where(TaiKhoanController::email, '=', $user->email)
+                ->get();
+            if ($obj) {
+                return response()->json(['data' => $obj], 200);
+            } else {
+                return response()->json(['error' => 'Không tìm thấy'], 200);
+            }
         }
     }
 

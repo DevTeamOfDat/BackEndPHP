@@ -104,6 +104,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/bills', [\App\Http\Controllers\HoaDonController::class, 'store']);
 
+    Route::put('/bills/{id}', [\App\Http\Controllers\HoaDonController::class, 'update']);
+
     Route::post('/bills/delete', [\App\Http\Controllers\HoaDonController::class, 'destroy']);
 
 //khuyến mãi sản phẩm
@@ -195,6 +197,8 @@ Route::middleware('auth:api')->group(function () {
 
 //voucher
     Route::get('/vouchers', [\App\Http\Controllers\VoucherController::class, 'index']);
+
+    Route::get('/vouchers/{id}', [\App\Http\Controllers\VoucherController::class, 'show']);
 
     Route::post('/vouchers', [\App\Http\Controllers\VoucherController::class, 'store']);
 

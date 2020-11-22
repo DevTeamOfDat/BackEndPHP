@@ -102,7 +102,7 @@ class HoaDonController extends Controller
             $arr_value[self::ngay_lap] = date('Y-m-d');
             $arr_value[self::loai_don] = 2;
             $arr_value[self::trang_thai] = 1;
-            DB::table(self::table)->insert($request->all());
+            DB::table(self::table)->insert($arr_value);
             return response()->json(['success' => "Thêm mới thành công"], 201);
         } else {
             $arr_value = [];
@@ -188,8 +188,8 @@ class HoaDonController extends Controller
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
             $hd = DB::table(self::table)->where(self::id, '=', $id)->first();
-            if ($hd->trang_thai == false && $request->get(self::trang_thai) == true) {
-                DB::table(self::table)->where(self::id, '=', $id)->update([self::trang_thai => true]);
+            if ($hd->trang_thai == 2 && $request->get(self::trang_thai) == 1) {
+                DB::table(self::table)->where(self::id, '=', $id)->update([self::trang_thai => 1]);
                 return response()->json(['success' => 'Cập nhật thành công'], 201);
             } else {
                 return response()->json(['error' => 'Cập nhật thất bại'], 400);
