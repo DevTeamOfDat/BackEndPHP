@@ -44,7 +44,7 @@ class ChiTietHoaDonController extends Controller
                 ->join(SanPhamController::table, self::table . '.' . self::ma_san_pham, '=', SanPhamController::table . '.' . SanPhamController::id)
                 ->select(self::table . '.*', SanPhamController::table . '.' . SanPhamController::ten_san_pham)
                 ->get();
-            foreach ($objs as $obj){
+            foreach ($objs as $obj) {
                 $list_speciality_id = DB::table(self::table)
                     ->select(self::danh_sach_loai_dac_trung)
                     ->where(self::table . '.' . self::id, '=', $obj->id)
@@ -106,7 +106,13 @@ class ChiTietHoaDonController extends Controller
                 if ($arr_value[self::so_luong] < 1) {
                     return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 400);
                 }
-                $str = $arr_value[self::danh_sach_loai_dac_trung];
+                $dac_trung = $arr_value[self::danh_sach_loai_dac_trung];
+                $str = '[';
+                foreach ($dac_trung as $item) {
+                    $str = $str . $item . ',';
+                }
+                $str = substr($str, 0, strlen($str) - 1) . ']';
+                $arr_value[self::danh_sach_loai_dac_trung] = $str;
                 $data = DB::table(self::table)
                     ->select(self::table . '.*')
                     ->where(self::ma_san_pham, '=', $arr_value[self::ma_san_pham])
@@ -118,7 +124,8 @@ class ChiTietHoaDonController extends Controller
                 }
                 $sl = DB::table(SanPhamController::table)->select(SanPhamController::so_luong)->where(SanPhamController::id, '=', $arr_value[self::ma_san_pham])
                     ->where(SanPhamController::isActive, '=', true)->get();
-                if ($arr_value[self::so_luong] > $sl[0]->so_luong) {
+                $sl = $sl[0]->so_luong;
+                if ($arr_value[self::so_luong] > $sl) {
                     return response()->json(['error' => 'Thêm mới thất bại. Số lượng sản phẩm không đủ'], 400);
                 }
                 $ngay_lap = DB::table(HoaDonController::table)->where(HoaDonController::table . '.' . HoaDonController::id, '=', $arr_value[self::ma_hoa_don])

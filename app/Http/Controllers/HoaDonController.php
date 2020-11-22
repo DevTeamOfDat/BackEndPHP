@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Cknow\Money\Money;
 
 class HoaDonController extends Controller
 {
@@ -117,6 +118,7 @@ class HoaDonController extends Controller
      */
     public function show($id)
     {
+        setlocale(LC_MONETARY,"en_US");
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == TaiKhoanController::NV || $loai_tk == TaiKhoanController::QT) {
