@@ -135,7 +135,7 @@ class HoaDonController extends Controller
                 ->leftJoin(VoucherController::table, VoucherController::table . '.' . VoucherController::id, self::table . '.' . self::ma_voucher)
                 ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang', TrangThaiController::table . '.' . TrangThaiController::mo_ta . ' as gia_tri_trang_thai', LoaiDonController::table . '.' . LoaiDonController::mo_ta . ' as gia_tri_loai_don', VoucherController::muc_voucher)
                 ->where(self::table . '.' . self::id, '=', $id)
-                ->get();
+                ->first();
             if ($obj) {
                 return response()->json([
                     'data' => $obj
@@ -153,7 +153,7 @@ class HoaDonController extends Controller
                 ->select(self::table . '.*', 'nvs.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien', 'khs.' . TaiKhoanController::ho_ten . ' as ten_khach_hang', TrangThaiController::table . '.' . TrangThaiController::mo_ta . ' as gia_tri_trang_thai', LoaiDonController::table . '.' . LoaiDonController::mo_ta . ' as gia_tri_loai_don', VoucherController::muc_voucher)
                 ->where(self::table . '.' . self::id, '=', $id)
                 ->where(self::table . '.' . self::ma_kh, '=', $user->ma_tai_khoan)
-                ->get();
+                ->first();
             if ($obj) {
                 return response()->json([
                     'data' => $obj
