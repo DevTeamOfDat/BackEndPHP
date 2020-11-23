@@ -112,7 +112,7 @@ class PhieuNhapController extends Controller
                 ->join(TaiKhoanController::table, self::table . '.' . self::ma_nhan_vien, '=', TaiKhoanController::table . '.' . TaiKhoanController::id)
                 ->select(self::table . '.*', NhaCungCapController::table . '.' . NhaCungCapController::ten . ' as ten_nha_cung_cap', TaiKhoanController::table . '.' . TaiKhoanController::ho_ten . ' as ten_nhan_vien')
                 ->where(self::table . '.' . self::id, '=', $id)
-                ->get();
+                ->first();
             if ($obj) {
                 return response()->json([
                     'data' => $obj
