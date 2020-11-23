@@ -271,6 +271,10 @@ class TaiKhoanController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()->all()], 400);
         }
+        $data = DB::table(self::table)->where(self::email, '=', $request->email)->get();
+        if (count($data) > 0) {
+            return response()->json(['error' => 'Email đã được đăng ký'], 400);
+        }
 
         $array = [];
         $array[self::ho_ten] = $request->ho_ten;
