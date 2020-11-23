@@ -95,6 +95,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/image-products', [\App\Http\Controllers\HinhAnhSanPhamController::class, 'store']);
 
+    Route::put('/image-products/{id}', [\App\Http\Controllers\HinhAnhSanPhamController::class, 'update']);
+
     Route::post('/image-products/delete', [\App\Http\Controllers\HinhAnhSanPhamController::class, 'destroy']);
 
 //hóa đơn
