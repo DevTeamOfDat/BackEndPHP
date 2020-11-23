@@ -100,17 +100,17 @@ class ChiTietHoaDonController extends Controller
                     return response()->json(['error' => 'Số lượng phải lớn hơn 0'], 400);
                 }
                 $dac_trung = $arr_value[self::danh_sach_loai_dac_trung];
-                $str = '[';
-                foreach ($dac_trung as $item) {
-                    $str = $str . $item . ',';
-                }
-                $str = substr($str, 0, strlen($str) - 1) . ']';
-                $arr_value[self::danh_sach_loai_dac_trung] = $str;
+//                $str = '[';
+//                foreach ($dac_trung as $item) {
+//                    $str = $str . $item . ',';
+//                }
+//                $str = substr($str, 0, strlen($str) - 1) . ']';
+//                $arr_value[self::danh_sach_loai_dac_trung] = $str;
                 $data = DB::table(self::table)
                     ->select(self::table . '.*')
                     ->where(self::ma_san_pham, '=', $arr_value[self::ma_san_pham])
                     ->where(self::ma_hoa_don, '=', $arr_value[self::ma_hoa_don])
-                    ->where(self::danh_sach_loai_dac_trung, '=', $str)
+                    ->where(self::danh_sach_loai_dac_trung, '=', $dac_trung)
                     ->where(self::isActive, '=', true)->get();
                 if (count($data) > 0) {
                     return response()->json(['error' => 'Thêm mới thất bại. Có 1 row đã tồn tại mã hóa đơn và mã sản phẩm'], 400);
