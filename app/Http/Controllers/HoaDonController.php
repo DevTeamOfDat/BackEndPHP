@@ -100,9 +100,15 @@ class HoaDonController extends Controller
                 $arr_value[self::ma_kh] = $request->ma_khach_hang;
             }
             $arr_value[self::ngay_lap] = date('Y-m-d');
+            if ($request->ma_voucher) {
+                $arr_value[self::ma_voucher] = $request->ma_voucher;
+            }
             $arr_value[self::loai_don] = 2;
             $arr_value[self::trang_thai] = 1;
             DB::table(self::table)->insert($arr_value);
+            DB::table(VoucherController::table)
+                ->where(VoucherController::id, '=', $request->ma_voucher)
+                ->update([VoucherController::isActive => false]);
             return response()->json(['success' => "Thêm mới thành công"], 201);
         } else {
             $arr_value = [];
@@ -110,7 +116,13 @@ class HoaDonController extends Controller
             $arr_value[self::ngay_lap] = date('Y-m-d');
             $arr_value[self::loai_don] = 1;
             $arr_value[self::trang_thai] = 2;
+            if ($request->ma_voucher) {
+                $arr_value[self::ma_voucher] = $request->ma_voucher;
+            }
             DB::table(self::table)->insert($arr_value);
+            DB::table(VoucherController::table)
+                ->where(VoucherController::id, '=', $request->ma_voucher)
+                ->update([VoucherController::isActive => false]);
             return response()->json(['success' => "Thêm mới thành công"], 201);
         }
     }
