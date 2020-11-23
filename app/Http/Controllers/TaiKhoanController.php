@@ -80,34 +80,21 @@ class TaiKhoanController extends Controller
         $user = auth()->user();
         $loai_tk = $user->loai_tai_khoan;
         if ($loai_tk == self::NV || $loai_tk == self::QT) {
-            if ($listObj = $request->get(BaseController::listObj)) {
-                $count = count($listObj);
-                if ($count > 0) {
-                    foreach ($listObj as $obj) {
-                        $validator = Validator::make($obj, [
-                            self::email => 'required|email',
-                            self::mat_khau => 'required|min:8',
-                            self::ho_ten => 'required',
-                            self::so_dien_thoai => 'required',
-                            self::loai_tai_khoan => 'required',
-                        ]);
-                        if ($validator->fails()) {
-                            return response()->json(['error' => $validator->errors()->all()], 400);
-                        }
-                    }
-                }
-            } else {
-                $validator = Validator::make($request->all(), [
-                    self::email => 'required|email',
-                    self::mat_khau => 'required|min:8',
-                    self::ho_ten => 'required',
-                    self::so_dien_thoai => 'required',
-                    self::loai_tai_khoan => 'required',
-                ]);
-                if ($validator->fails()) {
-                    return response()->json(['error' => $validator->errors()->all()], 400);
-                }
+            $validator = Validator::make($request->all(), [
+                self::email => 'required|email',
+                self::mat_khau => 'required|min:8',
+                self::ho_ten => 'required',
+                self::so_dien_thoai => 'required',
+                self::loai_tai_khoan => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->errors()->all()], 400);
             }
+            $data = DB::table(self::table)->where(self::email, '=', $request->email)->get();
+            if (count($data) > 0) {
+                return response()->json(['error' => 'Email đã được đăng ký'], 400);
+            }
+
             $array = [];
             $array[self::ho_ten] = $request->ho_ten;
             $array[self::email] = $request->email;
